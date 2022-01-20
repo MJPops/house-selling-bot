@@ -109,6 +109,10 @@ namespace HouseSellingBot.Repositories
         {
             var retrievedHouses = await AllHouseRepositore.GetAllHousesAsync();
             var user = await dBContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new NotFoundException("The user with this ID is not registered in the database");
+            }
 
             if (user.HouseType != null)
             {
