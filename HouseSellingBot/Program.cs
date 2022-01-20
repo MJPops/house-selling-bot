@@ -1,4 +1,5 @@
-﻿using HouseSellingBot.UI;
+﻿using HouseSellingBot.Repositories;
+using HouseSellingBot.UI;
 using System;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -44,7 +45,10 @@ namespace HouseSellingBot
 
             if (inputMessage.Text == "/start")
             {
-                await Message.SendStartMenuAsync();
+                foreach (var item in await AllHouseRepositore.GetAllHousesAsync())
+                {
+                    Console.WriteLine(item.Description);
+                }
             }
         }
     }

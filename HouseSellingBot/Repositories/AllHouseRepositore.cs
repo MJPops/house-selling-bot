@@ -7,13 +7,13 @@ namespace HouseSellingBot.Repositories
 {
     public class AllHouseRepositore
     {
-        AppDBContext dBContext = new AppDBContext();
+        private static AppDBContext dBContext = new AppDBContext();
 
         /// <summary>
         /// Returns all houses from the database.
         /// </summary>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetAllHousesAsync()
+        public static async Task<IEnumerable<House>> GetAllHousesAsync()
         {
             return await Task.Run(() => GetAllHouses());
         }
@@ -22,7 +22,7 @@ namespace HouseSellingBot.Repositories
         /// </summary>
         /// <param name="type">The type of house you are looking for.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetHousesByTypeAsync(string type)
+        public static async Task<IEnumerable<House>> GetHousesByTypeAsync(string type)
         {
             return await Task.Run(() => GetHousesByType(type));
         }
@@ -31,7 +31,7 @@ namespace HouseSellingBot.Repositories
         /// </summary>
         /// <param name="district">The district of house you are looking for.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetHouseByDistrictAsync(string district)
+        public static async Task<IEnumerable<House>> GetHouseByDistrictAsync(string district)
         {
             return await Task.Run(() => GetHouseByDistrict(district));
         }
@@ -40,16 +40,16 @@ namespace HouseSellingBot.Repositories
         /// </summary>
         /// <param name="roomsNumber">The number of rooms in the desired house.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetHousesByRoomsNumberAsync(int roomsNumber)
+        public static async Task<IEnumerable<House>> GetHousesByRoomsNumberAsync(int roomsNumber)
         {
-            return await Task.Run(()=>GetHousesByRoomsNumber(roomsNumber));
+            return await Task.Run(() => GetHousesByRoomsNumber(roomsNumber));
         }
         /// <summary>
         /// Returns houses from the database that are priced higher than the specified price.
         /// </summary>
         /// <param name="price">Price border.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetHouseWithHigherPrice(float price)
+        public static async Task<IEnumerable<House>> GetHouseWithHigherPrice(float price)
         {
             var allHouses = await GetAllHousesAsync();
             return allHouses.Where(h => h.Price >= price).ToList();
@@ -59,7 +59,7 @@ namespace HouseSellingBot.Repositories
         /// </summary>
         /// <param name="price">Price border.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetHouseWithLowerPrice(float price)
+        public static async Task<IEnumerable<House>> GetHouseWithLowerPrice(float price)
         {
             var allHouses = await GetAllHousesAsync();
             return allHouses.Where(h => h.Price <= price).ToList();
@@ -70,7 +70,8 @@ namespace HouseSellingBot.Repositories
         /// <param name="lowerPrice">The lower limit of the range.</param>
         /// <param name="higherPrice">The upper limit of the range.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetHouseWithPriceInBetween(float lowerPrice, float higherPrice)
+        public static async Task<IEnumerable<House>> GetHouseWithPriceInBetween(float lowerPrice,
+            float higherPrice)
         {
             var allHouses = await GetAllHousesAsync();
             return allHouses.Where(h => h.Price >= lowerPrice && h.Price <= higherPrice).ToList();
@@ -80,7 +81,7 @@ namespace HouseSellingBot.Repositories
         /// </summary>
         /// <param name="footage">Footage border.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetHouseWithHigherFootage(float footage)
+        public static async Task<IEnumerable<House>> GetHouseWithHigherFootage(float footage)
         {
             var allHouses = await GetAllHousesAsync();
             return allHouses.Where(h => h.Footage >= footage).ToList();
@@ -90,7 +91,7 @@ namespace HouseSellingBot.Repositories
         /// </summary>
         /// <param name="footage">Footage border.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetHouseWithLowerFootage(float footage)
+        public static async Task<IEnumerable<House>> GetHouseWithLowerFootage(float footage)
         {
             var allHouses = await GetAllHousesAsync();
             return allHouses.Where(h => h.Footage <= footage).ToList();
@@ -101,25 +102,26 @@ namespace HouseSellingBot.Repositories
         /// <param name="lowerFootage">The lower limit of the range.</param>
         /// <param name="higherFootage">The upper limit of the range.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        public async Task<IEnumerable<House>> GetHouseWithFootageInBetween(float lowerFootage, float higherFootage)
+        public static async Task<IEnumerable<House>> GetHouseWithFootageInBetween(float lowerFootage,
+            float higherFootage)
         {
             var allHouses = await GetAllHousesAsync();
             return allHouses.Where(h => h.Footage >= lowerFootage && h.Price <= higherFootage).ToList();
         }
 
-        private IEnumerable<House> GetAllHouses()
+        private static IEnumerable<House> GetAllHouses()
         {
             return dBContext.Houses.ToList();
         }
-        private IEnumerable<House> GetHousesByRoomsNumber(int roomsNumber)
+        private static IEnumerable<House> GetHousesByRoomsNumber(int roomsNumber)
         {
             return dBContext.Houses.Where(h => h.RoomsNumber == roomsNumber).ToList();
         }
-        private IEnumerable<House> GetHousesByType(string type)
+        private static IEnumerable<House> GetHousesByType(string type)
         {
             return dBContext.Houses.Where(h => h.HouseType == type).ToList();
         }
-        private IEnumerable<House> GetHouseByDistrict(string district)
+        private static IEnumerable<House> GetHouseByDistrict(string district)
         {
             return dBContext.Houses.Where(h => h.District == district).ToList();
         }

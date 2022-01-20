@@ -6,7 +6,7 @@ namespace HouseSellingBot
     public class AppDBContext : DbContext
     {
         public DbSet<House> Houses { get; set; }
-        public DbSet<User> Users { get; set; }
+        //public DbSet<User> Users { get; set; }
 
         //public AppDBContext() : base()
         //{
@@ -15,7 +15,7 @@ namespace HouseSellingBot
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=HousesBase;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=HousesSellingBase;Trusted_Connection=True;");
         }
     }
 }
