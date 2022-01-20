@@ -13,7 +13,7 @@ namespace HouseSellingBot.Repositories
         /// Added house in the database.
         /// </summary>
         /// <param name="house">The house being add.</param>
-        public static async Task AddHouse(House house)
+        public static async Task AddHouseAsync(House house)
         {
             dBContext.Houses.Add(house);
             await dBContext.SaveChangesAsync();
@@ -22,7 +22,7 @@ namespace HouseSellingBot.Repositories
         /// Update house in the database.
         /// </summary>
         /// <param name="house">The house being updated.</param>
-        public static async Task UpdateHouse(House house)
+        public static async Task UpdateHouseAsync(House house)
         {
             dBContext.Houses.Update(house);
             await dBContext.SaveChangesAsync();
@@ -31,7 +31,7 @@ namespace HouseSellingBot.Repositories
         /// Remove house from the database.
         /// </summary>
         /// <param name="house">The house being remove.</param>
-        public static async Task RemoveHouse(House house)
+        public static async Task RemoveHouseAsync(House house)
         {
             dBContext.Houses.Remove(house);
             await dBContext.SaveChangesAsync();
