@@ -16,6 +16,41 @@ namespace HouseSellingBot.Repositories
         private static AppDBContext dBContext = new AppDBContext();
 
         /// <summary>
+        /// Writes the user to the database.
+        /// </summary>
+        /// <param name="user">The user being recorded.</param>
+        /// <returns></returns>
+        /// <exception cref="AlreadyContainException"></exception>
+        public static async Task AddUser(User user)
+        {
+            if (dBContext.Users.ToList().Contains(user))
+            {
+                throw new AlreadyContainException();
+            }
+            dBContext.Users.Add(user);
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
+        /// Update user in the database.
+        /// </summary>
+        /// <param name="user">The user being update.</param>
+        /// <returns></returns>
+        public static async Task UpdateUser(User user)
+        {
+            dBContext.Users.Update(user);
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
+        /// Remove user from the database.
+        /// </summary>
+        /// <param name="user">The user being removed.</param>
+        /// <returns></returns>
+        public static async Task RemoveUser(User user)
+        {
+            dBContext.Users.Remove(user);
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
         /// Clears the filters for the given user.
         /// </summary>
         /// <param name="userId">The id of the user whose filters will be cleared.</param>
@@ -47,7 +82,7 @@ namespace HouseSellingBot.Repositories
 
             if (user.FavoriteHouses.Contains(houseToAdd))
             {
-                throw new AlreadyContainException("This music has already been added to this user");
+                throw new AlreadyContainException("This house has already been added to this user");
             }
             user.FavoriteHouses.Add(await dBContext.Houses.FindAsync(houseId));
         }
@@ -57,7 +92,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="userId">The user ID for which the selection will be made.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
         /// <exception cref="NoHomesWithTheseFeaturesException"></exception>
-        public static async Task<IEnumerable<House>> GetHousesByCustomFilters(int userId)
+        public static async Task<IEnumerable<House>> GetHousesWhithCustomFilters(int userId)
         {
             var retrievedHouses = await AllHouseRepositore.GetAllHousesAsync();
             var user = await dBContext.Users.FindAsync(userId);
