@@ -45,10 +45,7 @@ namespace HouseSellingBot
 
             if (inputMessage.Text == "/start")
             {
-                foreach (var item in await AllHouseRepositore.GetAllHousesAsync())
-                {
-                    Console.WriteLine(item.Description);
-                }
+                await Message.SendStartMenuAsync();
             }
         }
     }
