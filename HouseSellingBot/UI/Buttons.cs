@@ -57,28 +57,143 @@ namespace HouseSellingBot.UI
             });
             ;
         }
-        public static IReplyMarkup InRent()
+        public static IReplyMarkup InRentDistrict()
         {
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
             {
                     new List<InlineKeyboardButton>
                     {
-                        InlineKeyboardButton.WithCallbackData(text: "Район", callbackData: "Район"),
-                        InlineKeyboardButton.WithCallbackData(text: "Количество комнат",
-                        callbackData: "Количество комнат")
-                    },
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "Этаж", callbackData: "Этаж"),
-                        InlineKeyboardButton.WithCallbackData(text: "Цена", callbackData: "Цена")
+                        InlineKeyboardButton.WithCallbackData(text: "Выберите район", callbackData: "РайонАренда"),
                     },
                     new List<InlineKeyboardButton>
                     {
                         //TODO - Add way back
-                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: ""),
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Аренда"),
                     }
             });
             ;
+        }
+        public static IReplyMarkup InRentRooms()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Выберите количество комнат", callbackData: "КомнатаАренда"),
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        //TODO - Add way back
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "РайонАренда"),
+                    }
+            });
+            ;
+        }
+        public static IReplyMarkup InRentPrice()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Выберите желаемую стоимость", callbackData: "СтоимостьАренда"),
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        //TODO - Add way back
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "КомнатаАренда"),
+                    }
+            });
+            ;
+        }
+        public static IReplyMarkup InRentFootage()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Выберите желаемый мтераж", callbackData: "МетражАренда"),
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        //TODO - Add way back
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "СтоимостьАренда"),
+                    }
+            });
+            ;
+        }
+        public static IReplyMarkup InSaleDistrict()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Выберите район", callbackData: "РайонПродажа"),
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        //TODO - Add way back
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Продажа"),
+                    }
+            });
+            ;
+        }
+        public static IReplyMarkup InSaleRooms()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Выберите количество комнат", callbackData: "КомнатаПродажа"),
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        //TODO - Add way back
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "РайонПродажа"),
+                    }
+            });
+            ;
+        }
+        public static IReplyMarkup InSalePrice()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Выберите желаемую стоимость", callbackData: "СтоимостьПродажа"),
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        //TODO - Add way back
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "КомнатаПродажа"),
+                    }
+            });
+            ;
+        }
+        public static IReplyMarkup InSaleFootage()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Выберите желаемый метраж", callbackData: "МетражПродажа"),
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        //TODO - Add way back
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "СтоимостьПродажа"),
+                    }
+            });
+            ;
+        }
+        public static IReplyMarkup Contacts()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "", callbackData: "О нас")
+                }
+            });
         }
     }
 }

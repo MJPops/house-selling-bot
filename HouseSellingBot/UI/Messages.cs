@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Args;
 
 namespace HouseSellingBot.UI
 {
@@ -11,16 +10,16 @@ namespace HouseSellingBot.UI
     public class Messages
     {
         private static TelegramBotClient Client { get; set; }
-        private static Telegram.Bot.Types.Message message;
+        private static long chatId;
 
         /// <summary>
         /// A class that encapsulates messages towards the user.
         /// </summary>
         [Obsolete]
-        public Messages(TelegramBotClient client, MessageEventArgs e)
+        public Messages(TelegramBotClient client, long _chatId)
         {
             Client = client;
-            message = e.Message;
+            chatId = _chatId;
         }
 
         /// <summary>
@@ -28,9 +27,51 @@ namespace HouseSellingBot.UI
         /// </summary>
         public async Task SendStartMenuAsync()
         {
-            await Client.SendTextMessageAsync(message.Chat.Id,
-                "Надмите кнопку",
-                replyMarkup: Buttons.Start());
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Start());
+        }
+        public async Task SendContactsMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Contacts());
+        }
+        public async Task SendRentMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Rent());
+        }
+        public async Task SendSaleMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Sale());
+        }
+        public async Task SendRentDistrictMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentDistrict());
+        }
+        public async Task SentRentRoomsMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentRooms());
+        }
+        public async Task SentRentPriceMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentPrice());
+        }
+        public async Task SentRentFootageMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentFootage());
+        }
+        public async Task SentSaleDictrictMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSaleDistrict());
+        }
+        public async Task SentSaleRoomsMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSaleRooms());
+        }
+        public async Task SentSalePriceMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSalePrice());
+        }
+        public async Task SentSaleFootageMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSaleFootage());
         }
     }
 }

@@ -39,8 +39,8 @@ namespace HouseSellingBot
         [Obsolete]
         private static async void OnMessageHandler(object sender, MessageEventArgs e)
         {
-            Messages Message = new(client, e);
             var inputMessage = e.Message;
+            Messages Message = new(client, inputMessage.Chat.Id);
             Console.WriteLine(inputMessage.Text); //TODO - delete
 
             if (inputMessage.Text == "/start")
