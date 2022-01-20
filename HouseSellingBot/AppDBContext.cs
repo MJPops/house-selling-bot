@@ -1,17 +1,17 @@
 ﻿using HouseSellingBot.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HouseSellingBot
 {
-    public class DBContext : DbContext
+    public class AppDBContext : DbContext
     {
         public DbSet<House> Houses { get; set; }
-        public DbSet<User> Users { get; set; }  
+        public DbSet<User> Users { get; set; }
+
+        //public AppDBContext() : base()
+        //{
+
+        //}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
