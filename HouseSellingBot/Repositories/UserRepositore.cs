@@ -19,7 +19,6 @@ namespace HouseSellingBot.Repositories
         /// Writes the user to the database.
         /// </summary>
         /// <param name="user">The user being recorded.</param>
-        /// <returns></returns>
         /// <exception cref="AlreadyContainException"></exception>
         public static async Task AddUser(User user)
         {
@@ -34,7 +33,6 @@ namespace HouseSellingBot.Repositories
         /// Update user in the database.
         /// </summary>
         /// <param name="user">The user being update.</param>
-        /// <returns></returns>
         public static async Task UpdateUser(User user)
         {
             dBContext.Users.Update(user);
@@ -44,7 +42,6 @@ namespace HouseSellingBot.Repositories
         /// Remove user from the database.
         /// </summary>
         /// <param name="user">The user being removed.</param>
-        /// <returns></returns>
         public static async Task RemoveUser(User user)
         {
             dBContext.Users.Remove(user);

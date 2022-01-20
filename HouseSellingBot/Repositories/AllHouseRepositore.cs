@@ -10,6 +10,33 @@ namespace HouseSellingBot.Repositories
         private static AppDBContext dBContext = new AppDBContext();
 
         /// <summary>
+        /// Added house in the database.
+        /// </summary>
+        /// <param name="house">The house being add.</param>
+        public static async Task AddHouse(House house)
+        {
+            dBContext.Houses.Add(house);
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
+        /// Update house in the database.
+        /// </summary>
+        /// <param name="house">The house being updated.</param>
+        public static async Task UpdateHouse(House house)
+        {
+            dBContext.Houses.Update(house);
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
+        /// Remove house from the database.
+        /// </summary>
+        /// <param name="house">The house being remove.</param>
+        public static async Task RemoveHouse(House house)
+        {
+            dBContext.Houses.Remove(house);
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
         /// Returns all houses from the database.
         /// </summary>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
