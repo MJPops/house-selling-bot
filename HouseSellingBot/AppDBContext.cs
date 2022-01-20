@@ -6,12 +6,7 @@ namespace HouseSellingBot
     public class AppDBContext : DbContext
     {
         public DbSet<House> Houses { get; set; }
-        //public DbSet<User> Users { get; set; }
-
-        //public AppDBContext() : base()
-        //{
-
-        //}
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -1,4 +1,6 @@
-﻿namespace HouseSellingBot.Models
+﻿using System.Collections.Generic;
+
+namespace HouseSellingBot.Models
 {
     public class House
     {
@@ -11,5 +13,8 @@
         public int? RoomsNumber { get; set; }
         public float? Price { get; set; }
         public float? Footage { get; set; }
+
+        public int? UserId { get; set; }
+        public List<User> Users { get; set; } = new();
     }
 }
