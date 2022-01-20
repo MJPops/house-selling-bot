@@ -105,7 +105,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="userId">The user ID for which the selection will be made.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
         /// <exception cref="NoHomesWithTheseFeaturesException"></exception>
-        public static async Task<IEnumerable<House>> GetHousesWhithCustomFilters(int userId)
+        public static async Task<IEnumerable<House>> GetHousesWhithCustomFiltersAsync(int userId)
         {
             var retrievedHouses = await AllHouseRepositore.GetAllHousesAsync();
             var user = await dBContext.Users.FindAsync(userId);
