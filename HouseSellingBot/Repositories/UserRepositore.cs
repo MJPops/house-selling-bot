@@ -16,6 +16,22 @@ namespace HouseSellingBot.Repositories
         private static AppDBContext dBContext = new AppDBContext();
 
         /// <summary>
+        /// Returns the user with the given ID from the database.
+        /// </summary>
+        /// <param name="userId">The id of the user you are looking for.</param>
+        /// <returns><see cref="User"/></returns>
+        /// <exception cref="NotFoundException"></exception>
+        public static async Task<User> GetUsrByIdAsync(int userId)
+        {
+            var user = await dBContext.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                throw new NotFoundException("The user with this ID is not registered in the database");
+            }
+            return user;
+        }
+        /// <summary>
         /// Writes the user to the database.
         /// </summary>
         /// <param name="user">The user being recorded.</param>
