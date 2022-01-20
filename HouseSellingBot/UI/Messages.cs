@@ -23,7 +23,7 @@ namespace HouseSellingBot.UI
         public Messages(TelegramBotClient client, MessageEventArgs e)
         {
             Client = client;
-            var message = e.Message;
+            message = e.Message;
         }
 
         /// <summary>
@@ -31,9 +31,9 @@ namespace HouseSellingBot.UI
         /// </summary>
         public async Task SendStartMenuAsync()
         {
-            //await Client.SendTextMessageAsync(message.Chat.Id,
-            //    "Надмите кнопку",
-            //    )
+            await Client.SendTextMessageAsync(message.Chat.Id,
+                "Надмите кнопку",
+                replyMarkup: Buttons.Start());
         }
     }
 }

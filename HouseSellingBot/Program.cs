@@ -7,7 +7,7 @@ namespace HouseSellingBot
 {
     class Program
     {
-        private static string token { get; set; } = "";
+        private static string token { get; set; } = "5009457163:AAEz5eg_AAz26uVh9rLmdvdq7pxfCCzYBzo";
         private static TelegramBotClient client;
 
         [Obsolete]
@@ -40,6 +40,7 @@ namespace HouseSellingBot
         {
             Messages Message = new(client, e);
             var inputMessage = e.Message;
+            Console.WriteLine(inputMessage.Text); //TODO - delete
 
             if (inputMessage.Text == "/start")
             {

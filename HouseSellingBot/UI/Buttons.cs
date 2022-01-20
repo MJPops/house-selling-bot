@@ -3,7 +3,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace HouseSellingBot.UI
 {
-    public class Button
+    public class Buttons
     {
         public static IReplyMarkup Start()
         {
@@ -21,7 +21,6 @@ namespace HouseSellingBot.UI
             });
             ;
         }
-
         public static IReplyMarkup Rent()
         {
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
@@ -40,7 +39,6 @@ namespace HouseSellingBot.UI
             });
             ;
         }
-
         public static IReplyMarkup Sale()
         {
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
@@ -59,7 +57,6 @@ namespace HouseSellingBot.UI
             });
             ;
         }
-
         public static IReplyMarkup InRent()
         {
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
