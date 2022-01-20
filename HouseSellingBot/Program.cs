@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HouseSellingBot.UI;
+using System;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 
@@ -37,7 +38,13 @@ namespace HouseSellingBot
         [Obsolete]
         private static async void OnMessageHandler(object sender, MessageEventArgs e)
         {
+            Messages Message = new(client, e);
+            var inputMessage = e.Message;
 
+            if (inputMessage.Text == "/start")
+            {
+                await Message.SendStartMenuAsync();
+            }
         }
     }
 }

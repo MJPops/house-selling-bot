@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HouseSellingBot.Models
 {
-    internal class User
+    public class User
     {
     }
 }
