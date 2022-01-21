@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HouseSellingBot.Repositories
 {
-    public class AllHouseRepositore
+    public class HouseRepositore
     {
         private static AppDBContext dBContext = new AppDBContext();
 
@@ -146,7 +146,7 @@ namespace HouseSellingBot.Repositories
         }
         private static IEnumerable<House> GetHousesByType(string type)
         {
-            return dBContext.Houses.Where(h => h.HouseType == type).ToList();
+            return dBContext.Houses.Where(h => h.Type == type).ToList();
         }
         private static IEnumerable<House> GetHouseByDistrict(string district)
         {

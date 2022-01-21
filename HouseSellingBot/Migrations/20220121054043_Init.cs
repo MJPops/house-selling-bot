@@ -16,7 +16,7 @@ namespace HouseSellingBot.Migrations
                     PicturePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     District = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HouseType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RentType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RoomsNumber = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<float>(type: "real", nullable: true),

@@ -35,9 +35,6 @@ namespace HouseSellingBot.Migrations
                     b.Property<float?>("Footage")
                         .HasColumnType("real");
 
-                    b.Property<string>("HouseType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PicturePath")
                         .HasColumnType("nvarchar(max)");
 
@@ -49,6 +46,9 @@ namespace HouseSellingBot.Migrations
 
                     b.Property<int?>("RoomsNumber")
                         .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
