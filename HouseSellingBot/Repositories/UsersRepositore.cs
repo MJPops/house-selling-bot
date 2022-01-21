@@ -29,6 +29,23 @@ namespace HouseSellingBot.Repositories
             {
                 throw new NotFoundException("The user with this ID is not registered in the database");
             }
+            await dBContext.Houses.Include(h => h.Users).ToListAsync();
+            return user;
+        }
+        /// <summary>
+        /// Returns a user from the database, with the given chatId.
+        /// </summary>
+        /// <param name="chatId">ChatId of the user you are looking for.</param>
+        /// <returns><see cref="User"/></returns>
+        /// <exception cref="NotFoundException"></exception>
+        public static async Task<User> GetUserByChatIdAsync(long chatId)
+        {
+            var user = await dBContext.Users.FirstOrDefaultAsync(u=>u.ChatId == chatId);
+            if (user == null)
+            {
+                throw new NotFoundException();
+            }
+            await dBContext.Houses.Include(h => h.Users).ToListAsync();
             return user;
         }
         /// <summary>
