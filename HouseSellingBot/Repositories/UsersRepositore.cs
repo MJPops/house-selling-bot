@@ -125,7 +125,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NoHomesWithTheseFeaturesException"></exception>
         public static async Task<IEnumerable<House>> GetHousesWhithCustomFiltersAsync(int userId)
         {
-            var retrievedHouses = await HouseRepositore.GetAllHousesAsync();
+            var retrievedHouses = await HousesRepositore.GetAllHousesAsync();
             var user = await dBContext.Users.FindAsync(userId);
             if (user == null)
             {
@@ -163,13 +163,13 @@ namespace HouseSellingBot.Repositories
         {
             if (lowerPrice == null)
             {
-                return await HouseRepositore.GetHouseWithLowerPrice(Convert.ToInt32(hightPrice));
+                return await HousesRepositore.GetHouseWithLowerPrice(Convert.ToInt32(hightPrice));
             }
             else if (hightPrice == null)
             {
-                return await HouseRepositore.GetHouseWithHigherPrice(Convert.ToInt32(lowerPrice));
+                return await HousesRepositore.GetHouseWithHigherPrice(Convert.ToInt32(lowerPrice));
             }
-            return await HouseRepositore.GetHouseWithPriceInBetween(Convert.ToInt32(lowerPrice),
+            return await HousesRepositore.GetHouseWithPriceInBetween(Convert.ToInt32(lowerPrice),
                 Convert.ToInt32(hightPrice));
         }
         private static async Task<IEnumerable<House>> SamplingHousesBasedOnFootage
@@ -177,13 +177,13 @@ namespace HouseSellingBot.Repositories
         {
             if (lowerFootage == null)
             {
-                return await HouseRepositore.GetHouseWithLowerFootage(Convert.ToInt32(hightFootage));
+                return await HousesRepositore.GetHouseWithLowerFootage(Convert.ToInt32(hightFootage));
             }
             else if (hightFootage == null)
             {
-                return await HouseRepositore.GetHouseWithHigherFootage(Convert.ToInt32(lowerFootage));
+                return await HousesRepositore.GetHouseWithHigherFootage(Convert.ToInt32(lowerFootage));
             }
-            return await HouseRepositore.GetHouseWithFootageInBetween(Convert.ToInt32(lowerFootage),
+            return await HousesRepositore.GetHouseWithFootageInBetween(Convert.ToInt32(lowerFootage),
                 Convert.ToInt32(hightFootage));
         }
     }

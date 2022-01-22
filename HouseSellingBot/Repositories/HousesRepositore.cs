@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HouseSellingBot.Repositories
 {
-    public class HouseRepositore
+    public class HousesRepositore
     {
         private static AppDBContext dBContext = new AppDBContext();
 

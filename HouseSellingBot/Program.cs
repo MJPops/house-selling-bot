@@ -34,78 +34,28 @@ namespace HouseSellingBot
         [Obsolete]
         private static async void OnCallbackQweryHandlerAsync(object sender, CallbackQueryEventArgs e)
         {
-            var message = e.CallbackQuery.Message;
-            Messages Message = new(client, message.Chat.Id);
-            try
+            var callbackMessage = e.CallbackQuery.Data;
+            Messages Message = new(client, e.CallbackQuery.Message.Chat.Id);
+
+            if (callbackMessage == "ВсеДома")
             {
-                if (e.CallbackQuery.Data == "О нас")
-                {
-                    await Message.SendInfoMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "Добавить фильтр")
-                {
-                    await Message.SendFilterMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "Аренда")
-                {
-                    await Message.SendRentMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "Покупка")
-                {
-                    await Message.SendSaleMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "РайонАренда")
-                {
-                    await Message.SendRentDistrictMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "КомнатаАренда")
-                {
-                    await Message.SendRentRoomsMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "СтоимостьАренда")
-                {
-                    await Message.SendRentPriceMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "МетражАренда")
-                {
-                    await Message.SendRentFootageMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "РайонПокупка")
-                {
-                    await Message.SendSaleDictrictMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "КомнатаПокупка")
-                {
-                    await Message.SendSaleRoomsMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "СтоимостьПокупка")
-                {
-                    await Message.SendSalePriceMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "МетражПокупка")
-                {
-                    await Message.SendSaleFootageMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "Аренда дома")
-                {
-                    await Message.SendDistrictMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "Аренда квартиры")
-                {
-                    await Message.SendDistrictMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "Покупка дома")
-                {
-                    await Message.SendDistrictMenuAsync();
-                }
-                else if (e.CallbackQuery.Data == "Покупка квартиры")
-                {
-                    await Message.SendDistrictMenuAsync();
-                }
+                await Message.SendAllHousesAsync();
             }
-            catch 
+            else if(callbackMessage =="Фильтры")
             {
-                await client.SendTextMessageAsync(message.Chat.Id, "Ошибка");
+                await Message.SendFiltersMenuAsync();
+            }
+            else if (callbackMessage == "ПоТипуДома")
+            {
+                await Message.SendHousesTypeMenuAsync();
+            }
+            else if (callbackMessage == "Квартиры")
+            {
+                await Message.SendHouseByTypeAsync("Квартиры");
+            }
+            else if (callbackMessage == "ЧастныеДома")
+            {
+                await Message.SendHouseByTypeAsync("Частные Дома");
             }
         }
 
@@ -115,23 +65,45 @@ namespace HouseSellingBot
             var inputMessage = e.Message;
             Messages Message = new(client, inputMessage.Chat.Id);
             Console.WriteLine(inputMessage.Text); //TODO - delete
-            try
+
+            if (inputMessage.Text == "/start")
             {
-                if (inputMessage.Text == "/start")
-                {
-                    await Message.SendStartMenuAsync();
-                }
-                await UserRepositore.GetHousesWhithCustomFilters('1');
-                {
-                    foreach (House house in await AllHouseRepositore.GetAllHousesAsync())
-                    {
-                        await AllHouseRepositore.GetHouseWithHigherPrice('1');
-                    }
-                }
+                await Message.SendStartMenuAsync();
             }
-            catch
+            else if (inputMessage.Text == "Заполнить бд")
             {
-                await client.SendTextMessageAsync(inputMessage.Chat.Id, "Ошибка");
+                await HousesRepositore.AddHouseAsync(new House()
+                {
+                    District = "Центральная",
+                    Footage = 60,
+                    Price = 6000000,
+                    RentType = "Аренда",
+                    RoomsNumber = 2,
+                    Type = "Квартиры"
+                });
+                await HousesRepositore.AddHouseAsync(new House()
+                {
+                    District = "Северный",
+                    Footage = 36,
+                    Price = 4000000,
+                    RentType = "Продажа",
+                    RoomsNumber = 1,
+                    Type = "Квартиры"
+                });
+                await HousesRepositore.AddHouseAsync(new House()
+                {
+                    District = "Центральная",
+                    Footage = 79,
+                    Price = 6000000,
+                    RentType = "Продажа",
+                    RoomsNumber = 3,
+                    Type = "Частные Дома"
+                });
+                await UsersRepositore.AddUserAsync(new User()
+                {
+                    HightFootage = 70,
+                });
+                await Message.SendStartMenuAsync();
             }
         }
     }

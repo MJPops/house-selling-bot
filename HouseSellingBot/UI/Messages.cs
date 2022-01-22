@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HouseSellingBot.Models;
+using HouseSellingBot.Repositories;
+using System;
 using System.Threading.Tasks;
 using Telegram.Bot;
 
@@ -27,63 +29,51 @@ namespace HouseSellingBot.UI
         /// </summary>
         public async Task SendStartMenuAsync()
         {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Start());
+            await Client.SendTextMessageAsync(chatId, "Здравствуйте, рад вас видеть. \n" +
+                "Я являюсь ботом, который поможет вам ознакомиться с домами, доступными к приобретению и аренде.\n" +
+                "Выберите интересующий вас пункт меню.",
+                replyMarkup: Buttons.Start());
         }
-        public async Task SendContactsMenuAsync()
+        public async Task SendAllHousesAsync()
         {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Contacts());
+            await Client.SendTextMessageAsync(chatId, "Вот все доступные на данных момент дома\n" +
+                "Для того, чтобы в любой момент вернуться на стартовое меню, введите /start");
+            foreach (var item in await HousesRepositore.GetAllHousesAsync())
+            {
+                await SendOneHouseAsync(item);
+            }
         }
-        public async Task SendRentMenuAsync()
+        public async Task SendFiltersMenuAsync()
         {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Rent());
+            await Client.SendTextMessageAsync(chatId,
+                "Вот доступные фильтры\n" +
+                "Напоминаем, что незарегистрированный клиент может использовать единовременно только 1 фильтр\n" +
+                "Для того, чтобы зарегистрироваться введите \"Регистрация <Имя>\", где <Имя> заменить на ваше имя.",
+                replyMarkup: Buttons.FiltersMenu());
         }
-        public async Task SendSaleMenuAsync()
+        public async Task SendHousesTypeMenuAsync()
         {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Sale());
+            await Client.SendTextMessageAsync(chatId,
+                "Выберите тип жилого помещения:",
+                replyMarkup: Buttons.HousesTypesMenu());
         }
-        public async Task SendRentDistrictMenuAsync()
+        public async Task SendHouseByTypeAsync(string type)
         {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentDistrict());
+            await Client.SendTextMessageAsync(chatId, $"Вот все доступные {type} на данный момент:");
+            foreach (var item in await HousesRepositore.GetHousesByTypeAsync(type)) 
+            {
+                await SendOneHouseAsync(item);
+            }
         }
-        public async Task SendRentRoomsMenuAsync()
+
+        private static async Task SendOneHouseAsync(House house)
         {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentRooms());
-        }
-        public async Task SendRentPriceMenuAsync()
-        { 
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentPrice());
-        }
-        public async Task SendRentFootageMenuAsync()
-        {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentFootage());
-        }
-        public async Task SendSaleDictrictMenuAsync()
-        {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSaleDistrict());
-        }
-        public async Task SendSaleRoomsMenuAsync()
-        {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSaleRooms());
-        }
-        public async Task SendSalePriceMenuAsync()
-        {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSalePrice());
-        }
-        public async Task SendSaleFootageMenuAsync()
-        {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSaleFootage());
-        }
-        public async Task SendFilterMenuAsync()
-        {
-            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Filter());
-        }
-        public async Task SendInfoMenuAsync()
-        {
-            await Client.SendTextMessageAsync(chatId, "Выберите дейтсвие", replyMarkup: Buttons.Contacts());
-        }
-        public async Task SendDistrictMenuAsync()
-        {
-            await Client.SendTextMessageAsync(chatId, "Выберите район", replyMarkup: Buttons.Districts());
+            await Client.SendTextMessageAsync(chatId,
+                    $"Описание: {house.Description}\n" +
+                    $"Метраж: {house.Footage}\n" +
+                    $"Число комнат: {house.RoomsNumber}\n" +
+                    $"Тип покупки: {house.RentType}\n" +
+                    $"Цена: {house.Price}\n");
         }
     }
 }
