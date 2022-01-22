@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HouseSellingBot.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20220121054043_Init")]
+    [Migration("20220122200044_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,8 +70,8 @@ namespace HouseSellingBot.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
+                    b.Property<long>("ChatId")
+                        .HasColumnType("bigint");
 
                     b.Property<float?>("HightFootage")
                         .HasColumnType("real");

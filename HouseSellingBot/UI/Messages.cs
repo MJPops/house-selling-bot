@@ -6,17 +6,11 @@ using Telegram.Bot;
 
 namespace HouseSellingBot.UI
 {
-    /// <summary>
-    /// A class that encapsulates messages towards the user.
-    /// </summary>
     public class Messages
     {
         private static TelegramBotClient Client { get; set; }
         private static long chatId;
 
-        /// <summary>
-        /// A class that encapsulates messages towards the user.
-        /// </summary>
         [Obsolete]
         public Messages(TelegramBotClient client, long _chatId)
         {
@@ -24,9 +18,6 @@ namespace HouseSellingBot.UI
             chatId = _chatId;
         }
 
-        /// <summary>
-        /// Sends a start menu with a set of buttons.
-        /// </summary>
         public async Task SendStartMenuAsync()
         {
             await Client.SendTextMessageAsync(chatId, "Здравствуйте, рад вас видеть. \n" +
@@ -43,19 +34,33 @@ namespace HouseSellingBot.UI
                 await SendOneHouseAsync(item);
             }
         }
+
+
         public async Task SendFiltersMenuAsync()
         {
+            if (await UsersRepositore.UserIsRegisteredAsync(chatId))
+            {
+
+            }
             await Client.SendTextMessageAsync(chatId,
                 "Вот доступные фильтры\n" +
                 "Напоминаем, что незарегистрированный клиент может использовать единовременно только 1 фильтр\n" +
                 "Для того, чтобы зарегистрироваться введите \"Регистрация <Имя>\", где <Имя> заменить на ваше имя.",
-                replyMarkup: Buttons.FiltersMenu());
+                replyMarkup: await Buttons.FiltersMenuForUserAsync(chatId));
+        }
+        public async Task SendHousesForUserAsync(int userId)
+        {
+            await Client.SendTextMessageAsync(chatId, "Дома, соответствующие вашим фильтрам:");
+            foreach (var item in await UsersRepositore.GetHousesWhithCustomFiltersAsync(userId))
+            {
+                await SendOneHouseAsync(item);
+            }
         }
         public async Task SendHousesTypeMenuAsync()
         {
             await Client.SendTextMessageAsync(chatId,
                 "Выберите тип жилого помещения:",
-                replyMarkup: Buttons.HousesTypesMenu());
+                replyMarkup: await Buttons.HousesTypesMenuForUser(chatId));
         }
         public async Task SendHouseByTypeAsync(string type)
         {

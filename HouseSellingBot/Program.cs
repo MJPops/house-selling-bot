@@ -35,13 +35,17 @@ namespace HouseSellingBot
         private static async void OnCallbackQweryHandlerAsync(object sender, CallbackQueryEventArgs e)
         {
             var callbackMessage = e.CallbackQuery.Data;
+            long chatId = e.CallbackQuery.Message.Chat.Id;
             Messages Message = new(client, e.CallbackQuery.Message.Chat.Id);
+            Console.WriteLine(callbackMessage); //TODO - delete
 
             if (callbackMessage == "ВсеДома")
             {
                 await Message.SendAllHousesAsync();
+
+
             }
-            else if(callbackMessage =="Фильтры")
+            else if (callbackMessage == "Фильтры")
             {
                 await Message.SendFiltersMenuAsync();
             }
@@ -57,20 +61,41 @@ namespace HouseSellingBot
             {
                 await Message.SendHouseByTypeAsync("Частные Дома");
             }
+
+            else if (callbackMessage == "КвартирыРег")
+            {
+                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                user.HouseType = "Квартиры";
+                await UsersRepositore.UpdateUserAsync(user);
+                await Message.SendHousesForUserAsync(user.Id);
+            }
+            else if (callbackMessage == "ЧастныеДомаРег")
+            {
+                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                user.HouseType = "Частные Дома";
+                await UsersRepositore.UpdateUserAsync(user);
+                await Message.SendHousesForUserAsync(user.Id);
+            }
+            else if (callbackMessage == "ОчиститьФильтры")
+            {
+                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                await UsersRepositore.ClearUserFiltersAsync(user.Id);
+            }
         }
 
         [Obsolete]
         private static async void OnMessageHandler(object sender, MessageEventArgs e)
         {
-            var inputMessage = e.Message;
-            Messages Message = new(client, inputMessage.Chat.Id);
-            Console.WriteLine(inputMessage.Text); //TODO - delete
+            var inputMessage = e.Message.Text;
+            long chatId = e.Message.Chat.Id;
+            Messages Message = new(client, e.Message.Chat.Id);
+            Console.WriteLine(inputMessage); //TODO - delete
 
-            if (inputMessage.Text == "/start")
+            if (inputMessage == "/start")
             {
                 await Message.SendStartMenuAsync();
             }
-            else if (inputMessage.Text == "Заполнить бд")
+            else if (inputMessage == "Заполнить бд")
             {
                 await HousesRepositore.AddHouseAsync(new House()
                 {
@@ -104,6 +129,26 @@ namespace HouseSellingBot
                     HightFootage = 70,
                 });
                 await Message.SendStartMenuAsync();
+            }
+            else if (inputMessage == "Удалить меня")
+            {
+                await UsersRepositore.RemoveUserByChatIdAsync(chatId);
+                await Message.SendStartMenuAsync();
+            }
+            else
+            {
+                try
+                {
+                    if (inputMessage.Substring(0, 12) == "Регистрация ")
+                    {
+                        await UsersRepositore.AddUserAsync(new User
+                        {
+                            ChatId = chatId,
+                            Name = inputMessage.Substring(12)
+                        });
+                    }
+                }
+                catch (ArgumentOutOfRangeException) { }//It's OK
             }
         }
     }

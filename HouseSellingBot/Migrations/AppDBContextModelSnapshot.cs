@@ -68,8 +68,8 @@ namespace HouseSellingBot.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
+                    b.Property<long>("ChatId")
+                        .HasColumnType("bigint");
 
                     b.Property<float?>("HightFootage")
                         .HasColumnType("real");

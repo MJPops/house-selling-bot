@@ -16,6 +16,22 @@ namespace HouseSellingBot.Repositories
         private static AppDBContext dBContext = new AppDBContext();
 
         /// <summary>
+        /// Returns true if a user with the given chatId is found in the database. Otherwise, it's false.
+        /// </summary>
+        /// <param name="chatId">ChatID of the user you are looking for.</param>
+        public static async Task<bool> UserIsRegisteredAsync(long chatId)
+        {
+            try
+            {
+                await GetUserByChatIdAsync(chatId);
+                return true;
+            }
+            catch (NotFoundException)
+            {
+                return false;
+            }
+        }
+        /// <summary>
         /// Returns the user with the given ID from the database.
         /// </summary>
         /// <param name="userId">The id of the user you are looking for.</param>
@@ -77,6 +93,16 @@ namespace HouseSellingBot.Repositories
         /// <param name="user">The user being removed.</param>
         public static async Task RemoveUserAsync(User user)
         {
+            dBContext.Users.Remove(user);
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
+        /// Remove user from the database.
+        /// </summary>
+        /// <param name="chatId">ChatID of the user to be deleted.</param>
+        public static async Task RemoveUserByChatIdAsync(long chatId)
+        {
+            var user = await GetUserByChatIdAsync(chatId);
             dBContext.Users.Remove(user);
             await dBContext.SaveChangesAsync();
         }

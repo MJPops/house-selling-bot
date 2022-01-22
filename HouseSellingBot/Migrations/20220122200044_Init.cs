@@ -34,7 +34,7 @@ namespace HouseSellingBot.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ChatId = table.Column<int>(type: "int", nullable: false),
+                    ChatId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HouseType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HouseDistrict = table.Column<string>(type: "nvarchar(max)", nullable: true),

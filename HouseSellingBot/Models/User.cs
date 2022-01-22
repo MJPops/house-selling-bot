@@ -5,7 +5,7 @@ namespace HouseSellingBot.Models
     public class User
     {
         public int Id { get; set; }
-        public int ChatId { get; set; }
+        public long ChatId { get; set; }
         public string Name { get; set; }
         public string HouseType { get; set; }
         public string HouseDistrict { get; set; }
