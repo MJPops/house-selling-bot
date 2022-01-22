@@ -45,33 +45,45 @@ namespace HouseSellingBot.UI
         {
             await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentDistrict());
         }
-        public async Task SentRentRoomsMenuAsync()
+        public async Task SendRentRoomsMenuAsync()
         {
             await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentRooms());
         }
-        public async Task SentRentPriceMenuAsync()
-        {
+        public async Task SendRentPriceMenuAsync()
+        { 
             await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentPrice());
         }
-        public async Task SentRentFootageMenuAsync()
+        public async Task SendRentFootageMenuAsync()
         {
             await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InRentFootage());
         }
-        public async Task SentSaleDictrictMenuAsync()
+        public async Task SendSaleDictrictMenuAsync()
         {
             await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSaleDistrict());
         }
-        public async Task SentSaleRoomsMenuAsync()
+        public async Task SendSaleRoomsMenuAsync()
         {
             await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSaleRooms());
         }
-        public async Task SentSalePriceMenuAsync()
+        public async Task SendSalePriceMenuAsync()
         {
             await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSalePrice());
         }
-        public async Task SentSaleFootageMenuAsync()
+        public async Task SendSaleFootageMenuAsync()
         {
             await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.InSaleFootage());
+        }
+        public async Task SendFilterMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите действие", replyMarkup: Buttons.Filter());
+        }
+        public async Task SendInfoMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите дейтсвие", replyMarkup: Buttons.Contacts());
+        }
+        public async Task SendDistrictMenuAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Выберите район", replyMarkup: Buttons.Districts());
         }
     }
 }

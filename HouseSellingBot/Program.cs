@@ -1,4 +1,5 @@
-﻿using HouseSellingBot.Repositories;
+﻿using HouseSellingBot.Models;
+using HouseSellingBot.Repositories;
 using HouseSellingBot.UI;
 using System;
 using Telegram.Bot;
@@ -33,7 +34,79 @@ namespace HouseSellingBot
         [Obsolete]
         private static async void OnCallbackQweryHandlerAsync(object sender, CallbackQueryEventArgs e)
         {
-
+            var message = e.CallbackQuery.Message;
+            Messages Message = new(client, message.Chat.Id);
+            try
+            {
+                if (e.CallbackQuery.Data == "О нас")
+                {
+                    await Message.SendInfoMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "Добавить фильтр")
+                {
+                    await Message.SendFilterMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "Аренда")
+                {
+                    await Message.SendRentMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "Покупка")
+                {
+                    await Message.SendSaleMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "РайонАренда")
+                {
+                    await Message.SendRentDistrictMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "КомнатаАренда")
+                {
+                    await Message.SendRentRoomsMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "СтоимостьАренда")
+                {
+                    await Message.SendRentPriceMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "МетражАренда")
+                {
+                    await Message.SendRentFootageMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "РайонПокупка")
+                {
+                    await Message.SendSaleDictrictMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "КомнатаПокупка")
+                {
+                    await Message.SendSaleRoomsMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "СтоимостьПокупка")
+                {
+                    await Message.SendSalePriceMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "МетражПокупка")
+                {
+                    await Message.SendSaleFootageMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "Аренда дома")
+                {
+                    await Message.SendDistrictMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "Аренда квартиры")
+                {
+                    await Message.SendDistrictMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "Покупка дома")
+                {
+                    await Message.SendDistrictMenuAsync();
+                }
+                else if (e.CallbackQuery.Data == "Покупка квартиры")
+                {
+                    await Message.SendDistrictMenuAsync();
+                }
+            }
+            catch 
+            {
+                await client.SendTextMessageAsync(message.Chat.Id, "Ошибка");
+            }
         }
 
         [Obsolete]
@@ -42,10 +115,23 @@ namespace HouseSellingBot
             var inputMessage = e.Message;
             Messages Message = new(client, inputMessage.Chat.Id);
             Console.WriteLine(inputMessage.Text); //TODO - delete
-
-            if (inputMessage.Text == "/start")
+            try
             {
-                await Message.SendStartMenuAsync();
+                if (inputMessage.Text == "/start")
+                {
+                    await Message.SendStartMenuAsync();
+                }
+                await UserRepositore.GetHousesWhithCustomFilters('1');
+                {
+                    foreach (House house in await AllHouseRepositore.GetAllHousesAsync())
+                    {
+                        await AllHouseRepositore.GetHouseWithHigherPrice('1');
+                    }
+                }
+            }
+            catch
+            {
+                await client.SendTextMessageAsync(inputMessage.Chat.Id, "Ошибка");
             }
         }
     }
