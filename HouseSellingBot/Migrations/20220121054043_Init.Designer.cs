@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HouseSellingBot.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20220120193255_Init")]
+    [Migration("20220121054043_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,9 +37,6 @@ namespace HouseSellingBot.Migrations
                     b.Property<float?>("Footage")
                         .HasColumnType("real");
 
-                    b.Property<string>("HouseType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PicturePath")
                         .HasColumnType("nvarchar(max)");
 
@@ -51,6 +48,9 @@ namespace HouseSellingBot.Migrations
 
                     b.Property<int?>("RoomsNumber")
                         .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");

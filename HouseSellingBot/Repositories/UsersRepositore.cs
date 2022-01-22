@@ -11,7 +11,7 @@ namespace HouseSellingBot.Repositories
     /// <summary>
     /// A class containing data processing methods for registered users.
     /// </summary>
-    public class UserRepositore
+    public class UsersRepositore
     {
         private static AppDBContext dBContext = new AppDBContext();
 
@@ -21,7 +21,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="userId">The id of the user you are looking for.</param>
         /// <returns><see cref="User"/></returns>
         /// <exception cref="NotFoundException"></exception>
-        public static async Task<User> GetUsrByIdAsync(int userId)
+        public static async Task<User> GetUserByIdAsync(int userId)
         {
             var user = await dBContext.Users.FindAsync(userId);
 
@@ -29,6 +29,23 @@ namespace HouseSellingBot.Repositories
             {
                 throw new NotFoundException("The user with this ID is not registered in the database");
             }
+            await dBContext.Houses.Include(h => h.Users).ToListAsync();
+            return user;
+        }
+        /// <summary>
+        /// Returns a user from the database, with the given chatId.
+        /// </summary>
+        /// <param name="chatId">ChatId of the user you are looking for.</param>
+        /// <returns><see cref="User"/></returns>
+        /// <exception cref="NotFoundException"></exception>
+        public static async Task<User> GetUserByChatIdAsync(long chatId)
+        {
+            var user = await dBContext.Users.FirstOrDefaultAsync(u=>u.ChatId == chatId);
+            if (user == null)
+            {
+                throw new NotFoundException();
+            }
+            await dBContext.Houses.Include(h => h.Users).ToListAsync();
             return user;
         }
         /// <summary>
@@ -104,27 +121,23 @@ namespace HouseSellingBot.Repositories
         /// </summary>
         /// <param name="userId">The user ID for which the selection will be made.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         /// <exception cref="NoHomesWithTheseFeaturesException"></exception>
-        public static async Task<IEnumerable<House>> GetHousesWhithCustomFilters(int userId)
+        public static async Task<IEnumerable<House>> GetHousesWhithCustomFiltersAsync(int userId)
         {
-            var retrievedHouses = await AllHouseRepositore.GetAllHousesAsync();
+            var retrievedHouses = await HouseRepositore.GetAllHousesAsync();
             var user = await dBContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new NotFoundException("The user with this ID is not registered in the database");
+            }
 
-            if (user.HouseType != null)
-            {
-                retrievedHouses = retrievedHouses.Intersect(
-                    await AllHouseRepositore.GetHousesByTypeAsync(user.HouseType));
-            }
-            if (user.HouseDistrict != null)
-            {
-                retrievedHouses = retrievedHouses.Intersect(
-                    await AllHouseRepositore.GetHouseByDistrictAsync(user.HouseDistrict));
-            }
-            if (user.HouseRoomsNumbe != null)
-            {
-                retrievedHouses = retrievedHouses.Intersect(
-                    await AllHouseRepositore.GetHousesByRoomsNumberAsync(Convert.ToInt32(user.HouseRoomsNumbe)));
-            }
+            retrievedHouses = from house in retrievedHouses
+                              where (user.HouseType == null || house.Type == user.HouseType)
+                              && (user.HouseDistrict == null || house.District == user.HouseDistrict)
+                              && (user.HouseRoomsNumbe == null || house.RoomsNumber == user.HouseRoomsNumbe)
+                              select house;
+
             if (user.LowerPrice != null || user.HightPrice != null)
             {
                 retrievedHouses = retrievedHouses.Intersect(
@@ -150,13 +163,13 @@ namespace HouseSellingBot.Repositories
         {
             if (lowerPrice == null)
             {
-                return await AllHouseRepositore.GetHouseWithLowerPrice(Convert.ToInt32(hightPrice));
+                return await HouseRepositore.GetHouseWithLowerPrice(Convert.ToInt32(hightPrice));
             }
             else if (hightPrice == null)
             {
-                return await AllHouseRepositore.GetHouseWithHigherPrice(Convert.ToInt32(lowerPrice));
+                return await HouseRepositore.GetHouseWithHigherPrice(Convert.ToInt32(lowerPrice));
             }
-            return await AllHouseRepositore.GetHouseWithPriceInBetween(Convert.ToInt32(lowerPrice),
+            return await HouseRepositore.GetHouseWithPriceInBetween(Convert.ToInt32(lowerPrice),
                 Convert.ToInt32(hightPrice));
         }
         private static async Task<IEnumerable<House>> SamplingHousesBasedOnFootage
@@ -164,13 +177,13 @@ namespace HouseSellingBot.Repositories
         {
             if (lowerFootage == null)
             {
-                return await AllHouseRepositore.GetHouseWithLowerFootage(Convert.ToInt32(hightFootage));
+                return await HouseRepositore.GetHouseWithLowerFootage(Convert.ToInt32(hightFootage));
             }
             else if (hightFootage == null)
             {
-                return await AllHouseRepositore.GetHouseWithHigherFootage(Convert.ToInt32(lowerFootage));
+                return await HouseRepositore.GetHouseWithHigherFootage(Convert.ToInt32(lowerFootage));
             }
-            return await AllHouseRepositore.GetHouseWithFootageInBetween(Convert.ToInt32(lowerFootage),
+            return await HouseRepositore.GetHouseWithFootageInBetween(Convert.ToInt32(lowerFootage),
                 Convert.ToInt32(hightFootage));
         }
     }

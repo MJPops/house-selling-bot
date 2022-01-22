@@ -1,11 +1,12 @@
 ﻿using HouseSellingBot.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HouseSellingBot.Repositories
 {
-    public class AllHouseRepositore
+    public class HouseRepositore
     {
         private static AppDBContext dBContext = new AppDBContext();
 
@@ -42,7 +43,7 @@ namespace HouseSellingBot.Repositories
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
         public static async Task<IEnumerable<House>> GetAllHousesAsync()
         {
-            return await Task.Run(() => GetAllHouses());
+            return await dBContext.Houses.ToListAsync();
         }
         /// <summary>
         /// Returns houses from the database with the appropriate type.
@@ -51,7 +52,7 @@ namespace HouseSellingBot.Repositories
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
         public static async Task<IEnumerable<House>> GetHousesByTypeAsync(string type)
         {
-            return await Task.Run(() => GetHousesByType(type));
+            return await dBContext.Houses.Where(h => h.Type == type).ToListAsync();
         }
         /// <summary>
         /// Returns houses from the database with the appropriate district.
@@ -60,7 +61,7 @@ namespace HouseSellingBot.Repositories
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
         public static async Task<IEnumerable<House>> GetHouseByDistrictAsync(string district)
         {
-            return await Task.Run(() => GetHouseByDistrict(district));
+            return await dBContext.Houses.Where(h => h.District == district).ToListAsync();
         }
         /// <summary>
         /// Returns houses from the database with the given number of rooms.
@@ -69,7 +70,7 @@ namespace HouseSellingBot.Repositories
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
         public static async Task<IEnumerable<House>> GetHousesByRoomsNumberAsync(int roomsNumber)
         {
-            return await Task.Run(() => GetHousesByRoomsNumber(roomsNumber));
+            return await dBContext.Houses.Where(h => h.RoomsNumber == roomsNumber).ToListAsync();
         }
         /// <summary>
         /// Returns houses from the database that are priced higher than the specified price.
@@ -134,23 +135,6 @@ namespace HouseSellingBot.Repositories
         {
             var allHouses = await GetAllHousesAsync();
             return allHouses.Where(h => h.Footage >= lowerFootage && h.Price <= higherFootage).ToList();
-        }
-
-        private static IEnumerable<House> GetAllHouses()
-        {
-            return dBContext.Houses.ToList();
-        }
-        private static IEnumerable<House> GetHousesByRoomsNumber(int roomsNumber)
-        {
-            return dBContext.Houses.Where(h => h.RoomsNumber == roomsNumber).ToList();
-        }
-        private static IEnumerable<House> GetHousesByType(string type)
-        {
-            return dBContext.Houses.Where(h => h.HouseType == type).ToList();
-        }
-        private static IEnumerable<House> GetHouseByDistrict(string district)
-        {
-            return dBContext.Houses.Where(h => h.District == district).ToList();
         }
     }
 }
