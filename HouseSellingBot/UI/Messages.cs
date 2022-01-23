@@ -34,14 +34,8 @@ namespace HouseSellingBot.UI
                 await SendOneHouseAsync(item);
             }
         }
-
-
         public async Task SendFiltersMenuAsync()
         {
-            if (await UsersRepositore.UserIsRegisteredAsync(chatId))
-            {
-
-            }
             await Client.SendTextMessageAsync(chatId,
                 "Вот доступные фильтры\n" +
                 "Напоминаем, что незарегистрированный клиент может использовать единовременно только 1 фильтр\n" +
