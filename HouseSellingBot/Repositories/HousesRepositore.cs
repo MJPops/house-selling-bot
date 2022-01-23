@@ -46,7 +46,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetAllHousesAsync()
         {
             var houses = await dBContext.Houses.ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
@@ -61,7 +61,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetHousesByTypeAsync(string type)
         {
             var houses = await dBContext.Houses.Where(h => h.Type == type).ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
@@ -76,7 +76,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetHouseByDistrictAsync(string district)
         {
             var houses = await dBContext.Houses.Where(h => h.District == district).ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
@@ -91,7 +91,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetHousesByRoomsNumberAsync(int roomsNumber)
         {
             var houses = await dBContext.Houses.Where(h => h.RoomsNumber == roomsNumber).ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
@@ -106,7 +106,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetHouseWithHigherPrice(float price)
         {
             var houses = await dBContext.Houses.Where(h => h.Price >= price).ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
@@ -121,7 +121,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetHouseWithLowerPrice(float price)
         {
             var houses = await dBContext.Houses.Where(h => h.Price <= price).ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
@@ -139,7 +139,7 @@ namespace HouseSellingBot.Repositories
         {
             var houses = await dBContext.Houses.
                 Where(h => h.Price >= lowerPrice && h.Price <= higherPrice).ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
@@ -154,7 +154,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetHouseWithHigherFootage(float footage)
         {
             var houses = await dBContext.Houses.Where(h => h.Footage >= footage).ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
@@ -169,7 +169,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetHouseWithLowerFootage(float footage)
         {
             var houses = await dBContext.Houses.Where(h => h.Footage <= footage).ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
@@ -187,7 +187,7 @@ namespace HouseSellingBot.Repositories
         {
             var houses = await dBContext.Houses.
                 Where(h => h.Footage >= lowerFootage && h.Price <= higherFootage).ToListAsync();
-            if (houses == null)
+            if (!houses.Any())
             {
                 throw new NotFoundException();
             }
