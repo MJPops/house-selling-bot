@@ -70,7 +70,14 @@ namespace HouseSellingBot.UI
                 await SendOneHouseAsync(item);
             }
         }
-
+        public async Task SendHouseByDistrictAsync(string type)
+        {
+            await Client.SendTextMessageAsync(chatId, $"Вот все доступные ");
+            foreach (var item in await HousesRepositore.GetHouseByDistrictAsync(type))
+            {
+                await SendOneHouseAsync(item);
+            }
+        }
         private static async Task SendOneHouseAsync(House house)
         {
             await Client.SendTextMessageAsync(chatId,
