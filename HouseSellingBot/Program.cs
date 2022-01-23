@@ -2,6 +2,8 @@
 using HouseSellingBot.Repositories;
 using HouseSellingBot.UI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 
@@ -11,7 +13,7 @@ namespace HouseSellingBot
     {
         private static string Token { get; set; } = "5009457163:AAEz5eg_AAz26uVh9rLmdvdq7pxfCCzYBzo";
         private static TelegramBotClient client;
-        private static bool DistrictSearchIsActive = false;
+        private static List<(long, string)> UnregisteredUsersFilters = new();
 
         [Obsolete]
         static void Main()
@@ -56,20 +58,21 @@ namespace HouseSellingBot
             }
             else if (callbackMessage == "Квартиры")
             {
-                await Message.SendHouseByTypeAsync("Квартиры");
+                await Message.SendHousesByTypeAsync("Квартиры");
             }
             else if (callbackMessage == "ЧастныеДома")
             {
-                await Message.SendHouseByTypeAsync("Частные Дома");
+                await Message.SendHousesByTypeAsync("Частные Дома");
             }
             else if (callbackMessage == "ПоРайону")
             {
                 await Message.SendDistrictsListAsync();
-                DistrictSearchIsActive = true;
+                UnregisteredUsersFilters.Add((chatId, "Район"));
             }
             else if (callbackMessage == "ПоКомнатам")
             {
                 await Message.SendRoomsNumberListAsync();
+                UnregisteredUsersFilters.Add((chatId, "Комнаты"));
             }
             else if (callbackMessage == "ПоТипуПокупки")
             {
@@ -146,6 +149,29 @@ namespace HouseSellingBot
             {
                 await UsersRepositore.RemoveUserByChatIdAsync(chatId);
                 await Message.SendStartMenuAsync();
+            }
+            else if (UnregisteredUsersFilters.Any())
+            {
+                List<(long, string)> FiltersToRemove = new();
+                foreach ((long, string) filterData in UnregisteredUsersFilters)
+                {
+                    if (filterData.Item1 == chatId)
+                    {
+                        if (filterData.Item2 == "Район")
+                        {
+                            await Message.SendHousesByDistrictAsync(inputMessage);
+                        }
+                        else if (filterData.Item2 == "Комнаты")
+                        {
+                            await Message.SendHousesByRoomsNumberAsync(Convert.ToInt32(inputMessage));
+                        }
+                        FiltersToRemove.Add(filterData);
+                    }
+                }
+                foreach (var filter in FiltersToRemove)
+                {
+                    UnregisteredUsersFilters.Remove(filter);
+                }
             }
             else
             {
