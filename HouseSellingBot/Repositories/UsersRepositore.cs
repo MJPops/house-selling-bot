@@ -32,23 +32,6 @@ namespace HouseSellingBot.Repositories
             }
         }
         /// <summary>
-        /// Returns the user with the given ID from the database.
-        /// </summary>
-        /// <param name="userId">The id of the user you are looking for.</param>
-        /// <returns><see cref="User"/></returns>
-        /// <exception cref="NotFoundException"></exception>
-        public static async Task<User> GetUserByIdAsync(int userId)
-        {
-            var user = await dBContext.Users.FindAsync(userId);
-
-            if (user == null)
-            {
-                throw new NotFoundException("The user with this ID is not registered in the database");
-            }
-            await dBContext.Houses.Include(h => h.Users).ToListAsync();
-            return user;
-        }
-        /// <summary>
         /// Returns a user from the database, with the given chatId.
         /// </summary>
         /// <param name="chatId">ChatId of the user you are looking for.</param>
@@ -90,15 +73,6 @@ namespace HouseSellingBot.Repositories
         /// <summary>
         /// Remove user from the database.
         /// </summary>
-        /// <param name="user">The user being removed.</param>
-        public static async Task RemoveUserAsync(User user)
-        {
-            dBContext.Users.Remove(user);
-            await dBContext.SaveChangesAsync();
-        }
-        /// <summary>
-        /// Remove user from the database.
-        /// </summary>
         /// <param name="chatId">ChatID of the user to be deleted.</param>
         public static async Task RemoveUserByChatIdAsync(long chatId)
         {
@@ -109,10 +83,10 @@ namespace HouseSellingBot.Repositories
         /// <summary>
         /// Clears the filters for the given user.
         /// </summary>
-        /// <param name="userId">The id of the user whose filters will be cleared.</param>
-        public static async Task ClearUserFiltersAsync(int userId)
+        /// <param name="chatId">The id of the user whose filters will be cleared.</param>
+        public static async Task ClearUserFiltersAsync(long chatId)
         {
-            var user = await dBContext.Users.FindAsync(userId);
+            var user = await GetUserByChatIdAsync(chatId);
 
             user.HouseType = null;
             user.HouseDistrict = null;
@@ -127,12 +101,12 @@ namespace HouseSellingBot.Repositories
         /// <summary>
         /// Creates a relationship between home and user in the database.
         /// </summary>
-        /// <param name="userId">The user ID to which the favorite home will be added.</param>
+        /// <param name="chatId">The user ID to which the favorite home will be added.</param>
         /// <param name="houseId"></param>
         /// <exception cref="AlreadyContainException"></exception>
-        public static async Task AddFavoriteHouseToUserAsync(int userId, int houseId)
+        public static async Task AddFavoriteHouseToUserAsync(long chatId, int houseId)
         {
-            var user = await dBContext.Users.FindAsync(userId);
+            var user = await GetUserByChatIdAsync(chatId);
             await dBContext.Houses.Include(h => h.Users).ToListAsync();
             var houseToAdd = await dBContext.Houses.FindAsync(houseId);
 
@@ -145,18 +119,14 @@ namespace HouseSellingBot.Repositories
         /// <summary>
         /// Returns the houses from the database that match the given user's filters.
         /// </summary>
-        /// <param name="userId">The user ID for which the selection will be made.</param>
+        /// <param name="chatId">The user ID for which the selection will be made.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
         /// <exception cref="NotFoundException"></exception>
         /// <exception cref="NoHomesWithTheseFeaturesException"></exception>
-        public static async Task<IEnumerable<House>> GetHousesWhithCustomFiltersAsync(int userId)
+        public static async Task<IEnumerable<House>> GetHousesWhithCustomFiltersAsync(long chatId)
         {
             var retrievedHouses = await HousesRepositore.GetAllHousesAsync();
-            var user = await dBContext.Users.FindAsync(userId);
-            if (user == null)
-            {
-                throw new NotFoundException("The user with this ID is not registered in the database");
-            }
+            var user = await GetUserByChatIdAsync(chatId);
 
             retrievedHouses = from house in retrievedHouses
                               where (user.HouseType == null || house.Type == user.HouseType)

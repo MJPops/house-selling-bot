@@ -48,10 +48,10 @@ namespace HouseSellingBot.UI
                 "Для того, чтобы зарегистрироваться введите \"Регистрация <Имя>\", где <Имя> заменить на ваше имя.",
                 replyMarkup: await Buttons.FiltersMenuForUserAsync(chatId));
         }
-        public async Task SendHousesForUserAsync(int userId)
+        public async Task SendHousesForUserAsync(long chatId)
         {
             await Client.SendTextMessageAsync(chatId, "Дома, соответствующие вашим фильтрам:");
-            foreach (var item in await UsersRepositore.GetHousesWhithCustomFiltersAsync(userId))
+            foreach (var item in await UsersRepositore.GetHousesWhithCustomFiltersAsync(chatId))
             {
                 await SendOneHouseAsync(item);
             }
