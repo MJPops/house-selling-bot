@@ -38,7 +38,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="AlreadyContainException"></exception>
         public static async Task AddUserAsync(User user)
         {
-            if (dBContext.Users.ToList().Contains(user))
+            if (dBContext.Users.Where(u=>u.ChatId == user.ChatId).Any())
             {
                 throw new AlreadyContainException();
             }

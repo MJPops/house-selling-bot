@@ -160,6 +160,11 @@ namespace HouseSellingBot.UI
         {
             await Client.SendTextMessageAsync(ChatId, "Дома с такими параметрами не обнаруженно.");
         }
+        public async Task SentAlreadyRegisterAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Вы уже зарегистрированны.\n" +
+                "Если хотите сменить имя, введите \"Удали меня\" и перерегистрируйтесь.");
+        }
 
         private async Task<IEnumerable<string>> GetAllDistrictsAsync()
         {

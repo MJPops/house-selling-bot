@@ -1,4 +1,5 @@
 ﻿using HouseSellingBot.Models;
+using HouseSellingBot.PersonalExceptions;
 using HouseSellingBot.Repositories;
 using HouseSellingBot.UI;
 using System;
@@ -172,6 +173,7 @@ namespace HouseSellingBot
                                 await Message.SendNotFoundMessageAsync();
                             }
                         }
+
                         FiltersToRemove.Add(filterData);
                     }
                 }
@@ -186,11 +188,18 @@ namespace HouseSellingBot
                 {
                     if (inputMessage.Substring(0, 12) == "Регистрация ")
                     {
-                        await UsersRepositore.AddUserAsync(new User
+                        try
                         {
-                            ChatId = chatId,
-                            Name = inputMessage.Substring(12)
-                        });
+                            await UsersRepositore.AddUserAsync(new User
+                            {
+                                ChatId = chatId,
+                                Name = inputMessage.Substring(12)
+                            });
+                        }
+                        catch (AlreadyContainException)
+                        {
+                            await Message.SentAlreadyRegisterAsync();
+                        }
                     }
                 }
                 catch (ArgumentOutOfRangeException) { }//It's OK
