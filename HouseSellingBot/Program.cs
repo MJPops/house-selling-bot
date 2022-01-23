@@ -11,6 +11,7 @@ namespace HouseSellingBot
     {
         private static string Token { get; set; } = "5009457163:AAEz5eg_AAz26uVh9rLmdvdq7pxfCCzYBzo";
         private static TelegramBotClient client;
+        private static bool DistrictSearchIsActive = false;
 
         [Obsolete]
         static void Main()
@@ -64,6 +65,15 @@ namespace HouseSellingBot
             else if (callbackMessage == "ПоРайону")
             {
                 await Message.SendDistrictsListAsync();
+                DistrictSearchIsActive = true;
+            }
+            else if (callbackMessage == "ПоКомнатам")
+            {
+                await Message.SendRoomsNumberListAsync();
+            }
+            else if (callbackMessage == "ПоТипуПокупки")
+            {
+                await Message.SendRentTypeListAsync();
             }
             else if (callbackMessage == "КвартирыРег")
             {

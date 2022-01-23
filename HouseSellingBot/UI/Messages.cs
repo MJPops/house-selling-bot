@@ -92,6 +92,40 @@ namespace HouseSellingBot.UI
                 await Client.SendTextMessageAsync(ChatId, "Районы пока не добавлены");
             }
         }
+        public async Task SendRoomsNumberListAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Вот все доступные варианты квартир по количеству комнат:");
+            try
+            {
+                int number = 0;
+                foreach (var roomsnumber in await GetAllRoomsNumberAsync())
+                {
+                    number++;
+                    await Client.SendTextMessageAsync(ChatId, $"{number}. Количество комнат: {roomsnumber}");
+                }
+            }
+            catch (NotFoundException)
+            {
+                await Client.SendTextMessageAsync(ChatId, "Количество комнат пока не добавлено");
+            }
+        }
+        public async Task SendRentTypeListAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Вот все доступные варианты:");
+            try
+            {
+                int number = 0;
+                foreach (var renttype in await GetAllRentTypesAsync())
+                {
+                    number++;
+                    await Client.SendTextMessageAsync(ChatId, $"{number}. {renttype}");
+                }
+            }
+            catch (NotFoundException)
+            {
+                await Client.SendTextMessageAsync(ChatId, "Типы продажи пока не добавлены");
+            }
+        }
 
         private async Task<IEnumerable<string>> GetAllDistrictsAsync()
         {
@@ -102,6 +136,26 @@ namespace HouseSellingBot.UI
                 throw new NotFoundException();
             }
             return allDistricts;
+        }
+        private async Task<IEnumerable<string>> GetAllRentTypesAsync()
+        {
+            var allRentTypes = from house in await HousesRepositore.GetAllHousesAsync() select house.RentType;
+            allRentTypes = allRentTypes.Distinct();
+            if (allRentTypes == null)
+            {
+                throw new NotFoundException();
+            }
+            return allRentTypes;
+        }
+        private async Task<IEnumerable<int?>> GetAllRoomsNumberAsync()
+        {
+            var allRoomsNumber = from house in await HousesRepositore.GetAllHousesAsync() select house.RoomsNumber;
+            allRoomsNumber = allRoomsNumber.Distinct();
+            if (allRoomsNumber == null)
+            {
+                throw new NotFoundException();
+            }
+            return allRoomsNumber;
         }
         private static async Task SendOneHouseAsync(House house)
         {
