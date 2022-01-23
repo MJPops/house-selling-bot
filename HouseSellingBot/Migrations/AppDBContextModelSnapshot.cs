@@ -83,6 +83,9 @@ namespace HouseSellingBot.Migrations
                     b.Property<int?>("HouseId")
                         .HasColumnType("int");
 
+                    b.Property<string>("HouseRentType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("HouseRoomsNumbe")
                         .HasColumnType("int");
 

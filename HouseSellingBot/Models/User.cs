@@ -8,6 +8,7 @@ namespace HouseSellingBot.Models
         public long ChatId { get; set; }
         public string Name { get; set; }
         public string HouseType { get; set; }
+        public string HouseRentType { get; set; }
         public string HouseDistrict { get; set; }
         public int? HouseRoomsNumbe { get; set; }
         public float? LowerPrice { get; set; }

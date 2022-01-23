@@ -37,6 +37,7 @@ namespace HouseSellingBot.Migrations
                     ChatId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HouseType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HouseRentType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HouseDistrict = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HouseRoomsNumbe = table.Column<int>(type: "int", nullable: true),
                     LowerPrice = table.Column<float>(type: "real", nullable: true),
