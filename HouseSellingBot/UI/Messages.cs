@@ -74,6 +74,21 @@ namespace HouseSellingBot.UI
                 await SendNotFoundMessageAsync();
             }
         }
+        public async Task SendHousesByRentTypeAsync(string type)
+        {
+            await Client.SendTextMessageAsync(ChatId, $"Вот все доступные {type} на данный момент:");
+            try
+            {
+                foreach (var item in await HousesRepositore.GetHousesByRentTypeAsync(type))
+                {
+                    await SendOneHouseAsync(item);
+                }
+            }
+            catch (NotFoundException)
+            {
+                await SendNotFoundMessageAsync();
+            }
+        }
         public async Task SendHousesByDistrictAsync(string type)
         {
             await Client.SendTextMessageAsync(ChatId, $"Вот все доступные помещение на данный момент в этом районе");
@@ -110,12 +125,7 @@ namespace HouseSellingBot.UI
             await Client.SendTextMessageAsync(ChatId, "Вот все доступные районы:");
             try
             {
-                int number = 0;
-                foreach (var district in await GetAllDistrictsAsync())
-                {
-                    number++;
-                    await Client.SendTextMessageAsync(ChatId, $"{number}. {district}");
-                }
+                await SendFiltersList(await GetAllDistrictsAsync());
             }
             catch (NotFoundException)
             {
@@ -127,12 +137,7 @@ namespace HouseSellingBot.UI
             await Client.SendTextMessageAsync(ChatId, "Вот все доступные варианты квартир по количеству комнат:");
             try
             {
-                int number = 0;
-                foreach (var roomsnumber in await GetAllRoomsNumberAsync())
-                {
-                    number++;
-                    await Client.SendTextMessageAsync(ChatId, $"{number}. Количество комнат: {roomsnumber}");
-                }
+                await SendFiltersList(await GetAllRoomsNumberAsync());
             }
             catch (NotFoundException)
             {
@@ -144,12 +149,7 @@ namespace HouseSellingBot.UI
             await Client.SendTextMessageAsync(ChatId, "Вот все доступные варианты:");
             try
             {
-                int number = 0;
-                foreach (var renttype in await GetAllRentTypesAsync())
-                {
-                    number++;
-                    await Client.SendTextMessageAsync(ChatId, $"{number}. {renttype}");
-                }
+                await SendFiltersList(await GetAllRentTypesAsync());
             }
             catch (NotFoundException)
             {
@@ -160,13 +160,13 @@ namespace HouseSellingBot.UI
         {
             await Client.SendTextMessageAsync(ChatId, "Дома с такими параметрами не обнаруженно.");
         }
-        public async Task SentAlreadyRegisterAsync()
+        public async Task SendAlreadyRegisterAsync()
         {
             await Client.SendTextMessageAsync(ChatId, "Вы уже зарегистрированны.\n" +
-                "Если хотите сменить имя, введите \"Удали меня\" и перерегистрируйтесь.");
+                "Если хотите сменить имя, введите \"Удалить меня\" и перерегистрируйтесь.");
         }
 
-        private async Task<IEnumerable<string>> GetAllDistrictsAsync()
+        private static async Task<IEnumerable<string>> GetAllDistrictsAsync()
         {
             var allDistricts = from house in await HousesRepositore.GetAllHousesAsync() select house.District;
             allDistricts = allDistricts.Distinct();
@@ -176,7 +176,7 @@ namespace HouseSellingBot.UI
             }
             return allDistricts;
         }
-        private async Task<IEnumerable<string>> GetAllRentTypesAsync()
+        private static async Task<IEnumerable<string>> GetAllRentTypesAsync()
         {
             var allRentTypes = from house in await HousesRepositore.GetAllHousesAsync() select house.RentType;
             allRentTypes = allRentTypes.Distinct();
@@ -186,7 +186,7 @@ namespace HouseSellingBot.UI
             }
             return allRentTypes;
         }
-        private async Task<IEnumerable<int?>> GetAllRoomsNumberAsync()
+        private static async Task<IEnumerable<int?>> GetAllRoomsNumberAsync()
         {
             var allRoomsNumber = from house in await HousesRepositore.GetAllHousesAsync() select house.RoomsNumber;
             allRoomsNumber = allRoomsNumber.OrderBy(n => n).Distinct();
@@ -195,6 +195,24 @@ namespace HouseSellingBot.UI
                 throw new NotFoundException();
             }
             return allRoomsNumber;
+        }
+        private async Task SendFiltersList(IEnumerable<string> filters)
+        {
+            int number = 0;
+            foreach (var filter in filters)
+            {
+                number++;
+                await Client.SendTextMessageAsync(ChatId, $"{number}. {filter}");
+            }
+        }
+        private async Task SendFiltersList(IEnumerable<int?> filters)
+        {
+            int number = 0;
+            foreach (var filter in filters)
+            {
+                number++;
+                await Client.SendTextMessageAsync(ChatId, $"{number}. Количество комнат: {filter}");
+            }
         }
         private static async Task SendOneHouseAsync(House house)
         {
