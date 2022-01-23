@@ -67,19 +67,18 @@ namespace HouseSellingBot
                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                 user.HouseType = "Квартиры";
                 await UsersRepositore.UpdateUserAsync(user);
-                await Message.SendHousesForUserAsync(user.Id);
+                await Message.SendHousesForUserAsync(chatId);
             }
             else if (callbackMessage == "ЧастныеДомаРег")
             {
                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                 user.HouseType = "Частные Дома";
                 await UsersRepositore.UpdateUserAsync(user);
-                await Message.SendHousesForUserAsync(user.Id);
+                await Message.SendHousesForUserAsync(chatId);
             }
             else if (callbackMessage == "ОчиститьФильтры")
             {
-                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                await UsersRepositore.ClearUserFiltersAsync(user.Id);
+                await UsersRepositore.ClearUserFiltersAsync(chatId);
             }
         }
 
