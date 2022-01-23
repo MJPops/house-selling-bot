@@ -1,4 +1,5 @@
 ﻿using HouseSellingBot.Models;
+using HouseSellingBot.PersonalExceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace HouseSellingBot.Repositories
 {
     public class HousesRepositore
     {
-        private static AppDBContext dBContext = new AppDBContext();
+        private static readonly AppDBContext dBContext = new();
 
         /// <summary>
         /// Added house in the database.
@@ -41,56 +42,90 @@ namespace HouseSellingBot.Repositories
         /// Returns all houses from the database.
         /// </summary>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetAllHousesAsync()
         {
-            return await dBContext.Houses.ToListAsync();
+            var houses = await dBContext.Houses.ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
         /// <summary>
         /// Returns houses from the database with the appropriate type.
         /// </summary>
         /// <param name="type">The type of house you are looking for.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHousesByTypeAsync(string type)
         {
-            return await dBContext.Houses.Where(h => h.Type == type).ToListAsync();
+            var houses = await dBContext.Houses.Where(h => h.Type == type).ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
         /// <summary>
         /// Returns houses from the database with the appropriate district.
         /// </summary>
         /// <param name="district">The district of house you are looking for.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseByDistrictAsync(string district)
         {
-            return await dBContext.Houses.Where(h => h.District == district).ToListAsync();
+            var houses = await dBContext.Houses.Where(h => h.District == district).ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
         /// <summary>
         /// Returns houses from the database with the given number of rooms.
         /// </summary>
         /// <param name="roomsNumber">The number of rooms in the desired house.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHousesByRoomsNumberAsync(int roomsNumber)
         {
-            return await dBContext.Houses.Where(h => h.RoomsNumber == roomsNumber).ToListAsync();
+            var houses = await dBContext.Houses.Where(h => h.RoomsNumber == roomsNumber).ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
         /// <summary>
         /// Returns houses from the database that are priced higher than the specified price.
         /// </summary>
         /// <param name="price">Price border.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithHigherPrice(float price)
         {
-            var allHouses = await GetAllHousesAsync();
-            return allHouses.Where(h => h.Price >= price).ToList();
+            var houses = await dBContext.Houses.Where(h => h.Price >= price).ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
         /// <summary>
         /// Returns houses from the database that are priced below a specified price.
         /// </summary>
         /// <param name="price">Price border.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithLowerPrice(float price)
         {
-            var allHouses = await GetAllHousesAsync();
-            return allHouses.Where(h => h.Price <= price).ToList();
+            var houses = await dBContext.Houses.Where(h => h.Price <= price).ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
         /// <summary>
         /// Returns houses from the database whose price belongs to the given range.
@@ -98,31 +133,47 @@ namespace HouseSellingBot.Repositories
         /// <param name="lowerPrice">The lower limit of the range.</param>
         /// <param name="higherPrice">The upper limit of the range.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithPriceInBetween(float lowerPrice,
             float higherPrice)
         {
-            var allHouses = await GetAllHousesAsync();
-            return allHouses.Where(h => h.Price >= lowerPrice && h.Price <= higherPrice).ToList();
+            var houses = await dBContext.Houses.
+                Where(h => h.Price >= lowerPrice && h.Price <= higherPrice).ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
         /// <summary>
         /// Returns houses from the database that are footage higher than the specified price.
         /// </summary>
         /// <param name="footage">Footage border.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithHigherFootage(float footage)
         {
-            var allHouses = await GetAllHousesAsync();
-            return allHouses.Where(h => h.Footage >= footage).ToList();
+            var houses = await dBContext.Houses.Where(h => h.Footage >= footage).ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
         /// <summary>
         /// Returns houses from the database that are footage below a specified price.
         /// </summary>
         /// <param name="footage">Footage border.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithLowerFootage(float footage)
         {
-            var allHouses = await GetAllHousesAsync();
-            return allHouses.Where(h => h.Footage <= footage).ToList();
+            var houses = await dBContext.Houses.Where(h => h.Footage <= footage).ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
         /// <summary>
         /// Returns houses from the database whose footage belongs to the given range.
@@ -130,11 +181,17 @@ namespace HouseSellingBot.Repositories
         /// <param name="lowerFootage">The lower limit of the range.</param>
         /// <param name="higherFootage">The upper limit of the range.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithFootageInBetween(float lowerFootage,
             float higherFootage)
         {
-            var allHouses = await GetAllHousesAsync();
-            return allHouses.Where(h => h.Footage >= lowerFootage && h.Price <= higherFootage).ToList();
+            var houses = await dBContext.Houses.
+                Where(h => h.Footage >= lowerFootage && h.Price <= higherFootage).ToListAsync();
+            if (houses == null)
+            {
+                throw new NotFoundException();
+            }
+            return houses;
         }
     }
 }

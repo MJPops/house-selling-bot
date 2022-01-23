@@ -9,7 +9,7 @@ namespace HouseSellingBot
 {
     class Program
     {
-        private static string token { get; set; } = "5009457163:AAEz5eg_AAz26uVh9rLmdvdq7pxfCCzYBzo";
+        private static string Token { get; set; } = "5009457163:AAEz5eg_AAz26uVh9rLmdvdq7pxfCCzYBzo";
         private static TelegramBotClient client;
 
         [Obsolete]
@@ -17,7 +17,7 @@ namespace HouseSellingBot
         {
             try
             {
-                client = new TelegramBotClient(token);
+                client = new TelegramBotClient(Token);
                 client.StartReceiving();
                 client.OnMessage += OnMessageHandler;
                 client.OnCallbackQuery += OnCallbackQweryHandlerAsync;
