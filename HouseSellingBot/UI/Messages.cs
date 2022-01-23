@@ -1,6 +1,9 @@
 ﻿using HouseSellingBot.Models;
+using HouseSellingBot.PersonalExceptions;
 using HouseSellingBot.Repositories;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
 
@@ -65,18 +68,46 @@ namespace HouseSellingBot.UI
         public async Task SendHouseByTypeAsync(string type)
         {
             await Client.SendTextMessageAsync(chatId, $"Вот все доступные {type} на данный момент:");
-            foreach (var item in await HousesRepositore.GetHousesByTypeAsync(type)) 
+            foreach (var item in await HousesRepositore.GetHousesByTypeAsync(type))
             {
                 await SendOneHouseAsync(item);
             }
         }
         public async Task SendHouseByDistrictAsync(string type)
         {
-            await Client.SendTextMessageAsync(chatId, $"Вот все доступные ");
+            await Client.SendTextMessageAsync(chatId, $"Вот все доступные помещение на данный момент в этом районе");
             foreach (var item in await HousesRepositore.GetHouseByDistrictAsync(type))
             {
                 await SendOneHouseAsync(item);
             }
+        }
+        public async Task SendDistrictsListAsync()
+        {
+            await Client.SendTextMessageAsync(chatId, "Вот все доступные районы:");
+            try
+            {
+                int number = 0;
+                foreach (var district in await GetAllDistrictsAsync())
+                {
+                    number++;
+                    await Client.SendTextMessageAsync(chatId, $"{number}. {district}");
+                }
+            }
+            catch (NotFoundException)
+            {
+                await Client.SendTextMessageAsync(chatId, "Районы пока не добавлены");
+            }
+        }
+
+        private async Task<IEnumerable<string>> GetAllDistrictsAsync()
+        {
+            var allDistricts = from house in await HousesRepositore.GetAllHousesAsync() select house.District;
+            allDistricts = allDistricts.Distinct();
+            if (allDistricts == null)
+            {
+                throw new NotFoundException();
+            }
+            return allDistricts;
         }
         private static async Task SendOneHouseAsync(House house)
         {

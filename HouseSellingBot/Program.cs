@@ -61,9 +61,9 @@ namespace HouseSellingBot
             {
                 await Message.SendHouseByTypeAsync("Частные Дома");
             }
-            else if (callbackMessage == "По району")
+            else if (callbackMessage == "ПоРайону")
             {
-                
+                await Message.SendDistrictsListAsync();
             }
             else if (callbackMessage == "КвартирыРег")
             {
