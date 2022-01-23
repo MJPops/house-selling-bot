@@ -163,7 +163,14 @@ namespace HouseSellingBot
                         }
                         else if (filterData.Item2 == "Комнаты")
                         {
-                            await Message.SendHousesByRoomsNumberAsync(Convert.ToInt32(inputMessage));
+                            try
+                            {
+                                await Message.SendHousesByRoomsNumberAsync(Convert.ToInt32(inputMessage));
+                            }
+                            catch (FormatException)
+                            {
+                                await Message.SendNotFoundMessageAsync();
+                            }
                         }
                         FiltersToRemove.Add(filterData);
                     }

@@ -156,6 +156,10 @@ namespace HouseSellingBot.UI
                 await Client.SendTextMessageAsync(ChatId, "Типы продажи пока не добавлены");
             }
         }
+        public async Task SendNotFoundMessageAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Дома с такими параметрами не обнаруженно.");
+        }
 
         private async Task<IEnumerable<string>> GetAllDistrictsAsync()
         {
@@ -195,10 +199,6 @@ namespace HouseSellingBot.UI
                     $"Число комнат: {house.RoomsNumber}\n" +
                     $"Тип покупки: {house.RentType}\n" +
                     $"Цена: {house.Price}\n");
-        }
-        private static async Task SendNotFoundMessageAsync()
-        {
-            await Client.SendTextMessageAsync(ChatId, "Дома с такими параметрами не обнаруженно.");
         }
     }
 }
