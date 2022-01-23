@@ -25,45 +25,7 @@ namespace HouseSellingBot.UI
         }
         public static async Task<IReplyMarkup> FiltersMenuForUserAsync(long chatId)
         {
-            if (await UsersRepositore.UserIsRegisteredAsync(chatId))
-            {
-                return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
-                {
-                        new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "По Цене",
-                        callbackData: "ПоЦене"),
-                        InlineKeyboardButton.WithCallbackData(text: "По Метражу",
-                        callbackData: "ПоМетражу")
-                    },
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "По Району",
-                        callbackData: "ПоРайону"),
-                        InlineKeyboardButton.WithCallbackData(text: "По Комнатам",
-                        callbackData: "ПоКомнатам")
-                    },
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "По Типу Дома",
-                        callbackData: "ПоТипуДома")
-                    },
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "По Типу Покупки",
-                        callbackData: "ПоТипуПокупки")
-                    },
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "Очистить Фильтры",
-                        callbackData: "ОчиститьФильтры"),
-                        InlineKeyboardButton.WithCallbackData(text: "Назад",
-                        callbackData: "/start")
-                    }
-                });
-                ;
-            }
-            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            List<List<InlineKeyboardButton>> startButtons = new()
             {
                 new List<InlineKeyboardButton>
                 {
@@ -89,9 +51,29 @@ namespace HouseSellingBot.UI
                     InlineKeyboardButton.WithCallbackData(text: "По Типу Покупки",
                     callbackData: "ПоТипуПокупки")
                 }
-            });
-            ;
-        }//TODO - уменьшить
+            };
+            if (await UsersRepositore.UserIsRegisteredAsync(chatId))
+            {
+                startButtons.Add(new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Очистить Фильтры",
+                    callbackData: "ОчиститьФильтры"),
+                    InlineKeyboardButton.WithCallbackData(text: "Назад",
+                    callbackData: "/start")
+                });
+            }
+            else
+            {
+                startButtons.Add(new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Назад",
+                    callbackData: "/start")
+                });
+            }
+
+            return new InlineKeyboardMarkup(startButtons);
+
+        }
         public static async Task<IReplyMarkup> HousesTypesMenuForUser(long chatId)
         {
             if (await UsersRepositore.UserIsRegisteredAsync(chatId))
@@ -110,7 +92,6 @@ namespace HouseSellingBot.UI
                         InlineKeyboardButton.WithCallbackData(text: "О нас", callbackData: "О насРег"),
                     }
                 });
-                ;
             }
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
             {

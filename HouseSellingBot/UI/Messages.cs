@@ -252,7 +252,8 @@ namespace HouseSellingBot.UI
                     $"Метраж: {house.Footage}\n" +
                     $"Число комнат: {house.RoomsNumber}\n" +
                     $"Тип покупки: {house.RentType}\n" +
-                    $"Цена: {house.Price}\n");
+                    $"Цена: {house.Price}\n" +
+                    $"/start");
         }
     }
 }
