@@ -8,7 +8,7 @@ namespace HouseSellingBot.Repositories
 {
     public class HousesRepositore
     {
-        private static AppDBContext dBContext = new AppDBContext();
+        private static readonly AppDBContext dBContext = new();
 
         /// <summary>
         /// Added house in the database.

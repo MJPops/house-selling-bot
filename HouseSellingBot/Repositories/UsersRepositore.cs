@@ -13,24 +13,8 @@ namespace HouseSellingBot.Repositories
     /// </summary>
     public class UsersRepositore
     {
-        private static AppDBContext dBContext = new AppDBContext();
+        private static readonly AppDBContext dBContext = new();
 
-        /// <summary>
-        /// Returns true if a user with the given chatId is found in the database. Otherwise, it's false.
-        /// </summary>
-        /// <param name="chatId">ChatID of the user you are looking for.</param>
-        public static async Task<bool> UserIsRegisteredAsync(long chatId)
-        {
-            try
-            {
-                await GetUserByChatIdAsync(chatId);
-                return true;
-            }
-            catch (NotFoundException)
-            {
-                return false;
-            }
-        }
         /// <summary>
         /// Returns a user from the database, with the given chatId.
         /// </summary>
@@ -78,24 +62,6 @@ namespace HouseSellingBot.Repositories
         {
             var user = await GetUserByChatIdAsync(chatId);
             dBContext.Users.Remove(user);
-            await dBContext.SaveChangesAsync();
-        }
-        /// <summary>
-        /// Clears the filters for the given user.
-        /// </summary>
-        /// <param name="chatId">The id of the user whose filters will be cleared.</param>
-        public static async Task ClearUserFiltersAsync(long chatId)
-        {
-            var user = await GetUserByChatIdAsync(chatId);
-
-            user.HouseType = null;
-            user.HouseDistrict = null;
-            user.HouseRoomsNumbe = null;
-            user.LowerPrice = null;
-            user.HightPrice = null;
-            user.LowerFootage = null;
-            user.HightFootage = null;
-
             await dBContext.SaveChangesAsync();
         }
         /// <summary>
@@ -151,6 +117,40 @@ namespace HouseSellingBot.Repositories
             }
 
             return retrievedHouses;
+        }
+        /// <summary>
+        /// Clears the filters for the given user.
+        /// </summary>
+        /// <param name="chatId">The id of the user whose filters will be cleared.</param>
+        public static async Task ClearUserFiltersAsync(long chatId)
+        {
+            var user = await GetUserByChatIdAsync(chatId);
+
+            user.HouseType = null;
+            user.HouseDistrict = null;
+            user.HouseRoomsNumbe = null;
+            user.LowerPrice = null;
+            user.HightPrice = null;
+            user.LowerFootage = null;
+            user.HightFootage = null;
+
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
+        /// Returns true if a user with the given chatId is found in the database. Otherwise, it's false.
+        /// </summary>
+        /// <param name="chatId">ChatID of the user you are looking for.</param>
+        public static async Task<bool> UserIsRegisteredAsync(long chatId)
+        {
+            try
+            {
+                await GetUserByChatIdAsync(chatId);
+                return true;
+            }
+            catch (NotFoundException)
+            {
+                return false;
+            }
         }
 
 
