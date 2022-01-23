@@ -23,7 +23,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<User> GetUserByChatIdAsync(long chatId)
         {
-            var user = await dBContext.Users.FirstOrDefaultAsync(u=>u.ChatId == chatId);
+            var user = await dBContext.Users.FirstOrDefaultAsync(u => u.ChatId == chatId);
             if (user == null)
             {
                 throw new NotFoundException();

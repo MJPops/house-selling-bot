@@ -59,7 +59,7 @@ namespace HouseSellingBot.UI
         public async Task SendHouseByTypeAsync(string type)
         {
             await Client.SendTextMessageAsync(ChatId, $"Вот все доступные {type} на данный момент:");
-            foreach (var item in await HousesRepositore.GetHousesByTypeAsync(type)) 
+            foreach (var item in await HousesRepositore.GetHousesByTypeAsync(type))
             {
                 await SendOneHouseAsync(item);
             }
