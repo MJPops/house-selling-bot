@@ -113,6 +113,18 @@ namespace HouseSellingBot.UI
                 await SendNotFoundMessageAsync(messageId);
             }
         }
+        public async Task SendHousesMetroAsync(string metro, int messageId)
+        {
+            await Client.EditMessageTextAsync(ChatId, messageId, $"Вот станции метро, рядом с которыми сейчас доступны квартиры:");
+            try
+            {
+                await SendHousesListAsync(await HousesRepositore.GetHousesByMetroAsync(metro));
+            }
+            catch
+            {
+                await SendNotFoundMessageAsync(messageId);
+            }
+        }
         public async Task SendHousesByRentTypeAsync(string type, int messageId)
         {
             await Client.EditMessageTextAsync(ChatId, messageId, $"Вот все доступные помещения на данный момент:");
@@ -251,6 +263,20 @@ namespace HouseSellingBot.UI
                 await Client.EditMessageTextAsync(ChatId, messageId, "Районы пока не добавлены");
             }
         }
+        public async Task SendMetroListAsync(int messageId)
+        {
+            try
+            {
+                var metro = await GetAllMetroAsync();
+                await Client.EditMessageTextAsync(ChatId, messageId, "Вот все доступные станции метро:",
+                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
+                    Buttons.FiltersList(metro));
+            }
+            catch (NotFoundException)
+            {
+                await Client.EditMessageTextAsync(ChatId, messageId, "Станции метро пока не добавлены");
+            }
+        }
         public async Task SendRoomsNumberListAsync(int messageId)
         {
             try
@@ -309,7 +335,8 @@ namespace HouseSellingBot.UI
                     $"Метраж: {house.Footage}\n" +
                     $"Число комнат: {house.RoomsNumber}\n" +
                     $"Тип покупки: {house.RentType}\n" +
-                    $"Цена: {house.Price}");
+                    $"Цена: {house.Price}\n" +
+                    $"Тип дома: {house.Type}");
         }
         private static async Task SendBackToStart()
         {
@@ -354,6 +381,16 @@ namespace HouseSellingBot.UI
                 throw new NotFoundException();
             }
             return allDistricts;
+        }
+        private static async Task<IEnumerable<string>> GetAllMetroAsync()
+        {
+            var allMetro = from house in await HousesRepositore.GetAllHousesAsync() select house.Metro;
+            allMetro = allMetro.Distinct();
+            if (allMetro == null)
+            {
+                throw new NotFoundException();
+            }
+            return allMetro;
         }
         private static async Task<IEnumerable<int?>> GetAllRoomsNumberAsync()
         {

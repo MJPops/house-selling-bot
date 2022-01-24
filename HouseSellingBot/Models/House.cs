@@ -10,6 +10,7 @@ namespace HouseSellingBot.Models
         public string Description { get; set; }
         public string District { get; set; }
         public string Type { get; set; }
+        public string Metro { get; set; }
         public string RentType { get; set; }
         public int? RoomsNumber { get; set; }
         public float? Price { get; set; }

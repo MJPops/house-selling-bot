@@ -98,6 +98,7 @@ namespace HouseSellingBot.Repositories
                               && (user.HouseRentType == null || house.RentType == user.HouseRentType)
                               && (user.HouseDistrict == null || house.District == user.HouseDistrict)
                               && (user.HouseRoomsNumbe == null || house.RoomsNumber == user.HouseRoomsNumbe)
+                              && (user.HouseMetro == null || house.Metro == user.HouseMetro)
                               select house;
 
             if (user.LowerPrice != null || user.HightPrice != null)
@@ -127,6 +128,7 @@ namespace HouseSellingBot.Repositories
             var user = await GetUserByChatIdAsync(chatId);
 
             user.HouseType = null;
+            user.HouseMetro = null;
             user.HouseRentType = null;
             user.HouseDistrict = null;
             user.HouseRoomsNumbe = null;

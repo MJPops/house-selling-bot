@@ -68,6 +68,21 @@ namespace HouseSellingBot.Repositories
             return houses;
         }
         /// <summary>
+        /// Returns houses from the database with the appropriate metro.
+        /// </summary>
+        /// <param name="metro">The metro station which corresponds to the houses.</param>
+        /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NotFoundException"></exception>
+        public static async Task<IEnumerable<House>> GetHousesByMetroAsync(string metro)
+        {
+            var houses = await dBContext.Houses.Where(h => h.Metro == metro).ToListAsync();
+            if (!houses.Any())
+            {
+                throw new NotFoundException();
+            }
+            return houses;
+        }
+        /// <summary>
         /// Returns houses from the database with the appropriate rent type.
         /// </summary>
         /// <param name="rentType">The rent type of house you are looking for.</param>
