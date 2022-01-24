@@ -408,6 +408,7 @@ namespace HouseSellingBot
                                 ChatId = chatId,
                                 Name = inputMessage.Substring(12)
                             });
+                            await Message.SendStartMenuAsync();
                         }
                         catch (AlreadyContainException)
                         {
