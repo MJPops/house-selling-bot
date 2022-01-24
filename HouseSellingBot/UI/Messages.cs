@@ -314,11 +314,13 @@ namespace HouseSellingBot.UI
         }
         public async Task SendNotFoundMessageAsync()
         {
-            await Client.SendTextMessageAsync(ChatId, "Дома с такими параметрами не обнаружены.");
+            await Client.SendTextMessageAsync(ChatId, "Дома с такими параметрами не обнаружены.",
+                replyMarkup: Buttons.BackToStart());
         }
         public async Task SendNotFoundMessageAsync(int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId, messageId, "Дома с такими параметрами не обнаружены.");
+            await Client.EditMessageTextAsync(ChatId, messageId, "Дома с такими параметрами не обнаружены.",
+                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToStart());
         }
         public async Task SubmitInputRequest(string request, int messageId)
         {
