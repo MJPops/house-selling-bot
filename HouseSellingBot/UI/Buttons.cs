@@ -22,6 +22,91 @@ namespace HouseSellingBot.UI
                     }
             });
         }
+        public static IReplyMarkup BackToStart()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Меню", callbackData: "/start"),
+                    }
+            });
+        }
+        public static IReplyMarkup BackToFilters()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры"),
+                    }
+            });
+        }
+        public static IReplyMarkup PriceFilters()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Верхнее", callbackData: "ЦенаВерх"),
+                        InlineKeyboardButton.WithCallbackData(text: "Нижнее", callbackData: "ЦенаНиз")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры"),
+                    }
+            });
+        }
+        public static IReplyMarkup FootageFilters()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Верхнее", callbackData: "МетражВерх"),
+                        InlineKeyboardButton.WithCallbackData(text: "Нижнее", callbackData: "МетражНиз")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры"),
+                    }
+            });
+        }
+        public static IReplyMarkup FiltersList(IEnumerable<string> filters)
+        {
+            List<List<InlineKeyboardButton>> filtersList = new();
+
+            foreach (string filter in filters)
+            {
+                filtersList.Add(new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: filter, callbackData: filter)
+                });
+            }
+            filtersList.Add(new List<InlineKeyboardButton>
+            {
+                InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры")
+            });
+
+            return new InlineKeyboardMarkup(filtersList);
+        }
+        public static IReplyMarkup FiltersList(IEnumerable<int?> filters)
+        {
+            List<List<InlineKeyboardButton>> filtersList = new();
+
+            foreach (var filter in filters)
+            {
+                filtersList.Add(new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: filter.ToString(), callbackData: filter.ToString())
+                });
+            }
+            filtersList.Add(new List<InlineKeyboardButton>
+            {
+                InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры")
+            });
+            return new InlineKeyboardMarkup(filtersList);
+        }
         public static async Task<IReplyMarkup> FiltersMenuForUserAsync(long chatId)
         {
             List<List<InlineKeyboardButton>> startButtons = new()
@@ -112,81 +197,6 @@ namespace HouseSellingBot.UI
                 }
             });
             ;
-        }
-        public static IReplyMarkup FiltersList(IEnumerable<string> filters)
-        {
-            List<List<InlineKeyboardButton>> filtersList = new();
-
-            foreach (string filter in filters)
-            {
-                filtersList.Add(new List<InlineKeyboardButton>
-                {
-                    InlineKeyboardButton.WithCallbackData(text: filter, callbackData: filter)
-                });
-            }
-            filtersList.Add(new List<InlineKeyboardButton>
-            {
-                InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры")
-            });
-
-            return new InlineKeyboardMarkup(filtersList);
-        }
-        public static IReplyMarkup FiltersList(IEnumerable<int?> filters)
-        {
-            List<List<InlineKeyboardButton>> filtersList = new();
-
-            foreach (var filter in filters)
-            {
-                filtersList.Add(new List<InlineKeyboardButton>
-                {
-                    InlineKeyboardButton.WithCallbackData(text: filter.ToString(), callbackData: filter.ToString())
-                });
-            }
-            filtersList.Add(new List<InlineKeyboardButton>
-            {
-                InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры")
-            });
-            return new InlineKeyboardMarkup(filtersList);
-        }
-        public static IReplyMarkup PriceFilters()
-        {
-            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
-            {
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "Верхнее", callbackData: "ЦенаВерх"),
-                        InlineKeyboardButton.WithCallbackData(text: "Нижнее", callbackData: "ЦенаНиз")
-                    },
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры"),
-                    }
-            });
-        }
-        public static IReplyMarkup FootageFilters()
-        {
-            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
-            {
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "Верхнее", callbackData: "МетражВерх"),
-                        InlineKeyboardButton.WithCallbackData(text: "Нижнее", callbackData: "МетражНиз")
-                    },
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры"),
-                    }
-            });
-        }
-        public static IReplyMarkup BackToFilters()
-        {
-            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
-            {
-                    new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры"),
-                    }
-            });
         }
     }
 }
