@@ -331,8 +331,8 @@ namespace HouseSellingBot.UI
         private static async Task SendOneHouseAsync(House house)
         {
             string text = $"Описание: {house.Description}\n" +
-                $"Метро: {house.Metro}" +
-                $"Район: {house.District}" +
+                $"Метро: {house.Metro}\n" +
+                $"Район: {house.District}\n" +
                 $"Метраж: {house.Footage}\n" +
                 $"Число комнат: {house.RoomsNumber}\n" +
                 $"Тип покупки: {house.RentType}\n" +
