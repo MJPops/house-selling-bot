@@ -364,7 +364,7 @@ namespace HouseSellingBot.UI
         {
             await Client.SendTextMessageAsync(await UsersRepositore.GetDirectorChatIdAsync(),
                 $"Пользователь {userName}, просит предоставить доступ администратора.\n" +
-                $"Для предоставления доступа регистратора сообщите ему код: {code}");
+                $"Для предоставления доступа администратора сообщите ему код: {code}");
             await Client.SendTextMessageAsync(ChatId, "Введите код. Код направлен директору");
         }
         public async Task SendAdminsRedactionMenuAsync()
