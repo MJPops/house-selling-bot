@@ -171,45 +171,24 @@ namespace HouseSellingBot
                             }
                             else if (filterData.filterName == "ТипПокупки")
                             {
-                                try
-                                {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HouseRentType = callbackMessage;
                                     await UsersRepositore.UpdateUserAsync(user);
                                     await Message.SendHousesForUserAsync(chatId, messageId);
-                                }
-                                catch (FormatException)
-                                {
-                                    await Message.SendNotFoundMessageAsync(messageId);
-                                }
                             }
                             else if (filterData.filterName == "ПоТипуДома")
                             {
-                                try
-                                {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HouseType = callbackMessage;
                                     await UsersRepositore.UpdateUserAsync(user);
                                     await Message.SendHousesForUserAsync(chatId, messageId);
-                                }
-                                catch (FormatException)
-                                {
-                                    await Message.SendNotFoundMessageAsync(messageId);
-                                }
                             }
                             else if (filterData.filterName == "ПоМетро")
                             {
-                                try
-                                {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HouseMetro = callbackMessage;
                                     await UsersRepositore.UpdateUserAsync(user);
                                     await Message.SendHousesForUserAsync(chatId, messageId);
-                                }
-                                catch (FormatException)
-                                {
-                                    await Message.SendNotFoundMessageAsync(messageId);
-                                }
                             }
                         }
                         catch (NotFoundException)
