@@ -207,54 +207,33 @@ namespace HouseSellingBot
                     }
                     else if (filterData.chatId == chatId)
                     {
-                        if (filterData.filterName == "Район")
+                        try
                         {
-                            await Message.SendHousesByDistrictAsync(callbackMessage, messageId);
-                        }
-                        else if (filterData.filterName == "Комнаты")
-                        {
-                            try
+                            if (filterData.filterName == "Район")
+                            {
+                                await Message.SendHousesByDistrictAsync(callbackMessage, messageId);
+                            }
+                            else if (filterData.filterName == "Комнаты")
                             {
                                 await Message.SendHousesByRoomsNumberAsync(Convert.ToInt32(callbackMessage),
                                     messageId);
                             }
-                            catch (FormatException)
-                            {
-                                await Message.SendNotFoundMessageAsync(messageId);
-                            }
-                        }
-                        else if (filterData.filterName == "ТипПокупки")
-                        {
-                            try
+                            else if (filterData.filterName == "ТипПокупки")
                             {
                                 await Message.SendHousesByRentTypeAsync(callbackMessage, messageId);
                             }
-                            catch (FormatException)
-                            {
-                                await Message.SendNotFoundMessageAsync(messageId);
-                            }
-                        }
-                        else if (filterData.filterName == "ПоТипуДома")
-                        {
-                            try
+                            else if (filterData.filterName == "ПоТипуДома")
                             {
                                 await Message.SendHousesByTypeAsync(callbackMessage, messageId);
                             }
-                            catch (FormatException)
-                            {
-                                await Message.SendNotFoundMessageAsync(messageId);
-                            }
-                        }
-                        else if (filterData.filterName == "ПоМетро")
-                        {
-                            try
+                            else if (filterData.filterName == "ПоМетро")
                             {
                                 await Message.SendHousesMetroAsync(callbackMessage, messageId);
                             }
-                            catch (FormatException)
-                            {
-                                await Message.SendNotFoundMessageAsync(messageId);
-                            }
+                        }
+                        catch (FormatException)
+                        {
+                            await Message.SendNotFoundMessageAsync(messageId);
                         }
 
                         FiltersToRemove.Add(filterData);
@@ -378,7 +357,7 @@ namespace HouseSellingBot
                                 await Message.SendHousesForUserAsync(chatId);
                             }
                         }
-                        catch 
+                        catch
                         {
                             await Message.SendNotFoundMessageAsync();
                         }
