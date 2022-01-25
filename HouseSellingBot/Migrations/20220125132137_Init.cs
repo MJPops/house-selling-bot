@@ -37,6 +37,7 @@ namespace HouseSellingBot.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ChatId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HouseType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HouseMetro = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HouseRentType = table.Column<string>(type: "nvarchar(max)", nullable: true),

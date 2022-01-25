@@ -1,4 +1,5 @@
-﻿using HouseSellingBot.Repositories;
+﻿using HouseSellingBot.Models;
+using HouseSellingBot.Repositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -203,6 +204,35 @@ namespace HouseSellingBot.UI
             {
                 InlineKeyboardButton.WithUrl("Ссылка", path)
             });
+        }
+
+        public static IReplyMarkup RedactionMenu()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Редактировать",
+                    callbackData: "Редактировать"),
+                    InlineKeyboardButton.WithCallbackData(text: "Добавить",
+                    callbackData: "Добавить")
+                }
+            });
+        }
+        public static IReplyMarkup AdminsListAsync(IEnumerable<User> admins)
+        {
+            List<List<InlineKeyboardButton>> adminsListToDelete = new();
+
+            foreach (var admin in admins)
+            {
+                adminsListToDelete.Add(new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: $"Удалить {admin.Name}", 
+                    callbackData: $"Удалить{admin.ChatId}")
+                });
+            }
+
+            return new InlineKeyboardMarkup(adminsListToDelete);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace HouseSellingBot
         private static string Token { get; set; } = "5009457163:AAEz5eg_AAz26uVh9rLmdvdq7pxfCCzYBzo";
         private static TelegramBotClient client;
         private static List<(long chatId, string filterName)> UsersFilters = new();
+        private static List<(long chatId, int code)> RegistrationData = new();
 
         [Obsolete]
         static void Main()
@@ -173,24 +174,24 @@ namespace HouseSellingBot
                             }
                             else if (filterData.filterName == "ТипПокупки")
                             {
-                                    var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                    user.HouseRentType = callbackMessage;
-                                    await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendUsersFiltersAsync(chatId, messageId);
+                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                user.HouseRentType = callbackMessage;
+                                await UsersRepositore.UpdateUserAsync(user);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "ПоТипуДома")
                             {
-                                    var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                    user.HouseType = callbackMessage;
-                                    await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendUsersFiltersAsync(chatId, messageId);
+                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                user.HouseType = callbackMessage;
+                                await UsersRepositore.UpdateUserAsync(user);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "ПоМетро")
                             {
-                                    var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                    user.HouseMetro = callbackMessage;
-                                    await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendUsersFiltersAsync(chatId, messageId);
+                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                user.HouseMetro = callbackMessage;
+                                await UsersRepositore.UpdateUserAsync(user);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                         }
                         catch (NotFoundException)
@@ -239,11 +240,24 @@ namespace HouseSellingBot
                     UsersFilters.Remove(filter);
                 }
             }
+            else
+            {
+                try
+                {
+                    if (callbackMessage.Substring(0, 7) == "Удалить")
+                    {
+                        await UsersRepositore.
+                            RemoveUserByChatIdAsync(Convert.ToInt32(callbackMessage.Substring(8)));
+                        await Message.SendAdminsRedactionMenuAsync(messageId);
+                    }
+                }
+                catch { }//It's OK
+            }
         }
 
         private static void CleanUserFilter(long chatId)
         {
-            List<(long chatId, string Filter)> filtersToRemove = new();
+            List<(long chatId, string filterName)> filtersToRemove = new();
             foreach (var filter in UsersFilters)
             {
                 if (filter.chatId == chatId)
@@ -288,7 +302,7 @@ namespace HouseSellingBot
                     PicturePath = "https://telegra.ph/file/8f82c09d39585f1464d4a.jpg",
                     WebPath = "https://telegra.ph/3-kom-kv-v-ZHK-HeadLiner-33-300-000r-11-19",
                     District = "ЖК HeadLiner",
-                    Metro = "Речной вокзал",
+                    Metro = "Шелепиха",
                     Footage = 70,
                     Price = 33300000,
                     RentType = "Продажа",
@@ -300,7 +314,6 @@ namespace HouseSellingBot
                     PicturePath = "https://telegra.ph/file/8dc56f710a9678174992f.jpg",
                     WebPath = "https://telegra.ph/4-komnatnaya-kvartira-v-ZHK-Dom-na-Tishinke-05-18",
                     District = "ЖК Дом на Тишинке",
-                    Metro = "Речной вокзал",
                     Footage = 110,
                     Price = 73000000,
                     RentType = "Продажа",
@@ -313,6 +326,46 @@ namespace HouseSellingBot
             {
                 await UsersRepositore.RemoveUserByChatIdAsync(chatId);
                 await Message.SendStartMenuAsync();
+            }
+            else if (inputMessage == "Меню редактирования")
+            {
+                if (await UsersRepositore.UserIsAdminAsync(chatId) ||
+                    await UsersRepositore.UserIsDirectorAsync(chatId))
+                {
+                    await Message.SendRedactionMenuAsync();
+                }
+                else
+                {
+                    await Message.SendNotAdminAsync();
+                }
+            }
+            else if (inputMessage == "Меню редактирования админов")
+            {
+                await Message.SendAdminsRedactionMenuAsync();
+            }
+            else if (inputMessage == "Запросить права администратора")
+            {
+                if (await UsersRepositore.UserIsAdminAsync(chatId) ||
+                    await UsersRepositore.UserIsDirectorAsync(chatId))
+                {
+                    await Message.SendAlreadyAdminAsync();
+                }
+                else
+                {
+                    try
+                    {
+                        await Task.Run(() => CleanRegistrationDataFilter(chatId));
+                        var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                        Random random = new();
+                        int code = random.Next(1000, 9999);
+                        await Message.SendAdminRegistrationCodeAsync(code, user.Name);
+                        RegistrationData.Add((chatId, code));
+                    }
+                    catch
+                    {
+                        await Message.SendNotRegistredAsync();
+                    }
+                }
             }
             else if (UsersFilters.Any())
             {
@@ -393,6 +446,38 @@ namespace HouseSellingBot
                     UsersFilters.Remove(filter);
                 }
             }
+            else if (RegistrationData.Any())
+            {
+                List<(long, int)> RegistrationDataToRemove = new();
+                foreach (var registrationData in RegistrationData)
+                {
+                    try
+                    {
+                        if (registrationData.chatId == chatId
+                            && registrationData.code == Convert.ToInt32(inputMessage))
+                        {
+                            var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                            user.Role = "admin";
+                            await UsersRepositore.UpdateUserAsync(user);
+                            await Message.SendYouAdminAsync(await UsersRepositore.GetDirectorChatIdAsync());
+
+                            RegistrationDataToRemove.Add(registrationData);
+                        }
+                        else
+                        {
+                            await Message.SendCodeNotWorkAsync();
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        await Message.SendCodeNotWorkAsync();
+                    }
+                }
+                foreach (var filter in RegistrationDataToRemove)
+                {
+                    RegistrationData.Remove(filter);
+                }
+            }
             else
             {
                 try
@@ -415,6 +500,21 @@ namespace HouseSellingBot
                     }
                 }
                 catch (ArgumentOutOfRangeException) { }//It's OK
+            }
+        }
+        private static void CleanRegistrationDataFilter(long chatId)
+        {
+            List<(long chatId, int code)> registrationDataToRemove = new();
+            foreach (var registrationData in RegistrationData)
+            {
+                if (registrationData.chatId == chatId)
+                {
+                    registrationDataToRemove.Add(registrationData);
+                }
+            }
+            foreach (var registrationData in registrationDataToRemove)
+            {
+                RegistrationData.Remove(registrationData);
             }
         }
     }

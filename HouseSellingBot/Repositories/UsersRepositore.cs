@@ -16,6 +16,75 @@ namespace HouseSellingBot.Repositories
         private static readonly AppDBContext dBContext = new();
 
         /// <summary>
+        /// Returns true if a user with the given chatId is found in the database. Otherwise, it's false.
+        /// </summary>
+        /// <param name="chatId">ChatID of the user you are looking for.</param>
+        public static async Task<bool> UserIsRegisteredAsync(long chatId)
+        {
+            try
+            {
+                await GetUserByChatIdAsync(chatId);
+                return true;
+            }
+            catch (NotFoundException)
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Return true if the user role is admin. Otherwise, it's false.
+        /// </summary>
+        /// <param name="chatId">The chatID of the user being checked.</param>
+        public static async Task<bool> UserIsAdminAsync(long chatId)
+        {
+            try
+            {
+                var user = await GetUserByChatIdAsync(chatId);
+                if (user.Role == "admin")
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (NotFoundException)
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Return true if the user role is director. Otherwise, it's false.
+        /// </summary>
+        /// <param name="chatId">The chatID of the user being checked.</param>
+        public static async Task<bool> UserIsDirectorAsync(long chatId)
+        {
+            try
+            {
+                var user = await GetUserByChatIdAsync(chatId);
+                if (user.Role == "director")
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (NotFoundException)
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Returns the director's chatID.
+        /// </summary>
+        /// <exception cref="NotFoundException"></exception>
+        public static async Task<long> GetDirectorChatIdAsync()
+        {
+            var director = await dBContext.Users.FirstOrDefaultAsync(u => u.Role == "director");
+            if (director == null)
+            {
+                throw new NotFoundException();
+            }
+            return director.ChatId; 
+        }
+        /// <summary>
         /// Returns a user from the database, with the given chatId.
         /// </summary>
         /// <param name="chatId">ChatId of the user you are looking for.</param>
@@ -30,6 +99,19 @@ namespace HouseSellingBot.Repositories
             }
             await dBContext.Houses.Include(h => h.Users).ToListAsync();
             return user;
+        }
+        /// <summary>
+        /// Returns all users from the database who are registered as administrators.
+        /// </summary>
+        /// <exception cref="NotFoundException"></exception>
+        public static async Task<IEnumerable<User>> GetAllAdminAsync()
+        {
+            var admins = await dBContext.Users.Where(u => u.Role == "admin").ToListAsync();
+            if (admins.Any())
+            {
+                return admins;
+            }
+            throw new NotFoundException();
         }
         /// <summary>
         /// Writes the user to the database.
@@ -139,22 +221,7 @@ namespace HouseSellingBot.Repositories
 
             await dBContext.SaveChangesAsync();
         }
-        /// <summary>
-        /// Returns true if a user with the given chatId is found in the database. Otherwise, it's false.
-        /// </summary>
-        /// <param name="chatId">ChatID of the user you are looking for.</param>
-        public static async Task<bool> UserIsRegisteredAsync(long chatId)
-        {
-            try
-            {
-                await GetUserByChatIdAsync(chatId);
-                return true;
-            }
-            catch (NotFoundException)
-            {
-                return false;
-            }
-        }
+
 
 
         private static async Task<IEnumerable<House>> SamplingHousesBasedOnPrice

@@ -77,6 +77,10 @@ namespace HouseSellingBot.UI
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
+        public async Task SendRedactionMenuAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Выберите действие", replyMarkup: Buttons.RedactionMenu());
+        }
 
         public async Task SendHousesForUserAsync(long ChatId)
         {
@@ -325,7 +329,73 @@ namespace HouseSellingBot.UI
         {
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                $"Введите значение {request}");
+                $"Введите {request}");
+        }
+        public async Task SendNotRegistredAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId,
+                "Вы не зарегистрированны");
+        }
+        public async Task SendCodeNotWorkAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId,
+                "Код не подходит");
+        }
+
+        public async Task SendNotAdminAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId,
+                "Вы не имеете прав администатора, зарегистрируйтесь," +
+                " а потом введите \"Запросить права регистратора\"");
+        }
+        public async Task SendAlreadyAdminAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId,
+                "Вы уже имеете права администратора");
+        }
+        public async Task SendYouAdminAsync(long directorChatId)
+        {
+            await Client.SendTextMessageAsync(directorChatId,
+                "Админ зарегистрирован");
+            await Client.SendTextMessageAsync(ChatId,
+                "Вы получили роль администратора");
+        }
+        public async Task SendAdminRegistrationCodeAsync(int code, string userName)
+        {
+            await Client.SendTextMessageAsync(await UsersRepositore.GetDirectorChatIdAsync(),
+                $"Пользователь {userName}, просит предоставить доступ администратора.\n" +
+                $"Для предоставления доступа регистратора сообщите ему код: {code}");
+            await Client.SendTextMessageAsync(ChatId, "Введите код. Код направлен директору");
+        }
+        public async Task SendAdminsRedactionMenuAsync()
+        {
+            try
+            {
+                await Client.SendTextMessageAsync(ChatId,
+                    "Нажмите на кнопку для того, чтобы удалить соответствующего администратора",
+                    replyMarkup: Buttons.AdminsListAsync(await UsersRepositore.GetAllAdminAsync()));
+            }
+            catch (NotFoundException)
+            {
+                await Client.SendTextMessageAsync(ChatId,
+                    "Администраторы не добавлены");
+            }
+        }
+        public async Task SendAdminsRedactionMenuAsync(int messageId)
+        {
+            try
+            {
+                await Client.EditMessageTextAsync(ChatId,
+                    messageId,
+                    "Нажмите на кнопку для того, чтобы удалить соответствующего администратора",
+                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
+                    Buttons.AdminsListAsync(await UsersRepositore.GetAllAdminAsync()));
+            }
+            catch (NotFoundException)
+            {
+                await Client.SendTextMessageAsync(ChatId,
+                    "Администраторы не добавлены");
+            }
         }
 
 
