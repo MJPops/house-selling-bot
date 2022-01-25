@@ -39,6 +39,20 @@ namespace HouseSellingBot.Repositories
             await dBContext.SaveChangesAsync();
         }
         /// <summary>
+        /// Returns a house from the database with the corresponding ID.
+        /// </summary>
+        /// <param name="houseId">The id of the house you are looking for.</param>
+        /// <exception cref="No tFoundException"></exception>
+        public static async Task<House> GetHouseByIdAsync(int houseId)
+        {
+            var house = await dBContext.Houses.FindAsync(houseId);
+            if (house == null)
+            {
+                throw new NotFoundException();
+            }
+            return house;
+        }
+        /// <summary>
         /// Returns all houses from the database.
         /// </summary>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
