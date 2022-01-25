@@ -61,6 +61,7 @@ namespace HouseSellingBot.UI
                     messageId,
                     $"Вот выши фильтры:\n" +
                     $"Тип дома: {user.HouseType}\n" +
+                    $"Метро: {user.HouseMetro}\n" +
                     $"Тип покупки: {user.HouseRentType}\n" +
                     $"Район: {user.HouseDistrict}\n" +
                     $"Число комнат: {user.HouseRoomsNumbe}\n" +

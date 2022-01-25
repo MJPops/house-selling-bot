@@ -95,7 +95,7 @@ namespace HouseSellingBot.UI
             {
                     new List<InlineKeyboardButton>
                     {
-                        InlineKeyboardButton.WithCallbackData(text: "Назад", callbackData: "Фильтры"),
+                        InlineKeyboardButton.WithCallbackData(text: "К фильтрам", callbackData: "Фильтры"),
                     }
             });
         }

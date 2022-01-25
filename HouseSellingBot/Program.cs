@@ -138,6 +138,8 @@ namespace HouseSellingBot
             else if (callbackMessage == "ОчиститьФильтры")
             {
                 await UsersRepositore.ClearUserFiltersAsync(chatId);
+                await client.SendTextMessageAsync(chatId, "Ваши фильтры удалены",
+                    replyMarkup: Buttons.BackToFilters());
             }
             else if (UsersFilters.Any())
             {
@@ -153,7 +155,7 @@ namespace HouseSellingBot
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.HouseDistrict = callbackMessage;
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.SendHousesForUserAsync(chatId, messageId);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "Комнаты")
                             {
@@ -162,7 +164,7 @@ namespace HouseSellingBot
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HouseRoomsNumbe = Convert.ToInt32(callbackMessage);
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendHousesForUserAsync(chatId, messageId);
+                                    await Message.SendUsersFiltersAsync(chatId, messageId);
                                 }
                                 catch (FormatException)
                                 {
@@ -174,21 +176,21 @@ namespace HouseSellingBot
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HouseRentType = callbackMessage;
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendHousesForUserAsync(chatId, messageId);
+                                    await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "ПоТипуДома")
                             {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HouseType = callbackMessage;
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendHousesForUserAsync(chatId, messageId);
+                                    await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "ПоМетро")
                             {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HouseMetro = callbackMessage;
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendHousesForUserAsync(chatId, messageId);
+                                    await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                         }
                         catch (NotFoundException)
