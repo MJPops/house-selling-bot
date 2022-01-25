@@ -202,6 +202,8 @@ namespace HouseSellingBot
                         {
                             await Message.SendNotFoundMessageAsync(messageId);
                         }
+
+                        FiltersToRemove.Add(filterData);
                     }
                     else if (filterData.chatId == chatId)
                     {
