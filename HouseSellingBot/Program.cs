@@ -197,6 +197,20 @@ namespace HouseSellingBot
                                     await Message.SendNotFoundMessageAsync(messageId);
                                 }
                             }
+                            else if (filterData.filterName == "ПоМетро")
+                            {
+                                try
+                                {
+                                    var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                    user.HouseMetro = callbackMessage;
+                                    await UsersRepositore.UpdateUserAsync(user);
+                                    await Message.SendHousesForUserAsync(chatId, messageId);
+                                }
+                                catch (FormatException)
+                                {
+                                    await Message.SendNotFoundMessageAsync(messageId);
+                                }
+                            }
                         }
                         catch (NotFoundException)
                         {
@@ -293,7 +307,7 @@ namespace HouseSellingBot
                     PicturePath = "https://telegra.ph/file/8f82c09d39585f1464d4a.jpg",
                     WebPath = "https://telegra.ph/3-kom-kv-v-ZHK-HeadLiner-33-300-000r-11-19",
                     District = "ЖК HeadLiner",
-                    Metro = "Шелепиха ",
+                    Metro = "Речной вокзал",
                     Footage = 70,
                     Price = 33300000,
                     RentType = "Продажа",
