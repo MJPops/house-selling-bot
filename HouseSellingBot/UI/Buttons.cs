@@ -216,6 +216,11 @@ namespace HouseSellingBot.UI
                     callbackData: "Редактировать"),
                     InlineKeyboardButton.WithCallbackData(text: "Добавить",
                     callbackData: "Добавить")
+                },
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Удалить Дом",
+                    callbackData: "УдалитьДом"),
                 }
             });
         }
