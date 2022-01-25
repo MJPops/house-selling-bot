@@ -314,6 +314,7 @@ namespace HouseSellingBot
                     PicturePath = "https://telegra.ph/file/8dc56f710a9678174992f.jpg",
                     WebPath = "https://telegra.ph/4-komnatnaya-kvartira-v-ZHK-Dom-na-Tishinke-05-18",
                     District = "ЖК Дом на Тишинке",
+                    Metro = "Войковская",
                     Footage = 110,
                     Price = 73000000,
                     RentType = "Продажа",
