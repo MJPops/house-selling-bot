@@ -276,6 +276,7 @@ namespace HouseSellingBot
         {
             string inputMessage = e.Message.Text;
             long chatId = e.Message.Chat.Id;
+            int messageId = e.Message.MessageId;
             Messages Message = new(client, chatId);
             Console.WriteLine(inputMessage); //TODO - delete
 
@@ -381,28 +382,28 @@ namespace HouseSellingBot
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.HightPrice = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.SendHousesForUserAsync(chatId);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "ЦенаНиз")
                             {
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.LowerPrice = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.SendHousesForUserAsync(chatId);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "МетражВерх")
                             {
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.HightFootage = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.SendHousesForUserAsync(chatId);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "МетражНиз")
                             {
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.LowerFootage = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.SendHousesForUserAsync(chatId);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                         }
                         catch
