@@ -480,7 +480,9 @@ namespace HouseSellingBot.UI
         }
         private static async Task<IEnumerable<string>> GetAllTypesAsync()
         {
-            var allTypes = from house in await HousesRepositore.GetAllHousesAsync() select house.Type;
+            var allTypes = from house in await HousesRepositore.GetAllHousesAsync() 
+                           where house.Type != null
+                           select house.Type;
             allTypes = allTypes.Distinct();
             if (allTypes == null)
             {
@@ -490,7 +492,9 @@ namespace HouseSellingBot.UI
         }
         private static async Task<IEnumerable<string>> GetAllRentTypesAsync()
         {
-            var allRentTypes = from house in await HousesRepositore.GetAllHousesAsync() select house.RentType;
+            var allRentTypes = from house in await HousesRepositore.GetAllHousesAsync()
+                               where house.RentType != null
+                               select house.RentType;
             allRentTypes = allRentTypes.Distinct();
             if (allRentTypes == null)
             {
@@ -500,7 +504,9 @@ namespace HouseSellingBot.UI
         }
         private static async Task<IEnumerable<string>> GetAllDistrictsAsync()
         {
-            var allDistricts = from house in await HousesRepositore.GetAllHousesAsync() select house.District;
+            var allDistricts = from house in await HousesRepositore.GetAllHousesAsync() 
+                               where house.District != null
+                               select house.District;
             allDistricts = allDistricts.Distinct();
             if (allDistricts == null)
             {
@@ -510,7 +516,9 @@ namespace HouseSellingBot.UI
         }
         private static async Task<IEnumerable<string>> GetAllMetroAsync()
         {
-            var allMetro = from house in await HousesRepositore.GetAllHousesAsync() select house.Metro;
+            var allMetro = from house in await HousesRepositore.GetAllHousesAsync() 
+                           where house.Metro != null
+                           select house.Metro;
             allMetro = allMetro.Distinct();
             if (allMetro == null)
             {
@@ -520,7 +528,9 @@ namespace HouseSellingBot.UI
         }
         private static async Task<IEnumerable<int?>> GetAllRoomsNumberAsync()
         {
-            var allRoomsNumber = from house in await HousesRepositore.GetAllHousesAsync() select house.RoomsNumber;
+            var allRoomsNumber = from house in await HousesRepositore.GetAllHousesAsync() 
+                                 where house.RoomsNumber != null
+                                 select house.RoomsNumber;
             allRoomsNumber = allRoomsNumber.OrderBy(n => n).Distinct();
             if (allRoomsNumber == null)
             {
