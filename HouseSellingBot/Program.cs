@@ -297,37 +297,39 @@ namespace HouseSellingBot
             {
                 await HousesRepositore.AddHouseAsync(new House()
                 {
-                    District = "Центральная",
-                    Metro = "Войковская",
-                    Footage = 60,
-                    Price = 6000000,
-                    RentType = "Аренда",
-                    RoomsNumber = 2,
-                    Type = "Кирпичный"
-                });
-                await HousesRepositore.AddHouseAsync(new House()
-                {
-                    District = "Северный",
-                    Metro = "Водный стадион",
-                    Footage = 36,
-                    Price = 4000000,
-                    RentType = "Продажа",
+                    PicturePath = "https://telegra.ph/file/915e952e35f0cb24be7c4.jpg",
+                    WebPath = "https://telegra.ph/1-kom-kv-v-ZHK-HeadLiner-17-600-000r-10-13",
+                    District = "ЖК HeadLiner",
+                    Metro = "Шелепиха",
+                    Footage = 41,
+                    Price = 17600000,
+                    RentType = "Покупка",
                     RoomsNumber = 1,
-                    Type = "Монолитный"
+                    Type = "Панельный"
                 });
                 await HousesRepositore.AddHouseAsync(new House()
                 {
-                    District = "Центральная",
-                    Metro = "Речной вокзал",
-                    Footage = 79,
-                    Price = 6000000,
+                    PicturePath = "https://telegra.ph/file/8f82c09d39585f1464d4a.jpg",
+                    WebPath = "https://telegra.ph/3-kom-kv-v-ZHK-HeadLiner-33-300-000r-11-19",
+                    District = "ЖК HeadLiner",
+                    Metro = "Шелепиха ",
+                    Footage = 70,
+                    Price = 33300000,
                     RentType = "Продажа",
                     RoomsNumber = 3,
                     Type = "Панельный"
                 });
-                await UsersRepositore.AddUserAsync(new User()
+                await HousesRepositore.AddHouseAsync(new House()
                 {
-                    HightFootage = 70,
+                    PicturePath = "https://telegra.ph/file/8dc56f710a9678174992f.jpg",
+                    WebPath = "https://telegra.ph/4-komnatnaya-kvartira-v-ZHK-Dom-na-Tishinke-05-18",
+                    District = "Центральная",
+                    Metro = "Речной вокзал",
+                    Footage = 110,
+                    Price = 73000000,
+                    RentType = "Продажа",
+                    RoomsNumber = 4,
+                    Type = "Панельный"
                 });
                 await Message.SendStartMenuAsync();
             }

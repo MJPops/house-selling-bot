@@ -314,13 +314,11 @@ namespace HouseSellingBot.UI
         }
         public async Task SendNotFoundMessageAsync()
         {
-            await Client.SendTextMessageAsync(ChatId, "Дома с такими параметрами не обнаружены.",
-                replyMarkup: Buttons.BackToStart());
+            await Client.SendTextMessageAsync(ChatId, "Дома с такими параметрами не обнаружены.");
         }
         public async Task SendNotFoundMessageAsync(int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId, messageId, "Дома с такими параметрами не обнаружены.",
-                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToStart());
+            await Client.EditMessageTextAsync(ChatId, messageId, "Дома с такими параметрами не обнаружены.");
         }
         public async Task SubmitInputRequest(string request, int messageId)
         {
@@ -332,13 +330,38 @@ namespace HouseSellingBot.UI
 
         private static async Task SendOneHouseAsync(House house)
         {
-            await Client.SendTextMessageAsync(ChatId,
-                    $"Описание: {house.Description}\n" +
-                    $"Метраж: {house.Footage}\n" +
-                    $"Число комнат: {house.RoomsNumber}\n" +
-                    $"Тип покупки: {house.RentType}\n" +
-                    $"Цена: {house.Price}\n" +
-                    $"Тип дома: {house.Type}");
+            string text = $"Описание: {house.Description}\n" +
+                        $"Метраж: {house.Footage}\n" +
+                        $"Число комнат: {house.RoomsNumber}\n" +
+                        $"Тип покупки: {house.RentType}\n" +
+                        $"Цена: {house.Price}₽\n" +
+                        $"Тип дома: {house.Type}";
+            try
+            {
+                await Client.SendPhotoAsync(ChatId,
+                    house.PicturePath,
+                    caption: text,
+                    replyMarkup: Buttons.Link(house.WebPath));
+            }
+            catch
+            {
+                try
+                {
+                    await Client.SendPhotoAsync(ChatId, house.PicturePath, caption: text);
+                }
+                catch
+                {
+                    try
+                    {
+                        await Client.SendTextMessageAsync(ChatId, text,
+                            replyMarkup: Buttons.Link(house.WebPath));
+                    }
+                    catch
+                    {
+                        await Client.SendTextMessageAsync(ChatId, text);
+                    }
+                }
+            }
         }
         private static async Task SendBackToStart()
         {

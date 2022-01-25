@@ -197,6 +197,13 @@ namespace HouseSellingBot.UI
             });
             ;
         }
+        public static IReplyMarkup Link(string path)
+        {
+            return new InlineKeyboardMarkup(new List<InlineKeyboardButton>
+            {
+                InlineKeyboardButton.WithUrl("Ссылка", path)
+            });
+        }
     }
 }
 
