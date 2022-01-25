@@ -331,11 +331,13 @@ namespace HouseSellingBot.UI
         private static async Task SendOneHouseAsync(House house)
         {
             string text = $"Описание: {house.Description}\n" +
-                        $"Метраж: {house.Footage}\n" +
-                        $"Число комнат: {house.RoomsNumber}\n" +
-                        $"Тип покупки: {house.RentType}\n" +
-                        $"Цена: {house.Price}₽\n" +
-                        $"Тип дома: {house.Type}";
+                $"Метро: {house.Metro}" +
+                $"Район: {house.District}" +
+                $"Метраж: {house.Footage}\n" +
+                $"Число комнат: {house.RoomsNumber}\n" +
+                $"Тип покупки: {house.RentType}\n" +
+                $"Цена: {house.Price}₽\n" +
+                $"Тип дома: {house.Type}";
             try
             {
                 await Client.SendPhotoAsync(ChatId,

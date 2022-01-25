@@ -323,7 +323,7 @@ namespace HouseSellingBot
                 {
                     PicturePath = "https://telegra.ph/file/8dc56f710a9678174992f.jpg",
                     WebPath = "https://telegra.ph/4-komnatnaya-kvartira-v-ZHK-Dom-na-Tishinke-05-18",
-                    District = "Центральная",
+                    District = "ЖК Дом на Тишинке",
                     Metro = "Речной вокзал",
                     Footage = 110,
                     Price = 73000000,
