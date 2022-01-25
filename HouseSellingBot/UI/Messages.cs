@@ -51,13 +51,24 @@ namespace HouseSellingBot.UI
         }
         public async Task SendFiltersMenuAsync(int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId,
+            if (await UsersRepositore.UserIsRegisteredAsync(ChatId))
+            {
+                await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                "Вот доступные фильтры\n" +
-                "Напоминаем, что незарегистрированный клиент может использовать единовременно только 1 фильтр\n" +
-                "Для того, чтобы зарегистрироваться введите \"Регистрация <Имя>\", где <Имя> заменить на ваше имя.",
+                "Вот доступные фильтры",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 await Buttons.FiltersMenuForUserAsync(ChatId));
+            }
+            else
+            {
+                await Client.EditMessageTextAsync(ChatId,
+                    messageId,
+                    "Вот доступные фильтры\n" +
+                    "Напоминаем, что незарегистрированный клиент может использовать единовременно только 1 фильтр\n" +
+                    "Для того, чтобы зарегистрироваться введите \"Регистрация <Имя>\", где <Имя> заменить на ваше имя.",
+                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
+                    await Buttons.FiltersMenuForUserAsync(ChatId));
+            }
         }
         public async Task SendUsersFiltersAsync(long chatId, int messageId)
         {
@@ -242,7 +253,7 @@ namespace HouseSellingBot.UI
             }
             catch (NotFoundException)
             {
-                await Client.EditMessageTextAsync(ChatId, 
+                await Client.EditMessageTextAsync(ChatId,
                     messageId,
                     "Типы жилплощади пока не добавлены",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
@@ -342,13 +353,13 @@ namespace HouseSellingBot.UI
         }
         public async Task SendNotFoundMessageAsync()
         {
-            await Client.SendTextMessageAsync(ChatId, 
-                "Дома с такими параметрами не обнаружены.", 
+            await Client.SendTextMessageAsync(ChatId,
+                "Дома с такими параметрами не обнаружены.",
                 replyMarkup: Buttons.BackToStart());
         }
         public async Task SendNotFoundMessageAsync(int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId, 
+            await Client.EditMessageTextAsync(ChatId,
                 messageId,
                 "Дома с такими параметрами не обнаружены.",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToStart());
@@ -480,7 +491,7 @@ namespace HouseSellingBot.UI
         }
         private static async Task<IEnumerable<string>> GetAllTypesAsync()
         {
-            var allTypes = from house in await HousesRepositore.GetAllHousesAsync() 
+            var allTypes = from house in await HousesRepositore.GetAllHousesAsync()
                            where house.Type != null
                            select house.Type;
             allTypes = allTypes.Distinct();
@@ -504,7 +515,7 @@ namespace HouseSellingBot.UI
         }
         private static async Task<IEnumerable<string>> GetAllDistrictsAsync()
         {
-            var allDistricts = from house in await HousesRepositore.GetAllHousesAsync() 
+            var allDistricts = from house in await HousesRepositore.GetAllHousesAsync()
                                where house.District != null
                                select house.District;
             allDistricts = allDistricts.Distinct();
@@ -516,7 +527,7 @@ namespace HouseSellingBot.UI
         }
         private static async Task<IEnumerable<string>> GetAllMetroAsync()
         {
-            var allMetro = from house in await HousesRepositore.GetAllHousesAsync() 
+            var allMetro = from house in await HousesRepositore.GetAllHousesAsync()
                            where house.Metro != null
                            select house.Metro;
             allMetro = allMetro.Distinct();
@@ -528,7 +539,7 @@ namespace HouseSellingBot.UI
         }
         private static async Task<IEnumerable<int?>> GetAllRoomsNumberAsync()
         {
-            var allRoomsNumber = from house in await HousesRepositore.GetAllHousesAsync() 
+            var allRoomsNumber = from house in await HousesRepositore.GetAllHousesAsync()
                                  where house.RoomsNumber != null
                                  select house.RoomsNumber;
             allRoomsNumber = allRoomsNumber.OrderBy(n => n).Distinct();

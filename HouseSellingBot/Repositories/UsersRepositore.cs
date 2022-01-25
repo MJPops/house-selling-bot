@@ -82,7 +82,7 @@ namespace HouseSellingBot.Repositories
             {
                 throw new NotFoundException();
             }
-            return director.ChatId; 
+            return director.ChatId;
         }
         /// <summary>
         /// Returns a user from the database, with the given chatId.

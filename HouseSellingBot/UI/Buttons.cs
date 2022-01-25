@@ -55,6 +55,11 @@ namespace HouseSellingBot.UI
             {
                 startButtons.Add(new List<InlineKeyboardButton>
                 {
+                    InlineKeyboardButton.WithCallbackData(text: "Очистить Фильтры",
+                    callbackData: "ОчиститьФильтры")
+                });
+                startButtons.Add(new List<InlineKeyboardButton>
+                {
                     InlineKeyboardButton.WithCallbackData(text: "Мои Фильтры",
                     callbackData: "МоиФильтры"),
                     InlineKeyboardButton.WithCallbackData(text: "Дома по Фильтрам",
@@ -62,8 +67,6 @@ namespace HouseSellingBot.UI
                 });
                 startButtons.Add(new List<InlineKeyboardButton>
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "Очистить Фильтры",
-                    callbackData: "ОчиститьФильтры"),
                     InlineKeyboardButton.WithCallbackData(text: "Назад",
                     callbackData: "/start")
                 });
@@ -106,8 +109,8 @@ namespace HouseSellingBot.UI
             {
                     new List<InlineKeyboardButton>
                     {
-                        InlineKeyboardButton.WithCallbackData(text: "Верхнее", callbackData: "ЦенаВерх"),
-                        InlineKeyboardButton.WithCallbackData(text: "Нижнее", callbackData: "ЦенаНиз")
+                        InlineKeyboardButton.WithCallbackData(text: "Нижнее", callbackData: "ЦенаНиз"),
+                        InlineKeyboardButton.WithCallbackData(text: "Верхнее", callbackData: "ЦенаВерх")
                     },
                     new List<InlineKeyboardButton>
                     {
@@ -121,8 +124,8 @@ namespace HouseSellingBot.UI
             {
                     new List<InlineKeyboardButton>
                     {
-                        InlineKeyboardButton.WithCallbackData(text: "Верхнее", callbackData: "МетражВерх"),
-                        InlineKeyboardButton.WithCallbackData(text: "Нижнее", callbackData: "МетражНиз")
+                        InlineKeyboardButton.WithCallbackData(text: "Нижнее", callbackData: "МетражНиз"),
+                        InlineKeyboardButton.WithCallbackData(text: "Верхнее", callbackData: "МетражВерх")
                     },
                     new List<InlineKeyboardButton>
                     {
@@ -232,7 +235,7 @@ namespace HouseSellingBot.UI
             {
                 adminsListToDelete.Add(new List<InlineKeyboardButton>
                 {
-                    InlineKeyboardButton.WithCallbackData(text: $"Удалить {admin.Name}", 
+                    InlineKeyboardButton.WithCallbackData(text: $"Удалить {admin.Name}",
                     callbackData: $"Удалить{admin.ChatId}")
                 });
             }
