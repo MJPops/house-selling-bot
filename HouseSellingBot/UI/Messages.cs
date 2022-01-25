@@ -23,10 +23,19 @@ namespace HouseSellingBot.UI
 
         public async Task SendStartMenuAsync()
         {
-            await Client.SendTextMessageAsync(ChatId, "Здравствуйте, рад вас видеть. \n" +
-                "Я являюсь ботом, который поможет вам ознакомиться с домами, доступными к приобретению и аренде.\n\n" +
-                "Выберите интересующий вас пункт меню.",
+            if (await UsersRepositore.UserIsRegisteredAsync(ChatId))
+            {
+                var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
+                await Client.SendTextMessageAsync(ChatId, $"Здравствуйте {user.Name}, рад вас видеть.",
                 replyMarkup: Buttons.Start());
+            }
+            else
+            {
+                await Client.SendTextMessageAsync(ChatId, "Здравствуйте, рад вас видеть. \n" +
+                    "Я являюсь ботом, который поможет вам ознакомиться с домами, доступными к приобретению и аренде.\n\n" +
+                    "Выберите интересующий вас пункт меню.",
+                    replyMarkup: Buttons.Start());
+            }
         }
         public async Task EditStartMenuAsync(int messageId)
         {
