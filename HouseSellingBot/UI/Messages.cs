@@ -39,8 +39,15 @@ namespace HouseSellingBot.UI
         }
         public async Task SendAllHousesAsync()
         {
-            await Client.SendTextMessageAsync(ChatId, "Вот все доступные на данных момент дома:");
-            await SendHousesListAsync(await HousesRepositore.GetAllHousesAsync());
+            try
+            {
+                await Client.SendTextMessageAsync(ChatId, "Вот все доступные на данных момент дома:");
+                await SendHousesListAsync(await HousesRepositore.GetAllHousesAsync());
+            }
+            catch (NotFoundException)
+            {
+                await SendNotFoundMessageAsync();
+            }
         }
         public async Task SendFiltersMenuAsync(int messageId)
         {
@@ -235,7 +242,10 @@ namespace HouseSellingBot.UI
             }
             catch (NotFoundException)
             {
-                await Client.SendTextMessageAsync(ChatId, "Типы жилплощади пока не добавлены");
+                await Client.EditMessageTextAsync(ChatId, 
+                    messageId,
+                    "Типы жилплощади пока не добавлены",
+                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
         public async Task SendRentTypeListAsync(int messageId)
@@ -251,7 +261,10 @@ namespace HouseSellingBot.UI
             }
             catch (NotFoundException)
             {
-                await Client.SendTextMessageAsync(ChatId, "Типы продажи пока не добавлены");
+                await Client.EditMessageTextAsync(ChatId,
+                    messageId,
+                    "Типы продажи пока не добавлены",
+                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
         public async Task SendDistrictsListAsync(int messageId)
@@ -265,7 +278,10 @@ namespace HouseSellingBot.UI
             }
             catch (NotFoundException)
             {
-                await Client.EditMessageTextAsync(ChatId, messageId, "Районы пока не добавлены");
+                await Client.EditMessageTextAsync(ChatId,
+                    messageId,
+                    "Районы пока не добавлены",
+                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
         public async Task SendMetroListAsync(int messageId)
@@ -273,13 +289,17 @@ namespace HouseSellingBot.UI
             try
             {
                 var metro = await GetAllMetroAsync();
-                await Client.EditMessageTextAsync(ChatId, messageId, "Вот все доступные станции метро:",
-                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
-                    Buttons.FiltersList(metro));
+                await Client.EditMessageTextAsync(ChatId,
+                    messageId,
+                    "Вот все доступные станции метро:",
+                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.FiltersList(metro));
             }
             catch (NotFoundException)
             {
-                await Client.EditMessageTextAsync(ChatId, messageId, "Станции метро пока не добавлены");
+                await Client.EditMessageTextAsync(ChatId,
+                    messageId,
+                    "Станции метро пока не добавлены",
+                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
         public async Task SendRoomsNumberListAsync(int messageId)
@@ -294,7 +314,10 @@ namespace HouseSellingBot.UI
             }
             catch (NotFoundException)
             {
-                await Client.EditMessageTextAsync(ChatId, messageId, "Количество комнат пока не добавлено");
+                await Client.EditMessageTextAsync(ChatId,
+                    messageId,
+                    "Количество комнат пока не добавлено",
+                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
         public async Task SendPriceFilterMenuAsync(int messageId)
@@ -319,11 +342,16 @@ namespace HouseSellingBot.UI
         }
         public async Task SendNotFoundMessageAsync()
         {
-            await Client.SendTextMessageAsync(ChatId, "Дома с такими параметрами не обнаружены.");
+            await Client.SendTextMessageAsync(ChatId, 
+                "Дома с такими параметрами не обнаружены.", 
+                replyMarkup: Buttons.BackToStart());
         }
         public async Task SendNotFoundMessageAsync(int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId, messageId, "Дома с такими параметрами не обнаружены.");
+            await Client.EditMessageTextAsync(ChatId, 
+                messageId,
+                "Дома с такими параметрами не обнаружены.",
+                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToStart());
         }
         public async Task SubmitInputRequest(string request, int messageId)
         {
