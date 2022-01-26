@@ -123,10 +123,6 @@ namespace HouseSellingBot.UI
                     InlineKeyboardButton.WithCallbackData(text: "Редактировать",
                     callbackData: $"РедактированиеДома{houseId}"),
                     InlineKeyboardButton.WithCallbackData(text: "Удалить", callbackData: $"УдалитьДом{houseId}")
-                },
-                new List<InlineKeyboardButton>
-                {
-                    InlineKeyboardButton.WithCallbackData(text: "Меню", callbackData: "/start")
                 }
             });
         }
