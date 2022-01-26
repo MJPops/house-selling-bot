@@ -230,7 +230,7 @@ namespace HouseSellingBot.Repositories
             float higherFootage)
         {
             var houses = await dBContext.Houses.
-                Where(h => h.Footage >= lowerFootage && h.Price <= higherFootage).ToListAsync();
+                Where(h => h.Footage >= lowerFootage && h.Footage <= higherFootage).ToListAsync();
             if (!houses.Any())
             {
                 throw new NotFoundException();

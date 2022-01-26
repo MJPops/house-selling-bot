@@ -46,9 +46,14 @@ namespace HouseSellingBot
             Messages Message = new(client, chatId);
             Console.WriteLine(callbackMessage); //TODO - delete
 
+
             if (callbackMessage == "/start")
             {
                 await Message.EditStartMenuAsync(messageId);
+            }
+            if (callbackMessage == "МоиИзбранные")
+            {
+                await Message.SendFavoriteHousesAsync();
             }
             else if (callbackMessage == "ВсеДома")
             {
@@ -61,10 +66,6 @@ namespace HouseSellingBot
             else if (callbackMessage == "МоиФильтры")
             {
                 await Message.SendUsersFiltersAsync(chatId, messageId);
-            }
-            else if (callbackMessage == "Избранное")
-            {
-                await Message.AddFavoriteHouseAsync(chatId, messageId);
             }
             else if (callbackMessage == "ДомаПоФильтрам")
             {
@@ -254,6 +255,10 @@ namespace HouseSellingBot
                             RemoveUserByChatIdAsync(Convert.ToInt32(callbackMessage.Substring(8)));
                         await Message.SendAdminsRedactionMenuAsync(messageId);
                     }
+                    else if (callbackMessage.Substring(0, 9) == "Избранное")
+                    {
+                        await UsersRepositore.AddFavoriteHouseToUserAsync(chatId, Convert.ToInt32(callbackMessage.Substring(10)));
+                    }
                 }
                 catch { }//It's OK
             }
@@ -280,6 +285,7 @@ namespace HouseSellingBot
         {
             string inputMessage = e.Message.Text;
             long chatId = e.Message.Chat.Id;
+            int messageId = e.Message.MessageId;
             Messages Message = new(client, chatId);
             Console.WriteLine(inputMessage); //TODO - delete
 
@@ -292,7 +298,7 @@ namespace HouseSellingBot
                 await HousesRepositore.AddHouseAsync(new House()
                 {
                     PicturePath = "https://telegra.ph/file/915e952e35f0cb24be7c4.jpg",
-                    WebPath = "https://telegra.ph/1-kom-kv-v-ZHK-HeadLiner-17-600-000r-10-13",
+                    WebPath = "",
                     District = "ЖК HeadLiner",
                     Metro = "Шелепиха",
                     Footage = 41,
@@ -331,18 +337,6 @@ namespace HouseSellingBot
             {
                 await UsersRepositore.RemoveUserByChatIdAsync(chatId);
                 await Message.SendStartMenuAsync();
-            }
-            else if (inputMessage == "Меню редактирования")
-            {
-                if (await UsersRepositore.UserIsAdminAsync(chatId) ||
-                    await UsersRepositore.UserIsDirectorAsync(chatId))
-                {
-                    await Message.SendRedactionMenuAsync();
-                }
-                else
-                {
-                    await Message.SendNotAdminAsync();
-                }
             }
             else if (inputMessage == "Меню редактирования админов")
             {
@@ -386,28 +380,28 @@ namespace HouseSellingBot
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.HightPrice = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.SendHousesForUserAsync(chatId);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "ЦенаНиз")
                             {
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.LowerPrice = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.SendHousesForUserAsync(chatId);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "МетражВерх")
                             {
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.HightFootage = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.SendHousesForUserAsync(chatId);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                             else if (filterData.filterName == "МетражНиз")
                             {
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.LowerFootage = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.SendHousesForUserAsync(chatId);
+                                await Message.SendUsersFiltersAsync(chatId, messageId);
                             }
                         }
                         catch
