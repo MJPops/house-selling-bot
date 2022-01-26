@@ -489,54 +489,32 @@ namespace HouseSellingBot.UI
                 $"Тип дома: {house.Type}";
             try
             {
-                if (await UsersRepositore.UserIsRegisteredAsync(ChatId))
-                {
-
-                    await Client.SendPhotoAsync(ChatId,
+                await Client.SendPhotoAsync(ChatId,
                     house.PicturePath,
                     caption: text,
-                    replyMarkup: Buttons.LinkForUsers(house.WebPath, ChatId, house.Id));
-
-                    await Client.SendPhotoAsync(ChatId,
-                    house.PicturePath,
-                    caption: text,
-                    replyMarkup: Buttons.LinkForUsers(ChatId, house.Id));
-
-                }
-                else
-                {
-                    await Client.SendPhotoAsync(ChatId,
-                        house.PicturePath,
-                        caption: text,
-                        replyMarkup: Buttons.Link(house.WebPath));
-                }
+                    replyMarkup: await Buttons.LinkAndAddToFavoritAsync(house.WebPath, ChatId, house.Id));
             }
             catch
             {
                 try
                 {
-                    await Client.SendPhotoAsync(ChatId, house.PicturePath, caption: text);
+                    await Client.SendPhotoAsync(ChatId,
+                        house.PicturePath,
+                        caption: text,
+                        replyMarkup: await Buttons.AddToFavorit(ChatId, house.Id));
                 }
                 catch
                 {
                     try
                     {
-                        if (await UsersRepositore.UserIsRegisteredAsync(ChatId))
-                        {
-
-                            await Client.SendTextMessageAsync(ChatId, text,
-                            replyMarkup: Buttons.LinkForUsers(ChatId, house.Id));
-
-                        }
-                        else
-                        {
-                            await Client.SendTextMessageAsync(ChatId, text,
-                            replyMarkup: Buttons.Link(house.WebPath));
-                        }
+                        await Client.SendTextMessageAsync(ChatId, text,
+                            replyMarkup: await Buttons.LinkAndAddToFavoritAsync(house.WebPath, ChatId, house.Id));
                     }
                     catch
                     {
-                        await Client.SendTextMessageAsync(ChatId, text);
+                        await Client.SendTextMessageAsync(ChatId, 
+                            text,
+                            replyMarkup: await Buttons.AddToFavorit(ChatId, house.Id));
                     }
                 }
             }

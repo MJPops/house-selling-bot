@@ -19,9 +19,14 @@ namespace HouseSellingBot.UI
                 },
                 new List<InlineKeyboardButton>
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "О нас", callbackData: "О нас"),
-                }
-            });
+                    InlineKeyboardButton.WithCallbackData(text: "Мои избранные",
+                    callbackData: "МоиИзбранные")
+                },
+                new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "О нас", callbackData: "О нас"),
+                    }
+                });
         }
         public static async Task<IReplyMarkup> FiltersMenuForUserAsync(long chatId)
         {
@@ -64,11 +69,6 @@ namespace HouseSellingBot.UI
                     callbackData: "МоиФильтры"),
                     InlineKeyboardButton.WithCallbackData(text: "Дома по Фильтрам",
                     callbackData: "ДомаПоФильтрам")
-                });
-                startButtons.Add(new List<InlineKeyboardButton>
-                {
-                    InlineKeyboardButton.WithCallbackData(text: "Мои избранные",
-                    callbackData: "МоиИзбранные")
                 });
                 startButtons.Add(new List<InlineKeyboardButton>
                 {
@@ -234,27 +234,34 @@ namespace HouseSellingBot.UI
             });
             ;
         }
-        public static IReplyMarkup Link(string path)
+        public static async Task<IReplyMarkup> LinkAndAddToFavoritAsync(string path, long chatId, int houseId)
         {
-            return new InlineKeyboardMarkup(new List<InlineKeyboardButton>
+            List<InlineKeyboardButton> returnsButtons = new()
             {
                 InlineKeyboardButton.WithUrl("Ссылка", path),
-            });
-        }
-        public static IReplyMarkup LinkForUsers(string path, long chatId, int houseId)
-        {
-            return new InlineKeyboardMarkup(new List<InlineKeyboardButton>
+            };
+
+            if (await UsersRepositore.UserIsRegisteredAsync(chatId))
             {
-                InlineKeyboardButton.WithUrl("Ссылка", path),
-                InlineKeyboardButton.WithCallbackData(text: "Добавить в избранное", callbackData: $"Избранное{houseId}")
-            });
+                returnsButtons.Add(InlineKeyboardButton.WithCallbackData(text: "Добавить в избранное",
+                callbackData: $"Избранное{houseId}"));
+            }
+            return new InlineKeyboardMarkup(returnsButtons);
         }
-        public static IReplyMarkup LinkForUsers(long chatId, int houseId)
+        public static async Task<IReplyMarkup> AddToFavorit(long chatId, int houseId)
         {
-            return new InlineKeyboardMarkup(new List<InlineKeyboardButton>
+            if (await UsersRepositore.UserIsRegisteredAsync(chatId))
             {
-                InlineKeyboardButton.WithCallbackData(text: "Добавить в избранное", callbackData: $"Избранное{houseId}")
-            });
+                return new InlineKeyboardMarkup(new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Добавить в избранное",
+                    callbackData: $"Избранное{houseId}")
+                });
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static IReplyMarkup RedactionMenu()

@@ -257,7 +257,8 @@ namespace HouseSellingBot
                     }
                     else if (callbackMessage.Substring(0, 9) == "Избранное")
                     {
-                        await UsersRepositore.AddFavoriteHouseToUserAsync(chatId, Convert.ToInt32(callbackMessage.Substring(10)));
+                        await UsersRepositore.AddFavoriteHouseToUserAsync(chatId,
+                            Convert.ToInt32(callbackMessage.Substring(9)));
                     }
                 }
                 catch { }//It's OK
