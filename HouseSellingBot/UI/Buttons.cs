@@ -202,10 +202,17 @@ namespace HouseSellingBot.UI
         {
             return new InlineKeyboardMarkup(new List<InlineKeyboardButton>
             {
-                InlineKeyboardButton.WithUrl("Ссылка", path)
+                InlineKeyboardButton.WithUrl("Ссылка", path),
             });
         }
-
+        public static IReplyMarkup Link(string path, long chatId)
+        {
+            return new InlineKeyboardMarkup(new List<InlineKeyboardButton>
+            {
+                InlineKeyboardButton.WithUrl("Ссылка", path),
+                InlineKeyboardButton.WithCallbackData(text: "Добавить в избранное", callbackData: "Избранное")
+            });
+        }
         public static IReplyMarkup RedactionMenu()
         {
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>

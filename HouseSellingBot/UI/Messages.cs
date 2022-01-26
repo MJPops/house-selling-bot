@@ -49,6 +49,12 @@ namespace HouseSellingBot.UI
                 await SendNotFoundMessageAsync();
             }
         }
+        public async Task AddFavoriteHouseAsync(long chatId, int houseId)
+        {
+            await HousesRepositore.GetHouseByIdAsync(houseId);
+            await UsersRepositore.AddFavoriteHouseToUserAsync(chatId, houseId);
+            await Client.SendTextMessageAsync(ChatId, "Дом добавлен в избранное");
+        }
         public async Task SendFiltersMenuAsync(int messageId)
         {
             await Client.EditMessageTextAsync(ChatId,

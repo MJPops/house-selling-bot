@@ -62,6 +62,10 @@ namespace HouseSellingBot
             {
                 await Message.SendUsersFiltersAsync(chatId, messageId);
             }
+            else if (callbackMessage == "Избранное")
+            {
+                await Message.AddFavoriteHouseAsync(chatId, messageId);
+            }
             else if (callbackMessage == "ДомаПоФильтрам")
             {
                 try
