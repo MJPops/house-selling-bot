@@ -104,10 +104,6 @@ namespace HouseSellingBot.UI
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
-        public async Task SendRedactionMenuAsync()
-        {
-            await Client.SendTextMessageAsync(ChatId, "Выберите действие", replyMarkup: Buttons.RedactionMenu());
-        }
 
         public async Task SendHousesForUserAsync(long ChatId)
         {
@@ -484,6 +480,49 @@ namespace HouseSellingBot.UI
                 }
             }
         }
+        private static async Task SendOneHouseForAdminAsync(House house)
+        {
+            string text = $"Описание: {house.Description}\n" +
+                $"Метро: {house.Metro}\n" +
+                $"Район: {house.District}\n" +
+                $"Метраж: {house.Footage}\n" +
+                $"Число комнат: {house.RoomsNumber}\n" +
+                $"Тип покупки: {house.RentType}\n" +
+                $"Цена: {house.Price}₽\n" +
+                $"Тип дома: {house.Type}";
+            try
+            {
+                await Client.SendPhotoAsync(ChatId,
+                    house.PicturePath,
+                    caption: text,
+                    replyMarkup: Buttons.RedactionMenuForHouses(house.WebPath, house.Id));
+            }
+            catch
+            {
+                try
+                {
+                    await Client.SendPhotoAsync(ChatId,
+                        house.PicturePath,
+                        caption: text,
+                        replyMarkup: Buttons.RedactionMenuForHouses(house.Id));
+                }
+                catch
+                {
+                    try
+                    {
+                        await Client.SendTextMessageAsync(ChatId,
+                            text,
+                            replyMarkup: Buttons.RedactionMenuForHouses(house.WebPath, house.Id));
+                    }
+                    catch
+                    {
+                        await Client.SendTextMessageAsync(ChatId,
+                            text,
+                            replyMarkup: Buttons.RedactionMenuForHouses(house.Id));
+                    }
+                }
+            }
+        }
         private static async Task SendBackToStart()
         {
             await Client.SendTextMessageAsync(ChatId,
@@ -492,9 +531,29 @@ namespace HouseSellingBot.UI
         }
         private static async Task SendHousesListAsync(IEnumerable<House> houses)
         {
-            foreach (var item in houses)
+            try
             {
-                await SendOneHouseAsync(item);
+                if (await UsersRepositore.UserIsAdminAsync(ChatId) || await UsersRepositore.UserIsDirectorAsync(ChatId))
+                {
+                    foreach (var item in houses)
+                    {
+                        await SendOneHouseForAdminAsync(item);
+                    }
+                }
+                else
+                {
+                    foreach (var item in houses)
+                    {
+                        await SendOneHouseAsync(item);
+                    }
+                }
+            }
+            catch (NotFoundException)
+            {
+                foreach (var item in houses)
+                {
+                    await SendOneHouseAsync(item);
+                }
             }
             await SendBackToStart();
         }

@@ -328,18 +328,6 @@ namespace HouseSellingBot
                 await UsersRepositore.RemoveUserByChatIdAsync(chatId);
                 await Message.SendStartMenuAsync();
             }
-            else if (inputMessage == "Меню редактирования")
-            {
-                if (await UsersRepositore.UserIsAdminAsync(chatId) ||
-                    await UsersRepositore.UserIsDirectorAsync(chatId))
-                {
-                    await Message.SendRedactionMenuAsync();
-                }
-                else
-                {
-                    await Message.SendNotAdminAsync();
-                }
-            }
             else if (inputMessage == "Меню редактирования админов")
             {
                 await Message.SendAdminsRedactionMenuAsync();
