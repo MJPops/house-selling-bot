@@ -252,7 +252,7 @@ namespace HouseSellingBot
                     if (callbackMessage.Substring(0, 7) == "Удалить")
                     {
                         await UsersRepositore.
-                            RemoveUserByChatIdAsync(Convert.ToInt32(callbackMessage.Substring(8)));
+                            RemoveUserByChatIdAsync(Convert.ToInt32(callbackMessage.Substring(7)));
                         await Message.SendAdminsRedactionMenuAsync(messageId);
                     }
                     else if (callbackMessage.Substring(0, 9) == "Избранное")
