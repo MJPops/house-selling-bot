@@ -20,11 +20,23 @@ namespace HouseSellingBot.UI
             };
             if (await UsersRepositore.UserIsRegisteredAsync(chatId))
             {
-                returnsButtons.Add(new List<InlineKeyboardButton>
+                if (await UsersRepositore.UserIsAdminAsync(chatId) 
+                    || await UsersRepositore.UserIsDirectorAsync(chatId))
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "Мои избранные",
-                        callbackData: "МоиИзбранные")
-                });
+                    returnsButtons.Add(new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Добавить дом",
+                            callbackData: "ДобавитьДом")
+                    });
+                }
+                else
+                {
+                    returnsButtons.Add(new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Мои избранные",
+                            callbackData: "МоиИзбранные")
+                    });
+                }
             }
             returnsButtons.Add(new List<InlineKeyboardButton>
                 {
@@ -296,7 +308,7 @@ namespace HouseSellingBot.UI
                 adminsListToDelete.Add(new List<InlineKeyboardButton>
                 {
                     InlineKeyboardButton.WithCallbackData(text: $"Удалить {admin.Name}",
-                    callbackData: $"Удалить{admin.ChatId}")
+                    callbackData: $"УдалитьАдмина{admin.ChatId}")
                 });
             }
 
