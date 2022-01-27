@@ -143,6 +143,39 @@ namespace HouseSellingBot.UI
                 }
             });
         }
+        public static IReplyMarkup InRedaction(int houseId)
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Изображение", 
+                        callbackData: $"Изображение{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Ссылка", callbackData: $"Ссылка{houseId}")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Описание", callbackData: $"Описание{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Район", callbackData: $"Район{houseId}")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Тип дома", callbackData: $"Тип{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Тип покупки", 
+                        callbackData: "ТипПокупки{houseId}")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Метро", callbackData: $"Метро{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Комнаты", callbackData: $"Комнаты{houseId}")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Цена", callbackData: $"Цена{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Метраж", callbackData: $"Метраж{houseId}")
+                    }
+            });
+        }
         public static IReplyMarkup BackToFilters()
         {
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>

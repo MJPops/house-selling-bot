@@ -376,7 +376,7 @@ namespace HouseSellingBot.UI
                 "Дома с такими параметрами не обнаружены.",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToStart());
         }
-        public async Task SubmitInputRequest(string request, int messageId)
+        public async Task EditToSubmitInputRequest(string request, int messageId)
         {
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
@@ -445,6 +445,12 @@ namespace HouseSellingBot.UI
                 await Client.SendTextMessageAsync(ChatId,
                     "Администраторы не добавлены");
             }
+        }
+        public async Task SendHouseRedactionMenuAsync(int houseId)
+        {
+            await Client.SendTextMessageAsync(ChatId, 
+                "Выберите изменяемый параметр", 
+                replyMarkup: Buttons.InRedaction(houseId));
         }
         public async Task SendNewHouseDesignAsync(House house)
         {
