@@ -27,14 +27,14 @@ namespace HouseSellingBot.UI
             {
                 var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
                 await Client.SendTextMessageAsync(ChatId, $"Здравствуйте {user.Name}, рад вас видеть.",
-                replyMarkup: Buttons.Start());
+                replyMarkup: await Buttons.StartAsync(ChatId));
             }
             else
             {
                 await Client.SendTextMessageAsync(ChatId, "Здравствуйте, рад вас видеть. \n" +
                     "Я являюсь ботом, который поможет вам ознакомиться с домами, доступными к приобретению и аренде.\n\n" +
                     "Выберите интересующий вас пункт меню.",
-                    replyMarkup: Buttons.Start());
+                    replyMarkup: await Buttons.StartAsync(ChatId));
             }
         }
         public async Task EditStartMenuAsync(int messageId)
@@ -44,7 +44,7 @@ namespace HouseSellingBot.UI
                 "Здравствуйте, рад вас видеть. \n" +
                 "Я являюсь ботом, который поможет вам ознакомиться с домами, доступными к приобретению и аренде.\n\n" +
                 "Выберите интересующий вас пункт меню.",
-                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.Start());
+                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)await Buttons.StartAsync(ChatId));
         }
         public async Task SendAllHousesAsync()
         {

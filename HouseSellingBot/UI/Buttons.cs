@@ -8,25 +8,30 @@ namespace HouseSellingBot.UI
 {
     public class Buttons
     {
-        public static IReplyMarkup Start()
+        public static async Task<IReplyMarkup> StartAsync(long chatId)
         {
-            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            List<List<InlineKeyboardButton>> returnsButtons = new()
             {
                 new List<InlineKeyboardButton>
                 {
                     InlineKeyboardButton.WithCallbackData(text: "Все дома", callbackData: "ВсеДома"),
                     InlineKeyboardButton.WithCallbackData(text: "Фильтры", callbackData: "Фильтры")
-                },
-                new List<InlineKeyboardButton>
+                }
+            };
+            if (await UsersRepositore.UserIsRegisteredAsync(chatId))
+            {
+                returnsButtons.Add(new List<InlineKeyboardButton>
                 {
                     InlineKeyboardButton.WithCallbackData(text: "Мои избранные",
-                    callbackData: "МоиИзбранные")
-                },
-                new List<InlineKeyboardButton>
-                    {
-                        InlineKeyboardButton.WithCallbackData(text: "О нас", callbackData: "О нас"),
-                    }
+                        callbackData: "МоиИзбранные")
                 });
+            }
+            returnsButtons.Add(new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "О нас", callbackData: "О нас")
+                });
+
+            return new InlineKeyboardMarkup(returnsButtons);
         }
         public static async Task<IReplyMarkup> FiltersMenuForUserAsync(long chatId)
         {
