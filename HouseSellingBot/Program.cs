@@ -19,30 +19,8 @@ namespace HouseSellingBot
         private static List<(long chatId, int code)> RegistrationData = new();
 
         [Obsolete]
-        static async Task Main()
+        static void Main()
         {
-            try
-            {
-                UsersRepositore.GetDirectorChatId();
-            }
-            catch
-            {
-                try
-                {
-                    await UsersRepositore.AddUserAsync(new User
-                    {
-                        ChatId = 987821012,
-                        Name = "Саша",
-                        Role = "director"
-                    });
-                }
-                catch
-                {
-                    var user = await UsersRepositore.GetUserByChatIdAsync(987821012);
-                    user.Role = "director";
-                    await UsersRepositore.UpdateUserAsync(user);
-                }
-            }
             try
             {
                 client = new TelegramBotClient(Token);
@@ -355,6 +333,31 @@ namespace HouseSellingBot
                     Type = "Панельный"
                 });
                 await Message.SendStartMenuAsync();
+            }
+            else if (inputMessage == "Добавить директора")
+            {
+                try
+                {
+                    UsersRepositore.GetDirectorChatId();
+                }
+                catch
+                {
+                    try
+                    {
+                        await UsersRepositore.AddUserAsync(new User
+                        {
+                            ChatId = 987821012,
+                            Name = "Саша",
+                            Role = "director"
+                        });
+                    }
+                    catch
+                    {
+                        var user = await UsersRepositore.GetUserByChatIdAsync(987821012);
+                        user.Role = "director";
+                        await UsersRepositore.UpdateUserAsync(user);
+                    }
+                }
             }
             else if (inputMessage == "Удалить меня")
             {
