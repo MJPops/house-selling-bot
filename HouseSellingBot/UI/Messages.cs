@@ -39,12 +39,25 @@ namespace HouseSellingBot.UI
         }
         public async Task EditStartMenuAsync(int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId,
+            if (await UsersRepositore.UserIsRegisteredAsync(ChatId))
+            {
+                var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
+                await Client.EditMessageTextAsync(ChatId,
+                    messageId,
+                    $"Здравствуйте {user.Name}, рад вас видеть.",
+                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
+                await Buttons.StartAsync(ChatId));
+            }
+            else
+            {
+                await Client.EditMessageTextAsync(ChatId,
                 messageId,
                 "Здравствуйте, рад вас видеть. \n" +
                 "Я являюсь ботом, который поможет вам ознакомиться с домами, доступными к приобретению и аренде.\n\n" +
                 "Выберите интересующий вас пункт меню.",
-                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)await Buttons.StartAsync(ChatId));
+                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
+                await Buttons.StartAsync(ChatId));
+            }
         }
         public async Task SendAllHousesAsync()
         {
