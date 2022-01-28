@@ -16,7 +16,6 @@ namespace HouseSellingBot.Models
         public float? Price { get; set; }
         public float? Footage { get; set; }
 
-        public int? UserId { get; set; }
         public List<User> Users { get; set; } = new();
     }
 }

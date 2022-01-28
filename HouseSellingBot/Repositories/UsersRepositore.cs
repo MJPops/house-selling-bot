@@ -169,14 +169,30 @@ namespace HouseSellingBot.Repositories
         {
             var user = await GetUserByChatIdAsync(chatId);
             await dBContext.Houses.Include(h => h.Users).ToListAsync();
-            var houseToAdd = await dBContext.Houses.FindAsync(houseId);
 
-            if (user.FavoriteHouses.Contains(houseToAdd))
+            if (user.FavoriteHouses.Where(h=>h.Id == houseId).Any())
             {
                 throw new AlreadyContainException("This house has already been added to this user");
             }
             user.FavoriteHouses.Add(await dBContext.Houses.FindAsync(houseId));
+            await dBContext.SaveChangesAsync();
         }
+        /// <summary>
+        /// Removes the association of a home and a user in the database.
+        /// </summary>
+        /// <exception cref="AlreadyContainException"></exception>
+        public static async Task RemoveFromFavoritHousesAsync(long chatId, int houseId)
+        {
+            var user = await GetUserByChatIdAsync(chatId);
+            await dBContext.Houses.Include(h => h.Users).ToListAsync();
+
+            if (!user.FavoriteHouses.Where(h => h.Id == houseId).Any())
+            {
+                throw new AlreadyContainException("This house has already been added to this user");
+            }
+            user.FavoriteHouses.Remove(await dBContext.Houses.FindAsync(houseId));
+            await dBContext.SaveChangesAsync();
+        } 
         /// <summary>
         /// Returns the houses from the database that match the given user's filters.
         /// </summary>

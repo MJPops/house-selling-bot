@@ -45,14 +45,14 @@ namespace HouseSellingBot
             long chatId = e.CallbackQuery.Message.Chat.Id;
             int messageId = e.CallbackQuery.Message.MessageId;
             Messages Message = new(client, chatId);
-            Console.WriteLine(callbackMessage); //TODO - delete
+            Console.WriteLine(callbackMessage); 
 
 
             if (callbackMessage == "/start")
             {
                 await Message.EditIntoStartMenuAsync(messageId);
             }
-            if (callbackMessage == "МоиИзбранные")
+            else if (callbackMessage == "МоиИзбранные")
             {
                 await Message.SendFavoriteHousesAsync();
             }
@@ -345,6 +345,11 @@ namespace HouseSellingBot
                     {
                         await Message.SendHouseRedactionMenuAsync(Convert.ToInt32(callbackMessage.Substring(18)));   
                     }
+                    else if (callbackMessage.Substring(0, 19) == "УдалитьИзИзбранного")
+                    {
+                        await UsersRepositore.RemoveFromFavoritHousesAsync(chatId, 
+                            Convert.ToInt32(callbackMessage.Substring(19)));
+                    }
 
                 }
                 catch { }//It's OK
@@ -374,7 +379,7 @@ namespace HouseSellingBot
             long chatId = e.Message.Chat.Id;
             int messageId = e.Message.MessageId;
             Messages Message = new(client, chatId);
-            Console.WriteLine(inputMessage); //TODO - delete
+            Console.WriteLine(inputMessage);
 
             if (inputMessage == "/start")
             {

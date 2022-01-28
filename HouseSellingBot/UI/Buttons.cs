@@ -1,6 +1,7 @@
 ﻿using HouseSellingBot.Models;
 using HouseSellingBot.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -21,7 +22,7 @@ namespace HouseSellingBot.UI
             };
             if (await UsersRepositore.UserIsRegisteredAsync(chatId))
             {
-                if (await UsersRepositore.UserIsAdminAsync(chatId) 
+                if (await UsersRepositore.UserIsAdminAsync(chatId)
                     || await UsersRepositore.UserIsDirectorAsync(chatId))
                 {
                     returnsButtons.Add(new List<InlineKeyboardButton>
@@ -150,7 +151,7 @@ namespace HouseSellingBot.UI
             {
                     new List<InlineKeyboardButton>
                     {
-                        InlineKeyboardButton.WithCallbackData(text: "Изображение", 
+                        InlineKeyboardButton.WithCallbackData(text: "Изображение",
                         callbackData: $"Изображение{houseId}"),
                         InlineKeyboardButton.WithCallbackData(text: "Ссылка", callbackData: $"Ссылка{houseId}")
                     },
@@ -162,7 +163,7 @@ namespace HouseSellingBot.UI
                     new List<InlineKeyboardButton>
                     {
                         InlineKeyboardButton.WithCallbackData(text: "Тип дома", callbackData: $"Тип{houseId}"),
-                        InlineKeyboardButton.WithCallbackData(text: "Тип покупки", 
+                        InlineKeyboardButton.WithCallbackData(text: "Тип покупки",
                         callbackData: "ТипПокупки{houseId}")
                     },
                     new List<InlineKeyboardButton>
@@ -295,8 +296,8 @@ namespace HouseSellingBot.UI
             if (await UsersRepositore.UserIsRegisteredAsync(chatId))
             {
                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                var house = await HousesRepositore.GetHouseByIdAsync(houseId);
-                if (user.FavoriteHouses.Contains(house))
+
+                if (user.FavoriteHouses.Where(h => h.Id == houseId).Any())
                 {
                     returnsButtons.Add(InlineKeyboardButton.WithCallbackData(text: "Удалить из избранного",
                         callbackData: $"УдалитьИзИзбранного{houseId}"));
@@ -315,8 +316,8 @@ namespace HouseSellingBot.UI
             if (await UsersRepositore.UserIsRegisteredAsync(chatId))
             {
                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                var house = await HousesRepositore.GetHouseByIdAsync(houseId);
-                if (user.FavoriteHouses.Contains(house))
+
+                if (user.FavoriteHouses.Where(h => h.Id == houseId).Any())
                 {
                     returnsButtons.Add(InlineKeyboardButton.WithCallbackData(text: "Удалить из избранного",
                         callbackData: $"УдалитьИзИзбранного{houseId}"));

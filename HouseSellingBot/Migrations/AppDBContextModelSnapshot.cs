@@ -53,9 +53,6 @@ namespace HouseSellingBot.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("WebPath")
                         .HasColumnType("nvarchar(max)");
 
@@ -82,9 +79,6 @@ namespace HouseSellingBot.Migrations
 
                     b.Property<string>("HouseDistrict")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("HouseId")
-                        .HasColumnType("int");
 
                     b.Property<string>("HouseMetro")
                         .HasColumnType("nvarchar(max)");

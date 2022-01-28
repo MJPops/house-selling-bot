@@ -21,8 +21,7 @@ namespace HouseSellingBot.Migrations
                     RentType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RoomsNumber = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<float>(type: "real", nullable: true),
-                    Footage = table.Column<float>(type: "real", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: true)
+                    Footage = table.Column<float>(type: "real", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -46,8 +45,7 @@ namespace HouseSellingBot.Migrations
                     LowerPrice = table.Column<float>(type: "real", nullable: true),
                     HightPrice = table.Column<float>(type: "real", nullable: true),
                     LowerFootage = table.Column<float>(type: "real", nullable: true),
-                    HightFootage = table.Column<float>(type: "real", nullable: true),
-                    HouseId = table.Column<int>(type: "int", nullable: true)
+                    HightFootage = table.Column<float>(type: "real", nullable: true)
                 },
                 constraints: table =>
                 {

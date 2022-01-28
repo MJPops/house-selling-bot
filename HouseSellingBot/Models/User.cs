@@ -18,7 +18,6 @@ namespace HouseSellingBot.Models
         public float? LowerFootage { get; set; }
         public float? HightFootage { get; set; }
 
-        public int? HouseId { get; set; }
         public List<House> FavoriteHouses { get; set; } = new();
     }
 }
