@@ -21,11 +21,23 @@ namespace HouseSellingBot.UI
             };
             if (await UsersRepositore.UserIsRegisteredAsync(chatId))
             {
-                returnsButtons.Add(new List<InlineKeyboardButton>
+                if (await UsersRepositore.UserIsAdminAsync(chatId) 
+                    || await UsersRepositore.UserIsDirectorAsync(chatId))
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "Мои избранные",
-                        callbackData: "МоиИзбранные")
-                });
+                    returnsButtons.Add(new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Добавить дом",
+                            callbackData: "ДобавитьДом")
+                    });
+                }
+                else
+                {
+                    returnsButtons.Add(new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Мои избранные",
+                            callbackData: "МоиИзбранные")
+                    });
+                }
             }
             returnsButtons.Add(new List<InlineKeyboardButton>
                 {
@@ -130,6 +142,39 @@ namespace HouseSellingBot.UI
                     callbackData: $"РедактированиеДома{houseId}"),
                     InlineKeyboardButton.WithCallbackData(text: "Удалить", callbackData: $"УдалитьДом{houseId}")
                 }
+            });
+        }
+        public static IReplyMarkup InRedaction(int houseId)
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Изображение", 
+                        callbackData: $"Изображение{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Ссылка", callbackData: $"Ссылка{houseId}")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Описание", callbackData: $"Описание{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Район", callbackData: $"Район{houseId}")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Тип дома", callbackData: $"Тип{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Тип покупки", 
+                        callbackData: "ТипПокупки{houseId}")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Метро", callbackData: $"Метро{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Комнаты", callbackData: $"Комнаты{houseId}")
+                    },
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: "Цена", callbackData: $"Цена{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Метраж", callbackData: $"Метраж{houseId}")
+                    }
             });
         }
         public static IReplyMarkup BackToFilters()
@@ -315,7 +360,7 @@ namespace HouseSellingBot.UI
                 adminsListToDelete.Add(new List<InlineKeyboardButton>
                 {
                     InlineKeyboardButton.WithCallbackData(text: $"Удалить {admin.Name}",
-                    callbackData: $"Удалить{admin.ChatId}")
+                    callbackData: $"УдалитьАдмина{admin.ChatId}")
                 });
             }
 

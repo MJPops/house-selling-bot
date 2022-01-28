@@ -4,3 +4,6 @@
 
 /HouseSellingBot/bin/Debug/net5.0
 /HouseSellingBot/obj
+/HouseSellingBot/bin/Release/net5.0
+/HouseSellingBot/Properties/PublishProfiles
+/HouseSellingBot/HouseSellingBot.csproj.user

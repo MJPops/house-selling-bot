@@ -85,6 +85,19 @@ namespace HouseSellingBot.Repositories
             return director.ChatId;
         }
         /// <summary>
+        /// Returns the director's chatID.
+        /// </summary>
+        /// <exception cref="NotFoundException"></exception>
+        public static long GetDirectorChatId()
+        {
+            var director = dBContext.Users.FirstOrDefault(u => u.Role == "director");
+            if (director == null)
+            {
+                throw new NotFoundException();
+            }
+            return director.ChatId;
+        }
+        /// <summary>
         /// Returns a user from the database, with the given chatId.
         /// </summary>
         /// <param name="chatId">ChatId of the user you are looking for.</param>

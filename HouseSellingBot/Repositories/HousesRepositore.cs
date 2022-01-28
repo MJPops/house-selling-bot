@@ -33,8 +33,9 @@ namespace HouseSellingBot.Repositories
         /// Remove house from the database.
         /// </summary>
         /// <param name="house">The house being remove.</param>
-        public static async Task RemoveHouseAsync(House house)
+        public static async Task RemoveHouseAsync(int houseId)
         {
+            var house = await GetHouseByIdAsync(houseId);
             dBContext.Houses.Remove(house);
             await dBContext.SaveChangesAsync();
         }
