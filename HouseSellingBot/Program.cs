@@ -605,6 +605,76 @@ namespace HouseSellingBot
                                 await Message.SendNewHouseDesignAsync(house);
                                 await HousesRepositore.UpdateHouseAsync(house);
                             }
+                            else if (data.attribute == "Ссылка")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.WebPath = inputMessage;
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
+                            else if (data.attribute == "Описание")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.Description = inputMessage;
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
+                            else if (data.attribute == "Район")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.District = inputMessage;
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
+                            else if (data.attribute == "Тип")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.Type = inputMessage;
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
+                            else if (data.attribute == "ТипПокупки")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.RentType = inputMessage;
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
+                            else if (data.attribute == "Метро")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.Metro = inputMessage;
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
+                            else if (data.attribute == "Метро")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.Metro = inputMessage;
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
+                            else if (data.attribute == "Комнаты")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.RoomsNumber = Convert.ToInt32(inputMessage);
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
+                            else if (data.attribute == "Цена")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.Price = Convert.ToInt32(inputMessage); ;
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
+                            else if (data.attribute == "Метраж")
+                            {
+                                var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                house.Footage = Convert.ToInt32(inputMessage); ;
+                                await Message.SendNewHouseDesignAsync(house);
+                                await HousesRepositore.UpdateHouseAsync(house);
+                            }
                         }
                         catch (FormatException)
                         {

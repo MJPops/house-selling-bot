@@ -150,7 +150,7 @@ namespace HouseSellingBot.UI
             {
                     new List<InlineKeyboardButton>
                     {
-                        InlineKeyboardButton.WithCallbackData(text: "Изображение", 
+                        InlineKeyboardButton.WithCallbackData(text: "Изображение",
                         callbackData: $"Изображение{houseId}"),
                         InlineKeyboardButton.WithCallbackData(text: "Ссылка", callbackData: $"Ссылка{houseId}")
                     },
@@ -162,8 +162,8 @@ namespace HouseSellingBot.UI
                     new List<InlineKeyboardButton>
                     {
                         InlineKeyboardButton.WithCallbackData(text: "Тип дома", callbackData: $"Тип{houseId}"),
-                        InlineKeyboardButton.WithCallbackData(text: "Тип покупки", 
-                        callbackData: "ТипПокупки{houseId}")
+                        InlineKeyboardButton.WithCallbackData(text: "Тип покупки",
+                        callbackData: $"ТипПокупки{houseId}")
                     },
                     new List<InlineKeyboardButton>
                     {
@@ -175,7 +175,7 @@ namespace HouseSellingBot.UI
                         InlineKeyboardButton.WithCallbackData(text: "Цена", callbackData: $"Цена{houseId}"),
                         InlineKeyboardButton.WithCallbackData(text: "Метраж", callbackData: $"Метраж{houseId}")
                     }
-            });
+            }) ;
         }
         public static IReplyMarkup BackToFilters()
         {
