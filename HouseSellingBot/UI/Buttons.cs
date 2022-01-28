@@ -8,6 +8,7 @@ namespace HouseSellingBot.UI
 {
     public class Buttons
     {
+
         public static async Task<IReplyMarkup> StartAsync(long chatId)
         {
             List<List<InlineKeyboardButton>> returnsButtons = new()
@@ -248,27 +249,45 @@ namespace HouseSellingBot.UI
 
             if (await UsersRepositore.UserIsRegisteredAsync(chatId))
             {
-                returnsButtons.Add(InlineKeyboardButton.WithCallbackData(text: "Добавить в избранное",
-                callbackData: $"Избранное{houseId}"));
+                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                var house = await HousesRepositore.GetHouseByIdAsync(houseId);
+                if (user.FavoriteHouses.Contains(house))
+                {
+                    returnsButtons.Add(InlineKeyboardButton.WithCallbackData(text: "Удалить из избранного",
+                        callbackData: $"УдалитьИзИзбранного{houseId}"));
+                }
+                else
+                {
+                    returnsButtons.Add(InlineKeyboardButton.WithCallbackData(text: "Добавить в избранное",
+                    callbackData: $"Избранное{houseId}"));
+                }
             }
             return new InlineKeyboardMarkup(returnsButtons);
         }
         public static async Task<IReplyMarkup> AddToFavorit(long chatId, int houseId)
         {
+            List<InlineKeyboardButton> returnsButtons = new();
             if (await UsersRepositore.UserIsRegisteredAsync(chatId))
             {
-                return new InlineKeyboardMarkup(new List<InlineKeyboardButton>
+                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                var house = await HousesRepositore.GetHouseByIdAsync(houseId);
+                if (user.FavoriteHouses.Contains(house))
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "Добавить в избранное",
-                    callbackData: $"Избранное{houseId}")
-                });
+                    returnsButtons.Add(InlineKeyboardButton.WithCallbackData(text: "Удалить из избранного",
+                        callbackData: $"УдалитьИзИзбранного{houseId}"));
+                }
+                else
+                {
+                    returnsButtons.Add(InlineKeyboardButton.WithCallbackData(text: "Добавить в избранное",
+                    callbackData: $"Избранное{houseId}"));
+                }
             }
             else
             {
                 return null;
             }
+            return new InlineKeyboardMarkup(returnsButtons);
         }
-
         public static IReplyMarkup RedactionMenu()
         {
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
