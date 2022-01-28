@@ -265,10 +265,64 @@ namespace HouseSellingBot
             {
                 try
                 {
-                    if (callbackMessage.Substring(0, 9) == "Избранное")
+                    if (callbackMessage.Substring(0, 3) == "Тип")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("тип дома", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(3)), "Тип"));
+                    }
+                    else if (callbackMessage.Substring(0, 4) == "Цена")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("цену", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(4)), "Цена"));
+                    }
+                    else if (callbackMessage.Substring(0,5) == "Район")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("район", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(5)), "Район"));
+                    }
+                    else if (callbackMessage.Substring(0, 5) == "Метро")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("Метро", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(5)), "Метро"));
+                    }
+                    else if (callbackMessage.Substring(0, 6) == "Ссылка")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("ссылку на сайт", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(6)), "Ссылка"));
+                    }
+                    else if (callbackMessage.Substring(0, 6) == "Метраж")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("метраж", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(6)), "Метраж"));
+                    }
+                    else if (callbackMessage.Substring(0, 7) == "Комнаты")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("количество комнат", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(7)), "Комнаты"));
+                    }
+                    else if (callbackMessage.Substring(0, 8) == "Описание")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("описание к дому", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(8)), "Описание"));
+                    }
+                    else if (callbackMessage.Substring(0, 9) == "Избранное")
                     {
                         await UsersRepositore.AddFavoriteHouseToUserAsync(chatId,
                             Convert.ToInt32(callbackMessage.Substring(9)));
+                    }
+                    else if (callbackMessage.Substring(0, 10) == "ТипПокупки")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("тип покупки", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(10)), "ТипПокупки"));
                     }
                     else if (callbackMessage.Substring(0, 10) == "УдалитьДом")
                     {
