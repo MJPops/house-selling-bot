@@ -51,7 +51,7 @@ namespace HouseSellingBot.Repositories
             {
                 throw new NotFoundException();
             }
-            await dBContext.Users.Include(u=>u.FavoriteHouses).ToListAsync();
+            await dBContext.Users.Include(u => u.FavoriteHouses).ToListAsync();
             return house;
         }
         /// <summary>

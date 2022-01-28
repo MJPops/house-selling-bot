@@ -45,7 +45,7 @@ namespace HouseSellingBot
             long chatId = e.CallbackQuery.Message.Chat.Id;
             int messageId = e.CallbackQuery.Message.MessageId;
             Messages Message = new(client, chatId);
-            Console.WriteLine(callbackMessage); 
+            Console.WriteLine(callbackMessage);
 
 
             if (callbackMessage == "/start")
@@ -265,19 +265,13 @@ namespace HouseSellingBot
             {
                 try
                 {
-                    if (callbackMessage.Substring(0, 3) == "Тип")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditToSubmitInputRequest("тип дома", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(3)), "Тип"));
-                    }
-                    else if (callbackMessage.Substring(0, 4) == "Цена")
+                    if (callbackMessage.Substring(0, 4) == "Цена")
                     {
                         await Task.Run(() => CleanRedactionDataFilter(chatId));
                         await Message.EditToSubmitInputRequest("цену", messageId);
                         RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(4)), "Цена"));
                     }
-                    else if (callbackMessage.Substring(0,5) == "Район")
+                    else if (callbackMessage.Substring(0, 5) == "Район")
                     {
                         await Task.Run(() => CleanRedactionDataFilter(chatId));
                         await Message.EditToSubmitInputRequest("район", messageId);
@@ -300,6 +294,12 @@ namespace HouseSellingBot
                         await Task.Run(() => CleanRedactionDataFilter(chatId));
                         await Message.EditToSubmitInputRequest("метраж", messageId);
                         RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(6)), "Метраж"));
+                    }
+                    else if (callbackMessage.Substring(0, 7) == "ТипДома")
+                    {
+                        await Task.Run(() => CleanRedactionDataFilter(chatId));
+                        await Message.EditToSubmitInputRequest("тип дома", messageId);
+                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(7)), "ТипДома"));
                     }
                     else if (callbackMessage.Substring(0, 7) == "Комнаты")
                     {
@@ -343,11 +343,11 @@ namespace HouseSellingBot
                     }
                     else if (callbackMessage.Substring(0, 18) == "РедактированиеДома")
                     {
-                        await Message.SendHouseRedactionMenuAsync(Convert.ToInt32(callbackMessage.Substring(18)));   
+                        await Message.SendHouseRedactionMenuAsync(Convert.ToInt32(callbackMessage.Substring(18)));
                     }
                     else if (callbackMessage.Substring(0, 19) == "УдалитьИзИзбранного")
                     {
-                        await UsersRepositore.RemoveFromFavoritHousesAsync(chatId, 
+                        await UsersRepositore.RemoveFromFavoritHousesAsync(chatId,
                             Convert.ToInt32(callbackMessage.Substring(19)));
                     }
 
@@ -631,7 +631,7 @@ namespace HouseSellingBot
                                 await Message.SendNewHouseDesignAsync(house);
                                 await HousesRepositore.UpdateHouseAsync(house);
                             }
-                            else if (data.attribute == "Тип")
+                            else if (data.attribute == "ТипДома")
                             {
                                 var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
                                 house.Type = inputMessage;

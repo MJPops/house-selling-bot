@@ -448,8 +448,8 @@ namespace HouseSellingBot.UI
         }
         public async Task SendHouseRedactionMenuAsync(int houseId)
         {
-            await Client.SendTextMessageAsync(ChatId, 
-                "Выберите изменяемый параметр", 
+            await Client.SendTextMessageAsync(ChatId,
+                "Выберите изменяемый параметр",
                 replyMarkup: Buttons.InRedaction(houseId));
         }
         public async Task SendNewHouseDesignAsync(House house)
