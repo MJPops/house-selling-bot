@@ -492,8 +492,8 @@ namespace HouseSellingBot
                     }
                 }
             }
-            else if (RedactionData.Any() 
-                && (await UsersRepositore.UserIsAdminAsync(chatId) 
+            else if (RedactionData.Any()
+                && (await UsersRepositore.UserIsAdminAsync(chatId)
                 || await UsersRepositore.UserIsDirectorAsync(chatId)))
             {
                 List<(long, int, string)> DataToRemove = new();
