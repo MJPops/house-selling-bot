@@ -11,7 +11,7 @@ using Telegram.Bot.Args;
 
 namespace HouseSellingBot
 {
-    class Program
+    class Programда
     {
         private static string Token { get; set; } = "5009457163:AAEz5eg_AAz26uVh9rLmdvdq7pxfCCzYBzo";
         private static TelegramBotClient client;
@@ -52,6 +52,10 @@ namespace HouseSellingBot
                 if (callbackMessage == "/start")
                 {
                     await Message.EditIntoStartMenuAsync(messageId);
+                }
+                else if (callbackMessage == "send/start")
+                {
+                    await Message.SendStartMenuAsync();
                 }
                 else if (callbackMessage == "МоиИзбранные")
                 {
