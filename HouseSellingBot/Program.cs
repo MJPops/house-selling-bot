@@ -676,7 +676,8 @@ namespace HouseSellingBot
                             else if (data.attribute == "Метраж")
                             {
                                 var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
-                                house.Footage = Convert.ToInt32(inputMessage); ;
+                                house.Footage
+                                    = Convert.ToInt32(inputMessage); ;
                                 await Message.SendNewHouseDesignAsync(house);
                                 await HousesRepositore.UpdateHouseAsync(house);
                             }
