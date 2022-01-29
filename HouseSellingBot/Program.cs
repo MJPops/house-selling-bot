@@ -71,7 +71,7 @@ namespace HouseSellingBot
                 }
                 else if (callbackMessage == "О нас")
                 {
-                    await Message.MenuAboutUsAsync(messageId);
+                    await Message.SendAboutUsAsync();
                 }
                 else if (callbackMessage == "ДомаПоФильтрам")
                 {
@@ -492,8 +492,8 @@ namespace HouseSellingBot
                     }
                 }
             }
-            else if (RedactionData.Any() 
-                && (await UsersRepositore.UserIsAdminAsync(chatId) 
+            else if (RedactionData.Any()
+                && (await UsersRepositore.UserIsAdminAsync(chatId)
                 || await UsersRepositore.UserIsDirectorAsync(chatId)))
             {
                 List<(long, int, string)> DataToRemove = new();

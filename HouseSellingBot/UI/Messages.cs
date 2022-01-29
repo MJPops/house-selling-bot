@@ -26,14 +26,15 @@ namespace HouseSellingBot.UI
             if (await UsersRepositore.UserIsRegisteredAsync(ChatId))
             {
                 var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
-                await Client.SendTextMessageAsync(ChatId, $"Здравствуйте {user.Name}, рад вас видеть.",
+                await Client.SendTextMessageAsync(ChatId, $"Здравствуйте {user.Name}, рад Вас видеть.",
                 replyMarkup: await Buttons.StartAsync(ChatId));
             }
             else
             {
-                await Client.SendTextMessageAsync(ChatId, "Здравствуйте, рад вас видеть. \n" +
-                    "Я являюсь ботом, который поможет вам ознакомиться с домами, доступными к приобретению и аренде.\n\n" +
-                    "Выберите интересующий вас пункт меню.",
+                await Client.SendTextMessageAsync(ChatId, "Привет, я бот канала Элитная недвижимость Москвы, и я помогу тебе найти квартиру мечты!\n" +
+                                              "Для начала нужно зарегистрироваться, иначе не получится пользоваться полным функционалом!\n" +
+                                              "Чтобы зарегистрироваться отправьте сообщение\n" +
+                                              "\"Регистрация <Ваше имя>\".",
                     replyMarkup: await Buttons.StartAsync(ChatId));
             }
         }
@@ -44,7 +45,7 @@ namespace HouseSellingBot.UI
                 var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    $"Здравствуйте {user.Name}, рад вас видеть.",
+                    $"Здравствуйте {user.Name}, рад Вас видеть.",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 await Buttons.StartAsync(ChatId));
             }
@@ -52,9 +53,10 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                "Здравствуйте, рад вас видеть. \n" +
-                "Я являюсь ботом, который поможет вам ознакомиться с домами, доступными к приобретению и аренде.\n\n" +
-                "Выберите интересующий вас пункт меню.",
+                "Привет, я бот канала Элитная недвижимость Москвы, и я помогу тебе найти квартиру мечты!\n" +
+                                              "Для начала нужно зарегистрироваться, иначе не получится пользоваться полным функционалом!\n" +
+                                              "Чтобы зарегистрироваться отправьте сообщение\n" +
+                                              "\"Регистрация <Ваше имя>\".",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 await Buttons.StartAsync(ChatId));
             }
@@ -65,7 +67,7 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                "Вот доступные фильтры",
+                "Все доступные фильтры",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 await Buttons.FiltersMenuForUserAsync(ChatId));
             }
@@ -73,9 +75,9 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Вот доступные фильтры\n" +
-                    "Напоминаем, что незарегистрированный клиент может использовать единовременно только 1 фильтр\n" +
-                    "Для того, чтобы зарегистрироваться введите \"Регистрация <Имя>\", где <Имя> заменить на ваше имя.",
+                    "Все доступные фильтры\n" +
+                    "Напоминаю, что незарегистрированный клиент может использовать единовременно только 1 фильтр.\n" +
+                    "Чтобы зарегистрироваться отправьте сообщение \"Регистрация <Ваше имя>\".",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                     await Buttons.FiltersMenuForUserAsync(ChatId));
             }
@@ -112,7 +114,7 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Вот все доступные на данных момент дома:");
+                    "Все, что доступно сейчас на данный момент:");
                 await SendHousesListAsync(await HousesRepositore.GetAllHousesAsync());
             }
             catch (NotFoundException)
@@ -148,7 +150,7 @@ namespace HouseSellingBot.UI
 
         public async Task SendHousesWhithHigerPriceAsync(float price)
         {
-            await Client.SendTextMessageAsync(ChatId, $"Вот все доступные помещения с ценой выше " +
+            await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с ценой выше " +
                 $"{price}");
             try
             {
@@ -161,7 +163,7 @@ namespace HouseSellingBot.UI
         }
         public async Task SendHousesWhithHigerFootageAsync(float footage)
         {
-            await Client.SendTextMessageAsync(ChatId, $"Вот все доступные помещения с метражом больше " +
+            await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с метражом больше " +
                 $"{footage}");
             try
             {
@@ -180,14 +182,17 @@ namespace HouseSellingBot.UI
         {
             await Client.SendTextMessageAsync(ChatId, "Квартира удалена из списка избранного.");
         }
-        public async Task MenuAboutUsAsync(int messageId)
+        public async Task SendAboutUsAsync()
         {
-            await Client.EditMessageTextAsync(ChatId, messageId, "Привет, я бот канала Элитная недвижимость Москвы @eliterealestatemoscow и я помогу тебе найти квартиру мечты!\n" +
-                                              "Будут вопросы, звони: +79856986633", replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToStart());
+            await Client.SendContactAsync(ChatId,
+                phoneNumber: "", //Insert phone number
+                firstName: "Сергей",
+                lastName: "Малахов",
+                replyMarkup: Buttons.BackToStart());
         }
         public async Task SendHousesWhithLowerPriceAsync(float price)
         {
-            await Client.SendTextMessageAsync(ChatId, $"Вот все доступные помещения с ценой ниже" +
+            await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с ценой ниже " +
                 $"{price}");
             try
             {
@@ -200,7 +205,7 @@ namespace HouseSellingBot.UI
         }
         public async Task SendHousesWhithLowerFootageAsync(float footage)
         {
-            await Client.SendTextMessageAsync(ChatId, $"Вот все доступные помещения с метражом ниже" +
+            await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с метражом ниже " +
                 $"{footage}");
             try
             {
@@ -225,7 +230,7 @@ namespace HouseSellingBot.UI
         }
         public async Task EditIntoHousesMetroAsync(string metro, int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId, messageId, $"Вот станции метро, рядом с которыми сейчас доступны квартиры:");
+            await Client.EditMessageTextAsync(ChatId, messageId, $"Станции метро, рядом с которыми сейчас доступны квартиры:");
             try
             {
                 await SendHousesListAsync(await HousesRepositore.GetHousesByMetroAsync(metro));
@@ -237,7 +242,7 @@ namespace HouseSellingBot.UI
         }
         public async Task EditIntoHousesByRentTypeAsync(string type, int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId, messageId, $"Вот все доступные помещения на данный момент:");
+            await Client.EditMessageTextAsync(ChatId, messageId, $"Доступные помещения на данный момент:");
             try
             {
                 await SendHousesListAsync(await HousesRepositore.GetHousesByRentTypeAsync(type));
@@ -251,7 +256,7 @@ namespace HouseSellingBot.UI
         {
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                $"Вот все доступные помещение на данный момент в {type}");
+                $"Доступные помещение на данный момент в {type}");
             try
             {
                 await SendHousesListAsync(await HousesRepositore.GetHouseByDistrictAsync(type));
@@ -263,8 +268,8 @@ namespace HouseSellingBot.UI
         }
         public async Task EditIntoHousesByRoomsNumberAsync(int roomsNumber, int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId, messageId, $"Вот все доступные {roomsNumber}-х комнатные" +
-                $" помещение на данный момент:");
+            await Client.EditMessageTextAsync(ChatId, messageId, $"Доступные {roomsNumber}-х комнатные" +
+                $" помещения на данный момент:");
             try
             {
                 await SendHousesListAsync(await HousesRepositore.GetHousesByRoomsNumberAsync(roomsNumber));
@@ -282,7 +287,7 @@ namespace HouseSellingBot.UI
                 var types = await GetAllTypesAsync();
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Вот все доступные варианты:",
+                    "Все доступные варианты:",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 Buttons.FiltersList(types));
             }
@@ -290,7 +295,7 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Типы жилплощади пока не добавлены",
+                    "Типы жил/площади пока не добавлены",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
@@ -301,7 +306,7 @@ namespace HouseSellingBot.UI
                 var rentTypes = await GetAllRentTypesAsync();
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Вот все доступные варианты:",
+                    "Все доступные варианты:",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 Buttons.FiltersList(rentTypes));
             }
@@ -318,7 +323,7 @@ namespace HouseSellingBot.UI
             try
             {
                 var districts = await GetAllDistrictsAsync();
-                await Client.EditMessageTextAsync(ChatId, messageId, "Вот все доступные районы:",
+                await Client.EditMessageTextAsync(ChatId, messageId, "Все доступные районы:",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 Buttons.FiltersList(districts));
             }
@@ -337,7 +342,7 @@ namespace HouseSellingBot.UI
                 var metro = await GetAllMetroAsync();
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Вот все доступные станции метро:",
+                    "Все доступные станции метро:",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.FiltersList(metro));
             }
             catch (NotFoundException)
@@ -355,7 +360,7 @@ namespace HouseSellingBot.UI
                 var rooms = await GetAllRoomsNumberAsync();
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Вот все доступные варианты квартир по количеству комнат:",
+                    "Все доступные варианты квартир по количеству комнат:",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.FiltersList(rooms));
             }
             catch (NotFoundException)
