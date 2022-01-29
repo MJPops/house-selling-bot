@@ -317,6 +317,7 @@ namespace HouseSellingBot
                     {
                         await UsersRepositore.AddFavoriteHouseToUserAsync(chatId,
                             Convert.ToInt32(callbackMessage.Substring(9)));
+                        await client.SendTextMessageAsync(chatId, "Квартира добавлена в избранное");
                     }
                     else if (callbackMessage.Substring(0, 10) == "ТипПокупки")
                     {
@@ -349,6 +350,7 @@ namespace HouseSellingBot
                     {
                         await UsersRepositore.RemoveFromFavoritHousesAsync(chatId,
                             Convert.ToInt32(callbackMessage.Substring(19)));
+                        await client.SendTextMessageAsync(chatId, "Квартира удалена из списка избранного");
                     }
 
                 }
@@ -676,7 +678,8 @@ namespace HouseSellingBot
                             else if (data.attribute == "Метраж")
                             {
                                 var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
-                                house.Footage = Convert.ToInt32(inputMessage); ;
+                                house.Footage
+                                    = Convert.ToInt32(inputMessage); ;
                                 await Message.SendNewHouseDesignAsync(house);
                                 await HousesRepositore.UpdateHouseAsync(house);
                             }
