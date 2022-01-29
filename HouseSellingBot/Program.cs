@@ -161,11 +161,7 @@ namespace HouseSellingBot
                         await HousesRepositore.AddHouseAsync(newHouse);
                         await Message.SendNewHouseDesignAsync(newHouse);
                     }
-                    catch (Exception)
-                    {
-
-                        throw;
-                    }
+                    catch { }
                 }
 
                 else if (UsersFilters.Any())
