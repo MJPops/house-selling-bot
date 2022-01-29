@@ -271,6 +271,17 @@ namespace HouseSellingBot.UI
                     }
             });
         }
+        public static IReplyMarkup StartAndLink()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>
+                    {
+                        InlineKeyboardButton.WithUrl(text: "Телеграмм", url: "https://t.me/eliterealestatemoscow"),
+                        InlineKeyboardButton.WithCallbackData(text: "Меню", callbackData: "send/start")
+                    }
+            });
+        }
         public static async Task<IReplyMarkup> LinkAndAddToFavoritAsync(string path, long chatId, int houseId)
         {
             List<InlineKeyboardButton> returnsButtons = new()

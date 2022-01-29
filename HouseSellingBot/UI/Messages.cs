@@ -182,13 +182,17 @@ namespace HouseSellingBot.UI
         {
             await Client.SendTextMessageAsync(ChatId, "Квартира удалена из списка избранного.");
         }
-        public async Task SendAboutUsAsync()
+        public async Task SendAboutUsAsync(int messageId)
         {
+            await Client.EditMessageTextAsync(ChatId, messageId, 
+                "Привет, я бот канала Элитная недвижимость Москвы" +
+                " @eliterealestatemoscow и я помогу тебе найти квартиру мечты!\n" +
+                                              "Будут вопросы, звони:");
             await Client.SendContactAsync(ChatId,
-                phoneNumber: "", //Insert phone number
-                firstName: "Сергей",
-                lastName: "Малахов",
-                replyMarkup: Buttons.BackToStart());
+                phoneNumber: "", //TODO - insert telephon
+                firstName:"Сергей",
+                lastName:"Малахов",
+                replyMarkup: Buttons.StartAndLink());
         }
         public async Task SendHousesWhithLowerPriceAsync(float price)
         {
