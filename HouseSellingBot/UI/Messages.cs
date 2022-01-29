@@ -180,7 +180,7 @@ namespace HouseSellingBot.UI
         {
             await Client.SendTextMessageAsync(ChatId, "Квартира удалена из списка избранного.");
         }
-        public async Task MenuAboutUsAsync(int messageId)
+        public async Task SendAboutUsAsync(int messageId)
         {
             await Client.EditMessageTextAsync(ChatId, messageId, 
                 "Привет, я бот канала Элитная недвижимость Москвы" +

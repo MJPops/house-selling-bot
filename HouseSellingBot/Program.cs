@@ -75,7 +75,7 @@ namespace HouseSellingBot
                 }
                 else if (callbackMessage == "О нас")
                 {
-                    await Message.MenuAboutUsAsync(messageId);
+                    await Message.SendAboutUsAsync(messageId);
                 }
                 else if (callbackMessage == "ДомаПоФильтрам")
                 {
