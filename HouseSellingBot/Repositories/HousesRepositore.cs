@@ -12,34 +12,6 @@ namespace HouseSellingBot.Repositories
         private static readonly AppDBContext dBContext = new();
 
         /// <summary>
-        /// Added house in the database.
-        /// </summary>
-        /// <param name="house">The house being add.</param>
-        public static async Task AddHouseAsync(House house)
-        {
-            dBContext.Houses.Add(house);
-            await dBContext.SaveChangesAsync();
-        }
-        /// <summary>
-        /// Update house in the database.
-        /// </summary>
-        /// <param name="house">The house being updated.</param>
-        public static async Task UpdateHouseAsync(House house)
-        {
-            dBContext.Houses.Update(house);
-            await dBContext.SaveChangesAsync();
-        }
-        /// <summary>
-        /// Remove house from the database.
-        /// </summary>
-        /// <param name="house">The house being remove.</param>
-        public static async Task RemoveHouseAsync(int houseId)
-        {
-            var house = await GetHouseByIdAsync(houseId);
-            dBContext.Houses.Remove(house);
-            await dBContext.SaveChangesAsync();
-        }
-        /// <summary>
         /// Returns a house from the database with the corresponding ID.
         /// </summary>
         /// <param name="houseId">The id of the house you are looking for.</param>
@@ -51,7 +23,7 @@ namespace HouseSellingBot.Repositories
             {
                 throw new NotFoundException();
             }
-            await dBContext.Users.Include(u=>u.FavoriteHouses).ToListAsync();
+            await dBContext.Users.Include(u => u.FavoriteHouses).ToListAsync();
             return house;
         }
         /// <summary>
@@ -238,6 +210,35 @@ namespace HouseSellingBot.Repositories
                 throw new NotFoundException();
             }
             return houses;
+        }
+
+        /// <summary>
+        /// Added house in the database.
+        /// </summary>
+        /// <param name="house">The house being add.</param>
+        public static async Task AddHouseAsync(House house)
+        {
+            dBContext.Houses.Add(house);
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
+        /// Update house in the database.
+        /// </summary>
+        /// <param name="house">The house being updated.</param>
+        public static async Task UpdateHouseAsync(House house)
+        {
+            dBContext.Houses.Update(house);
+            await dBContext.SaveChangesAsync();
+        }
+        /// <summary>
+        /// Remove house from the database.
+        /// </summary>
+        /// <param name="house">The house being remove.</param>
+        public static async Task RemoveHouseAsync(int houseId)
+        {
+            var house = await GetHouseByIdAsync(houseId);
+            dBContext.Houses.Remove(house);
+            await dBContext.SaveChangesAsync();
         }
     }
 }

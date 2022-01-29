@@ -71,19 +71,7 @@ namespace HouseSellingBot.Repositories
                 return false;
             }
         }
-        /// <summary>
-        /// Returns the director's chatID.
-        /// </summary>
-        /// <exception cref="NotFoundException"></exception>
-        public static async Task<long> GetDirectorChatIdAsync()
-        {
-            var director = await dBContext.Users.FirstOrDefaultAsync(u => u.Role == "director");
-            if (director == null)
-            {
-                throw new NotFoundException();
-            }
-            return director.ChatId;
-        }
+
         /// <summary>
         /// Returns the director's chatID.
         /// </summary>
@@ -97,6 +85,20 @@ namespace HouseSellingBot.Repositories
             }
             return director.ChatId;
         }
+        /// <summary>
+        /// Returns the director's chatID.
+        /// </summary>
+        /// <exception cref="NotFoundException"></exception>
+        public static async Task<long> GetDirectorChatIdAsync()
+        {
+            var director = await dBContext.Users.FirstOrDefaultAsync(u => u.Role == "director");
+            if (director == null)
+            {
+                throw new NotFoundException();
+            }
+            return director.ChatId;
+        }
+
         /// <summary>
         /// Returns a user from the database, with the given chatId.
         /// </summary>
@@ -126,6 +128,44 @@ namespace HouseSellingBot.Repositories
             }
             throw new NotFoundException();
         }
+        /// <summary>
+        /// Returns the houses from the database that match the given user's filters.
+        /// </summary>
+        /// <param name="chatId">The user ID for which the selection will be made.</param>
+        /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
+        /// <exception cref="NoHomesWithTheseFeaturesException"></exception>
+        public static async Task<IEnumerable<House>> GetHousesWhithCustomFiltersAsync(long chatId)
+        {
+            var retrievedHouses = await HousesRepositore.GetAllHousesAsync();
+            var user = await GetUserByChatIdAsync(chatId);
+
+            retrievedHouses = from house in retrievedHouses
+                              where (user.HouseType == null || house.Type == user.HouseType)
+                              && (user.HouseRentType == null || house.RentType == user.HouseRentType)
+                              && (user.HouseDistrict == null || house.District == user.HouseDistrict)
+                              && (user.HouseRoomsNumbe == null || house.RoomsNumber == user.HouseRoomsNumbe)
+                              && (user.HouseMetro == null || house.Metro == user.HouseMetro)
+                              select house;
+
+            if (user.LowerPrice != null || user.HightPrice != null)
+            {
+                retrievedHouses = retrievedHouses.Intersect(
+                    await SamplingHousesBasedOnPrice(user.LowerPrice, user.HightPrice));
+            }
+            if (user.LowerFootage != null || user.HightFootage != null)
+            {
+                retrievedHouses = retrievedHouses.Intersect(
+                    await SamplingHousesBasedOnFootage(user.LowerFootage, user.HightFootage));
+            }
+
+            if (!retrievedHouses.Any())
+            {
+                throw new NoHomesWithTheseFeaturesException();
+            }
+
+            return retrievedHouses;
+        }
+
         /// <summary>
         /// Writes the user to the database.
         /// </summary>
@@ -170,7 +210,7 @@ namespace HouseSellingBot.Repositories
             var user = await GetUserByChatIdAsync(chatId);
             await dBContext.Houses.Include(h => h.Users).ToListAsync();
 
-            if (user.FavoriteHouses.Where(h=>h.Id == houseId).Any())
+            if (user.FavoriteHouses.Where(h => h.Id == houseId).Any())
             {
                 throw new AlreadyContainException("This house has already been added to this user");
             }
@@ -192,43 +232,6 @@ namespace HouseSellingBot.Repositories
             }
             user.FavoriteHouses.Remove(await dBContext.Houses.FindAsync(houseId));
             await dBContext.SaveChangesAsync();
-        } 
-        /// <summary>
-        /// Returns the houses from the database that match the given user's filters.
-        /// </summary>
-        /// <param name="chatId">The user ID for which the selection will be made.</param>
-        /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        /// <exception cref="NoHomesWithTheseFeaturesException"></exception>
-        public static async Task<IEnumerable<House>> GetHousesWhithCustomFiltersAsync(long chatId)
-        {
-            var retrievedHouses = await HousesRepositore.GetAllHousesAsync();
-            var user = await GetUserByChatIdAsync(chatId);
-
-            retrievedHouses = from house in retrievedHouses
-                              where (user.HouseType == null || house.Type == user.HouseType)
-                              && (user.HouseRentType == null || house.RentType == user.HouseRentType)
-                              && (user.HouseDistrict == null || house.District == user.HouseDistrict)
-                              && (user.HouseRoomsNumbe == null || house.RoomsNumber == user.HouseRoomsNumbe)
-                              && (user.HouseMetro == null || house.Metro == user.HouseMetro)
-                              select house;
-
-            if (user.LowerPrice != null || user.HightPrice != null)
-            {
-                retrievedHouses = retrievedHouses.Intersect(
-                    await SamplingHousesBasedOnPrice(user.LowerPrice, user.HightPrice));
-            }
-            if (user.LowerFootage != null || user.HightFootage != null)
-            {
-                retrievedHouses = retrievedHouses.Intersect(
-                    await SamplingHousesBasedOnFootage(user.LowerFootage, user.HightFootage));
-            }
-
-            if (!retrievedHouses.Any())
-            {
-                throw new NoHomesWithTheseFeaturesException();
-            }
-
-            return retrievedHouses;
         }
         /// <summary>
         /// Clears the filters for the given user.
@@ -250,7 +253,6 @@ namespace HouseSellingBot.Repositories
 
             await dBContext.SaveChangesAsync();
         }
-
 
 
         private static async Task<IEnumerable<House>> SamplingHousesBasedOnPrice
