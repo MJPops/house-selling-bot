@@ -121,8 +121,15 @@ namespace HouseSellingBot.UI
         public async Task SendFavoriteHousesAsync()
         {
             var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
-            await Client.SendTextMessageAsync(ChatId, "Ваши дома, которые были добавлены в избранное:");
-            await SendHousesListAsync(user.FavoriteHouses);
+            if (user.FavoriteHouses.Count == 0)
+            {
+                await Client.SendTextMessageAsync(ChatId, "Ваш список избранного пуст", replyMarkup: Buttons.BackToStart());
+            }
+            else
+            {
+                await Client.SendTextMessageAsync(ChatId, "Ваши дома, которые были добавлены в избранное:");
+                await SendHousesListAsync(user.FavoriteHouses);
+            }
         }
         public async Task EditIntoHousesForUserAsync(long ChatId, int messageId)
         {
