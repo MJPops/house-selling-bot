@@ -172,6 +172,19 @@ namespace HouseSellingBot.UI
                 await SendNotFoundMessageAsync();
             }
         }
+        public async Task FavoriteNotificationAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Квартира добавлена в список избранного.");
+        }
+        public async Task NotificationOfRemovalFromFavoritesAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Квартира удалена из списка избранного.");
+        }
+        public async Task MenuAboutUsAsync(int messageId)
+        {
+            await Client.EditMessageTextAsync(ChatId, messageId, "Привет, я бот канала Элитная недвижимость Москвы @eliterealestatemoscow и я помогу тебе найти квартиру мечты!\n" +
+                                              "Будут вопросы, звони: +79856986633", replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToStart());
+        }
         public async Task SendHousesWhithLowerPriceAsync(float price)
         {
             await Client.SendTextMessageAsync(ChatId, $"Вот все доступные помещения с ценой ниже" +

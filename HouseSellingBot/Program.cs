@@ -47,315 +47,322 @@ namespace HouseSellingBot
             Messages Message = new(client, chatId);
             Console.WriteLine(callbackMessage);
 
-
-            if (callbackMessage == "/start")
+            try
             {
-                await Message.EditIntoStartMenuAsync(messageId);
-            }
-            else if (callbackMessage == "МоиИзбранные")
-            {
-                await Message.SendFavoriteHousesAsync();
-            }
-            else if (callbackMessage == "ВсеДома")
-            {
-                await Message.EditIntoAllHousesAsync(messageId);
-            }
-            else if (callbackMessage == "Фильтры")
-            {
-                await Message.EditIntoFiltersMenuAsync(messageId);
-            }
-            else if (callbackMessage == "МоиФильтры")
-            {
-                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
-            }
-            else if (callbackMessage == "ДомаПоФильтрам")
-            {
-                try
+                if (callbackMessage == "/start")
                 {
-                    await Message.EditIntoHousesForUserAsync(chatId, messageId);
+                    await Message.EditIntoStartMenuAsync(messageId);
                 }
-                catch (NotFoundException)
+                else if (callbackMessage == "МоиИзбранные")
                 {
-                    await Message.EditIntoNotFoundMessageAsync(messageId);
+                    await Message.SendFavoriteHousesAsync();
                 }
-            }
-
-            else if (callbackMessage == "ПоТипуДома")
-            {
-                await Task.Run(() => CleanUserFilter(chatId));
-                await Message.EditIntoTypeListAsync(messageId);
-                UsersFilters.Add((chatId, "ПоТипуДома"));
-            }
-            else if (callbackMessage == "ПоМетро")
-            {
-                await Task.Run(() => CleanUserFilter(chatId));
-                await Message.EditIntoMetroListAsync(messageId);
-                UsersFilters.Add((chatId, "ПоМетро"));
-            }
-            else if (callbackMessage == "ПоРайону")
-            {
-                await Task.Run(() => CleanUserFilter(chatId));
-                await Message.EditIntoDistrictsListAsync(messageId);
-                UsersFilters.Add((chatId, "Район"));
-            }
-            else if (callbackMessage == "ПоКомнатам")
-            {
-                await Task.Run(() => CleanUserFilter(chatId));
-                await Message.EditIntoRoomsNumberListAsync(messageId);
-                UsersFilters.Add((chatId, "Комнаты"));
-            }
-            else if (callbackMessage == "ПоТипуПокупки")
-            {
-                await Task.Run(() => CleanUserFilter(chatId));
-                await Message.EditIntoRentTypeListAsync(messageId);
-                UsersFilters.Add((chatId, "ТипПокупки"));
-            }
-            else if (callbackMessage == "ПоЦене")
-            {
-                await Message.EditIntoPriceFilterMenuAsync(messageId);
-            }
-            else if (callbackMessage == "ЦенаВерх")
-            {
-                await Task.Run(() => CleanUserFilter(chatId));
-                await Message.EditIntoSubmitInputRequest("цены", messageId);
-                UsersFilters.Add((chatId, "ЦенаВерх"));
-            }
-            else if (callbackMessage == "ЦенаНиз")
-            {
-                await Task.Run(() => CleanUserFilter(chatId));
-                await Message.EditIntoSubmitInputRequest("цены", messageId);
-                UsersFilters.Add((chatId, "ЦенаНиз"));
-            }
-            else if (callbackMessage == "ПоМетражу")
-            {
-                await Message.EditIntoFootageFilterMenuAsync(messageId);
-            }
-            else if (callbackMessage == "МетражВерх")
-            {
-                await Task.Run(() => CleanUserFilter(chatId));
-                await Message.EditIntoSubmitInputRequest("метража", messageId);
-                UsersFilters.Add((chatId, "МетражВерх"));
-            }
-            else if (callbackMessage == "МетражНиз")
-            {
-                await Task.Run(() => CleanUserFilter(chatId));
-                await Message.EditIntoSubmitInputRequest("метража", messageId);
-                UsersFilters.Add((chatId, "МетражНиз"));
-            }
-            else if (callbackMessage == "ОчиститьФильтры")
-            {
-                await UsersRepositore.ClearUserFiltersAsync(chatId);
-                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
-            }
-
-            else if (callbackMessage == "ДобавитьДом")
-            {
-                try
+                else if (callbackMessage == "ВсеДома")
                 {
-                    House newHouse = new() { Description = "Новый дом" };
-                    await HousesRepositore.AddHouseAsync(newHouse);
-                    await Message.SendNewHouseDesignAsync(newHouse);
+                    await Message.EditIntoAllHousesAsync(messageId);
                 }
-                catch (Exception)
+                else if (callbackMessage == "Фильтры")
                 {
-
-                    throw;
+                    await Message.EditIntoFiltersMenuAsync(messageId);
                 }
-            }
-
-            else if (UsersFilters.Any())
-            {
-                List<(long, string)> FiltersToRemove = new();
-                foreach (var filterData in UsersFilters)
+                else if (callbackMessage == "МоиФильтры")
                 {
-                    if (await UsersRepositore.UserIsRegisteredAsync(filterData.chatId))
+                    await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                }
+                else if (callbackMessage == "О нас")
+                {
+                    await Message.MenuAboutUsAsync(messageId);
+                }
+                else if (callbackMessage == "ДомаПоФильтрам")
+                {
+                    try
                     {
-                        try
+                        await Message.EditIntoHousesForUserAsync(chatId, messageId);
+                    }
+                    catch (NotFoundException)
+                    {
+                        await Message.EditIntoNotFoundMessageAsync(messageId);
+                    }
+                }
+
+                else if (callbackMessage == "ПоТипуДома")
+                {
+                    await Task.Run(() => CleanUserFilter(chatId));
+                    await Message.EditIntoTypeListAsync(messageId);
+                    UsersFilters.Add((chatId, "ПоТипуДома"));
+                }
+                else if (callbackMessage == "ПоМетро")
+                {
+                    await Task.Run(() => CleanUserFilter(chatId));
+                    await Message.EditIntoMetroListAsync(messageId);
+                    UsersFilters.Add((chatId, "ПоМетро"));
+                }
+                else if (callbackMessage == "ПоРайону")
+                {
+                    await Task.Run(() => CleanUserFilter(chatId));
+                    await Message.EditIntoDistrictsListAsync(messageId);
+                    UsersFilters.Add((chatId, "Район"));
+                }
+                else if (callbackMessage == "ПоКомнатам")
+                {
+                    await Task.Run(() => CleanUserFilter(chatId));
+                    await Message.EditIntoRoomsNumberListAsync(messageId);
+                    UsersFilters.Add((chatId, "Комнаты"));
+                }
+                else if (callbackMessage == "ПоТипуПокупки")
+                {
+                    await Task.Run(() => CleanUserFilter(chatId));
+                    await Message.EditIntoRentTypeListAsync(messageId);
+                    UsersFilters.Add((chatId, "ТипПокупки"));
+                }
+                else if (callbackMessage == "ПоЦене")
+                {
+                    await Message.EditIntoPriceFilterMenuAsync(messageId);
+                }
+                else if (callbackMessage == "ЦенаВерх")
+                {
+                    await Task.Run(() => CleanUserFilter(chatId));
+                    await Message.EditIntoSubmitInputRequest("цены", messageId);
+                    UsersFilters.Add((chatId, "ЦенаВерх"));
+                }
+                else if (callbackMessage == "ЦенаНиз")
+                {
+                    await Task.Run(() => CleanUserFilter(chatId));
+                    await Message.EditIntoSubmitInputRequest("цены", messageId);
+                    UsersFilters.Add((chatId, "ЦенаНиз"));
+                }
+                else if (callbackMessage == "ПоМетражу")
+                {
+                    await Message.EditIntoFootageFilterMenuAsync(messageId);
+                }
+                else if (callbackMessage == "МетражВерх")
+                {
+                    await Task.Run(() => CleanUserFilter(chatId));
+                    await Message.EditIntoSubmitInputRequest("метража", messageId);
+                    UsersFilters.Add((chatId, "МетражВерх"));
+                }
+                else if (callbackMessage == "МетражНиз")
+                {
+                    await Task.Run(() => CleanUserFilter(chatId));
+                    await Message.EditIntoSubmitInputRequest("метража", messageId);
+                    UsersFilters.Add((chatId, "МетражНиз"));
+                }
+                else if (callbackMessage == "ОчиститьФильтры")
+                {
+                    await UsersRepositore.ClearUserFiltersAsync(chatId);
+                    await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                }
+
+                else if (callbackMessage == "ДобавитьДом")
+                {
+                    try
+                    {
+                        House newHouse = new() { Description = "Новый дом" };
+                        await HousesRepositore.AddHouseAsync(newHouse);
+                        await Message.SendNewHouseDesignAsync(newHouse);
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                }
+
+                else if (UsersFilters.Any())
+                {
+                    List<(long, string)> FiltersToRemove = new();
+                    foreach (var filterData in UsersFilters)
+                    {
+                        if (await UsersRepositore.UserIsRegisteredAsync(filterData.chatId))
                         {
-                            if (filterData.filterName == "Район")
+                            try
                             {
-                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                user.HouseDistrict = callbackMessage;
-                                await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
-                            }
-                            else if (filterData.filterName == "Комнаты")
-                            {
-                                try
+                                if (filterData.filterName == "Район")
                                 {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                    user.HouseRoomsNumbe = Convert.ToInt32(callbackMessage);
+                                    user.HouseDistrict = callbackMessage;
                                     await UsersRepositore.UpdateUserAsync(user);
                                     await Message.EditIntoUsersFiltersAsync(chatId, messageId);
                                 }
-                                catch (FormatException)
+                                else if (filterData.filterName == "Комнаты")
                                 {
-                                    await Message.EditIntoNotFoundMessageAsync(messageId);
+                                    try
+                                    {
+                                        var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                        user.HouseRoomsNumbe = Convert.ToInt32(callbackMessage);
+                                        await UsersRepositore.UpdateUserAsync(user);
+                                        await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                                    }
+                                    catch (FormatException)
+                                    {
+                                        await Message.EditIntoNotFoundMessageAsync(messageId);
+                                    }
+                                }
+                                else if (filterData.filterName == "ТипПокупки")
+                                {
+                                    var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                    user.HouseRentType = callbackMessage;
+                                    await UsersRepositore.UpdateUserAsync(user);
+                                    await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                                }
+                                else if (filterData.filterName == "ПоТипуДома")
+                                {
+                                    var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                    user.HouseType = callbackMessage;
+                                    await UsersRepositore.UpdateUserAsync(user);
+                                    await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                                }
+                                else if (filterData.filterName == "ПоМетро")
+                                {
+                                    var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                    user.HouseMetro = callbackMessage;
+                                    await UsersRepositore.UpdateUserAsync(user);
+                                    await Message.EditIntoUsersFiltersAsync(chatId, messageId);
                                 }
                             }
-                            else if (filterData.filterName == "ТипПокупки")
+                            catch (NotFoundException)
                             {
-                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                user.HouseRentType = callbackMessage;
-                                await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                                await Message.EditIntoNotFoundMessageAsync(messageId);
                             }
-                            else if (filterData.filterName == "ПоТипуДома")
-                            {
-                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                user.HouseType = callbackMessage;
-                                await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
-                            }
-                            else if (filterData.filterName == "ПоМетро")
-                            {
-                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                user.HouseMetro = callbackMessage;
-                                await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
-                            }
-                        }
-                        catch (NotFoundException)
-                        {
-                            await Message.EditIntoNotFoundMessageAsync(messageId);
-                        }
 
-                        FiltersToRemove.Add(filterData);
+                            FiltersToRemove.Add(filterData);
+                        }
+                        else if (filterData.chatId == chatId)
+                        {
+                            try
+                            {
+                                if (filterData.filterName == "Район")
+                                {
+                                    await Message.EditIntoHousesByDistrictAsync(callbackMessage, messageId);
+                                }
+                                else if (filterData.filterName == "Комнаты")
+                                {
+                                    await Message.EditIntoHousesByRoomsNumberAsync(Convert.ToInt32(callbackMessage),
+                                        messageId);
+                                }
+                                else if (filterData.filterName == "ТипПокупки")
+                                {
+                                    await Message.EditIntoHousesByRentTypeAsync(callbackMessage, messageId);
+                                }
+                                else if (filterData.filterName == "ПоТипуДома")
+                                {
+                                    await Message.EditIntoHousesByTypeAsync(callbackMessage, messageId);
+                                }
+                                else if (filterData.filterName == "ПоМетро")
+                                {
+                                    await Message.EditIntoHousesMetroAsync(callbackMessage, messageId);
+                                }
+                            }
+                            catch (FormatException)
+                            {
+                                await Message.EditIntoNotFoundMessageAsync(messageId);
+                            }
+
+                            FiltersToRemove.Add(filterData);
+                        }
                     }
-                    else if (filterData.chatId == chatId)
+                    foreach (var filter in FiltersToRemove)
                     {
-                        try
-                        {
-                            if (filterData.filterName == "Район")
-                            {
-                                await Message.EditIntoHousesByDistrictAsync(callbackMessage, messageId);
-                            }
-                            else if (filterData.filterName == "Комнаты")
-                            {
-                                await Message.EditIntoHousesByRoomsNumberAsync(Convert.ToInt32(callbackMessage),
-                                    messageId);
-                            }
-                            else if (filterData.filterName == "ТипПокупки")
-                            {
-                                await Message.EditIntoHousesByRentTypeAsync(callbackMessage, messageId);
-                            }
-                            else if (filterData.filterName == "ПоТипуДома")
-                            {
-                                await Message.EditIntoHousesByTypeAsync(callbackMessage, messageId);
-                            }
-                            else if (filterData.filterName == "ПоМетро")
-                            {
-                                await Message.EditIntoHousesMetroAsync(callbackMessage, messageId);
-                            }
-                        }
-                        catch (FormatException)
-                        {
-                            await Message.EditIntoNotFoundMessageAsync(messageId);
-                        }
-
-                        FiltersToRemove.Add(filterData);
+                        UsersFilters.Remove(filter);
                     }
                 }
-                foreach (var filter in FiltersToRemove)
+                else
                 {
-                    UsersFilters.Remove(filter);
+                    try
+                    {
+                        if (callbackMessage.Substring(0, 4) == "Цена")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("цену", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(4)), "Цена"));
+                        }
+                        else if (callbackMessage.Substring(0, 5) == "Район")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("район", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(5)), "Район"));
+                        }
+                        else if (callbackMessage.Substring(0, 5) == "Метро")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("Метро", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(5)), "Метро"));
+                        }
+                        else if (callbackMessage.Substring(0, 6) == "Ссылка")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("ссылку на сайт", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(6)), "Ссылка"));
+                        }
+                        else if (callbackMessage.Substring(0, 6) == "Метраж")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("метраж", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(6)), "Метраж"));
+                        }
+                        else if (callbackMessage.Substring(0, 7) == "ТипДома")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("тип дома", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(7)), "ТипДома"));
+                        }
+                        else if (callbackMessage.Substring(0, 7) == "Комнаты")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("количество комнат", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(7)), "Комнаты"));
+                        }
+                        else if (callbackMessage.Substring(0, 8) == "Описание")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("описание к дому", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(8)), "Описание"));
+                        }
+                        else if (callbackMessage.Substring(0, 9) == "Избранное")
+                        {
+                            await UsersRepositore.AddFavoriteHouseToUserAsync(chatId,
+                                Convert.ToInt32(callbackMessage.Substring(9)));
+                            await Message.FavoriteNotificationAsync();
+                        }
+                        else if (callbackMessage.Substring(0, 10) == "ТипПокупки")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("тип покупки", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(10)), "ТипПокупки"));
+                        }
+                        else if (callbackMessage.Substring(0, 10) == "УдалитьДом")
+                        {
+                            await HousesRepositore.RemoveHouseAsync(Convert.ToInt32(callbackMessage.Substring(10)));
+                            await Message.SendHouseIsDeleted();
+                        }
+                        else if (callbackMessage.Substring(0, 11) == "Изображение")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("ссылку на изображение", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(11)), "Изображение"));
+                        }
+                        else if (callbackMessage.Substring(0, 13) == "УдалитьАдмина")
+                        {
+                            await UsersRepositore.
+                                RemoveUserByChatIdAsync(Convert.ToInt32(callbackMessage.Substring(13)));
+                            await Message.EditIntoAdminsRedactionMenuAsync(messageId);
+                        }
+                        else if (callbackMessage.Substring(0, 18) == "РедактированиеДома")
+                        {
+                            await Message.SendHouseRedactionMenuAsync(Convert.ToInt32(callbackMessage.Substring(18)));
+                        }
+                        else if (callbackMessage.Substring(0, 19) == "УдалитьИзИзбранного")
+                        {
+                            await UsersRepositore.RemoveFromFavoritHousesAsync(chatId,
+                                Convert.ToInt32(callbackMessage.Substring(19)));
+                            await Message.NotificationOfRemovalFromFavoritesAsync();
+                        }
+
+                    }
+                    catch { }//It's OK
                 }
             }
-            else
-            {
-                try
-                {
-                    if (callbackMessage.Substring(0, 4) == "Цена")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("цену", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(4)), "Цена"));
-                    }
-                    else if (callbackMessage.Substring(0, 5) == "Район")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("район", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(5)), "Район"));
-                    }
-                    else if (callbackMessage.Substring(0, 5) == "Метро")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("Метро", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(5)), "Метро"));
-                    }
-                    else if (callbackMessage.Substring(0, 6) == "Ссылка")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("ссылку на сайт", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(6)), "Ссылка"));
-                    }
-                    else if (callbackMessage.Substring(0, 6) == "Метраж")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("метраж", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(6)), "Метраж"));
-                    }
-                    else if (callbackMessage.Substring(0, 7) == "ТипДома")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("тип дома", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(7)), "ТипДома"));
-                    }
-                    else if (callbackMessage.Substring(0, 7) == "Комнаты")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("количество комнат", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(7)), "Комнаты"));
-                    }
-                    else if (callbackMessage.Substring(0, 8) == "Описание")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("описание к дому", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(8)), "Описание"));
-                    }
-                    else if (callbackMessage.Substring(0, 9) == "Избранное")
-                    {
-                        await UsersRepositore.AddFavoriteHouseToUserAsync(chatId,
-                            Convert.ToInt32(callbackMessage.Substring(9)));
-                        await client.SendTextMessageAsync(chatId, "Квартира добавлена в избранное");
-                    }
-                    else if (callbackMessage.Substring(0, 10) == "ТипПокупки")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("тип покупки", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(10)), "ТипПокупки"));
-                    }
-                    else if (callbackMessage.Substring(0, 10) == "УдалитьДом")
-                    {
-                        await HousesRepositore.RemoveHouseAsync(Convert.ToInt32(callbackMessage.Substring(10)));
-                        await Message.SendHouseIsDeleted();
-                    }
-                    else if (callbackMessage.Substring(0, 11) == "Изображение")
-                    {
-                        await Task.Run(() => CleanRedactionDataFilter(chatId));
-                        await Message.EditIntoSubmitInputRequest("ссылку на изображение", messageId);
-                        RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(11)), "Изображение"));
-                    }
-                    else if (callbackMessage.Substring(0, 13) == "УдалитьАдмина")
-                    {
-                        await UsersRepositore.
-                            RemoveUserByChatIdAsync(Convert.ToInt32(callbackMessage.Substring(13)));
-                        await Message.EditIntoAdminsRedactionMenuAsync(messageId);
-                    }
-                    else if (callbackMessage.Substring(0, 18) == "РедактированиеДома")
-                    {
-                        await Message.SendHouseRedactionMenuAsync(Convert.ToInt32(callbackMessage.Substring(18)));
-                    }
-                    else if (callbackMessage.Substring(0, 19) == "УдалитьИзИзбранного")
-                    {
-                        await UsersRepositore.RemoveFromFavoritHousesAsync(chatId,
-                            Convert.ToInt32(callbackMessage.Substring(19)));
-                        await client.SendTextMessageAsync(chatId, "Квартира удалена из списка избранного");
-                    }
-
-                }
-                catch { }//It's OK
-            }
+            catch { }
         }
 
         private static void CleanUserFilter(long chatId)
