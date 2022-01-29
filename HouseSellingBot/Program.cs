@@ -58,7 +58,7 @@ namespace HouseSellingBot
             }
             else if (callbackMessage == "ВсеДома")
             {
-                await Message.SendAllHousesAsync();
+                await Message.EditIntoAllHousesAsync(messageId);
             }
             else if (callbackMessage == "Фильтры")
             {

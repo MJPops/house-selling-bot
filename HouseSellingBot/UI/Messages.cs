@@ -106,11 +106,13 @@ namespace HouseSellingBot.UI
             }
         }
 
-        public async Task SendAllHousesAsync()
+        public async Task EditIntoAllHousesAsync(int messageId)
         {
             try
             {
-                await Client.SendTextMessageAsync(ChatId, "Вот все доступные на данных момент дома:");
+                await Client.EditMessageTextAsync(ChatId,
+                    messageId,
+                    "Вот все доступные на данных момент дома:");
                 await SendHousesListAsync(await HousesRepositore.GetAllHousesAsync());
             }
             catch (NotFoundException)
