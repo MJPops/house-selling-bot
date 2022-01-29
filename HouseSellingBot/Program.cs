@@ -11,7 +11,7 @@ using Telegram.Bot.Args;
 
 namespace HouseSellingBot
 {
-    class Programда
+    class Program
     {
         private static string Token { get; set; } = "5009457163:AAEz5eg_AAz26uVh9rLmdvdq7pxfCCzYBzo";
         private static TelegramBotClient client;
