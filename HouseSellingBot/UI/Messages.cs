@@ -443,8 +443,8 @@ namespace HouseSellingBot.UI
         {
             await Client.SendTextMessageAsync(await UsersRepositore.GetDirectorChatIdAsync(),
                 $"Пользователь {userName}, просит предоставить доступ администратора.\n" +
-                $"Для предоставления доступа администратора сообщите ему код: {code}");
-            await Client.SendTextMessageAsync(ChatId, "Введите код. Код направлен директору");
+                $"Для предоставления доступа администратора сообщите ему код: Код{code}");
+            await Client.SendTextMessageAsync(ChatId, "Введите код в следующем формате: Код1111. Код направлен директору");
         }
         public async Task SendYouAdminAsync(long directorChatId)
         {

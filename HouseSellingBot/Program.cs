@@ -492,118 +492,9 @@ namespace HouseSellingBot
                     }
                 }
             }
-            else if (UsersFilters.Any())
-            {
-                List<(long, string)> FiltersToRemove = new();
-                foreach (var filterData in UsersFilters)
-                {
-                    if (await UsersRepositore.UserIsRegisteredAsync(filterData.chatId))
-                    {
-                        try
-                        {
-                            if (filterData.filterName == "ЦенаВерх")
-                            {
-                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                user.HightPrice = Convert.ToInt32(inputMessage);
-                                await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
-                            }
-                            else if (filterData.filterName == "ЦенаНиз")
-                            {
-                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                user.LowerPrice = Convert.ToInt32(inputMessage);
-                                await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
-                            }
-                            else if (filterData.filterName == "МетражВерх")
-                            {
-                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                user.HightFootage = Convert.ToInt32(inputMessage);
-                                await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
-                            }
-                            else if (filterData.filterName == "МетражНиз")
-                            {
-                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                user.LowerFootage = Convert.ToInt32(inputMessage);
-                                await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
-                            }
-                        }
-                        catch
-                        {
-                            await Message.SendNotFoundMessageAsync();
-                        }
-
-                        FiltersToRemove.Add(filterData);
-                    }
-                    else if (filterData.chatId == chatId)
-                    {
-                        try
-                        {
-                            if (filterData.filterName == "ЦенаВерх")
-                            {
-                                await Message.SendHousesWhithLowerPriceAsync(Convert.ToInt32(inputMessage));
-                            }
-                            else if (filterData.filterName == "ЦенаНиз")
-                            {
-                                await Message.SendHousesWhithHigerPriceAsync(Convert.ToInt32(inputMessage));
-                            }
-                            else if (filterData.filterName == "МетражВерх")
-                            {
-                                await Message.SendHousesWhithLowerFootageAsync(Convert.ToInt32(inputMessage));
-                            }
-                            else if (filterData.filterName == "МетражНиз")
-                            {
-                                await Message.SendHousesWhithHigerFootageAsync(Convert.ToInt32(inputMessage));
-                            }
-                        }
-                        catch (FormatException)
-                        {
-                            await Message.SendNotFoundMessageAsync();
-                        }
-
-                        FiltersToRemove.Add(filterData);
-                    }
-                }
-                foreach (var filter in FiltersToRemove)
-                {
-                    UsersFilters.Remove(filter);
-                }
-            }
-            else if (RegistrationData.Any())
-            {
-                List<(long, int)> RegistrationDataToRemove = new();
-                foreach (var registrationData in RegistrationData)
-                {
-                    try
-                    {
-                        if (registrationData.chatId == chatId
-                            && registrationData.code == Convert.ToInt32(inputMessage))
-                        {
-                            var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                            user.Role = "admin";
-                            await UsersRepositore.UpdateUserAsync(user);
-                            await Message.SendYouAdminAsync(await UsersRepositore.GetDirectorChatIdAsync());
-
-                            RegistrationDataToRemove.Add(registrationData);
-                        }
-                        else
-                        {
-                            await Message.SendCodeNotWorkAsync();
-                        }
-                    }
-                    catch (FormatException)
-                    {
-                        await Message.SendCodeNotWorkAsync();
-                    }
-                }
-                foreach (var filter in RegistrationDataToRemove)
-                {
-                    RegistrationData.Remove(filter);
-                }
-            }
-            else if (RedactionData.Any())
+            else if (RedactionData.Any() 
+                && (await UsersRepositore.UserIsAdminAsync(chatId) 
+                || await UsersRepositore.UserIsDirectorAsync(chatId)))
             {
                 List<(long, int, string)> DataToRemove = new();
                 foreach (var data in RedactionData)
@@ -704,11 +595,122 @@ namespace HouseSellingBot
                     RedactionData.Remove(data);
                 }
             }
+            else if (UsersFilters.Any())
+            {
+                List<(long, string)> FiltersToRemove = new();
+                foreach (var filterData in UsersFilters)
+                {
+                    if (await UsersRepositore.UserIsRegisteredAsync(filterData.chatId))
+                    {
+                        try
+                        {
+                            if (filterData.filterName == "ЦенаВерх")
+                            {
+                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                user.HightPrice = Convert.ToInt32(inputMessage);
+                                await UsersRepositore.UpdateUserAsync(user);
+                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                            }
+                            else if (filterData.filterName == "ЦенаНиз")
+                            {
+                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                user.LowerPrice = Convert.ToInt32(inputMessage);
+                                await UsersRepositore.UpdateUserAsync(user);
+                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                            }
+                            else if (filterData.filterName == "МетражВерх")
+                            {
+                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                user.HightFootage = Convert.ToInt32(inputMessage);
+                                await UsersRepositore.UpdateUserAsync(user);
+                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                            }
+                            else if (filterData.filterName == "МетражНиз")
+                            {
+                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                user.LowerFootage = Convert.ToInt32(inputMessage);
+                                await UsersRepositore.UpdateUserAsync(user);
+                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                            }
+                        }
+                        catch
+                        {
+                            await Message.SendNotFoundMessageAsync();
+                        }
+
+                        FiltersToRemove.Add(filterData);
+                    }
+                    else if (filterData.chatId == chatId)
+                    {
+                        try
+                        {
+                            if (filterData.filterName == "ЦенаВерх")
+                            {
+                                await Message.SendHousesWhithLowerPriceAsync(Convert.ToInt32(inputMessage));
+                            }
+                            else if (filterData.filterName == "ЦенаНиз")
+                            {
+                                await Message.SendHousesWhithHigerPriceAsync(Convert.ToInt32(inputMessage));
+                            }
+                            else if (filterData.filterName == "МетражВерх")
+                            {
+                                await Message.SendHousesWhithLowerFootageAsync(Convert.ToInt32(inputMessage));
+                            }
+                            else if (filterData.filterName == "МетражНиз")
+                            {
+                                await Message.SendHousesWhithHigerFootageAsync(Convert.ToInt32(inputMessage));
+                            }
+                        }
+                        catch (FormatException)
+                        {
+                            await Message.SendNotFoundMessageAsync();
+                        }
+
+                        FiltersToRemove.Add(filterData);
+                    }
+                }
+                foreach (var filter in FiltersToRemove)
+                {
+                    UsersFilters.Remove(filter);
+                }
+            }
             else
             {
                 try
                 {
-                    if (inputMessage.Substring(0, 12) == "Регистрация ")
+                    if (RegistrationData.Any() && inputMessage.Substring(0, 3) == "Код")
+                    {
+                        List<(long, int)> RegistrationDataToRemove = new();
+                        foreach (var registrationData in RegistrationData)
+                        {
+                            try
+                            {
+                                if (registrationData.chatId == chatId
+                                    && registrationData.code == Convert.ToInt32(inputMessage.Substring(3)))
+                                {
+                                    var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                    user.Role = "admin";
+                                    await UsersRepositore.UpdateUserAsync(user);
+                                    await Message.SendYouAdminAsync(await UsersRepositore.GetDirectorChatIdAsync());
+
+                                    RegistrationDataToRemove.Add(registrationData);
+                                }
+                                else
+                                {
+                                    await Message.SendCodeNotWorkAsync();
+                                }
+                            }
+                            catch (FormatException)
+                            {
+                                await Message.SendCodeNotWorkAsync();
+                            }
+                        }
+                        foreach (var filter in RegistrationDataToRemove)
+                        {
+                            RegistrationData.Remove(filter);
+                        }
+                    }
+                    else if (inputMessage.Substring(0, 12) == "Регистрация ")
                     {
                         try
                         {
