@@ -68,7 +68,7 @@ namespace HouseSellingBot.UI
                 " @eliterealestatemoscow и я помогу тебе найти квартиру мечты!\n" +
                                               "Будут вопросы, звони:");
             await Client.SendContactAsync(ChatId,
-                phoneNumber: "+79856986633", //TODO - insert telephon
+                phoneNumber: "", //TODO - insert telephon
                 firstName:"Сергей",
                 lastName:"Малахов",
                 replyMarkup: Buttons.StartAndLink());
