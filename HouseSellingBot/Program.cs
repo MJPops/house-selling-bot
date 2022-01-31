@@ -75,7 +75,7 @@ namespace HouseSellingBot
                 }
                 else if (callbackMessage == "О нас")
                 {
-                    await Message.SendAboutUsAsync(messageId);
+                    await Message.EditIntoAboutUsAsync(messageId);
                 }
                 else if (callbackMessage == "ДомаПоФильтрам")
                 {
@@ -322,7 +322,7 @@ namespace HouseSellingBot
                         {
                             await UsersRepositore.AddFavoriteHouseToUserAsync(chatId,
                                 Convert.ToInt32(callbackMessage.Substring(9)));
-                            await Message.FavoriteNotificationAsync();
+                            await Message.SendNotificationFavoriteIsAddAsync();
                         }
                         else if (callbackMessage.Substring(0, 10) == "ТипПокупки")
                         {
@@ -355,7 +355,7 @@ namespace HouseSellingBot
                         {
                             await UsersRepositore.RemoveFromFavoritHousesAsync(chatId,
                                 Convert.ToInt32(callbackMessage.Substring(19)));
-                            await Message.NotificationOfRemovalFromFavoritesAsync();
+                            await Message.SendNotificationFavoriteIsRemoveAsync();
                         }
 
                     }
@@ -394,46 +394,6 @@ namespace HouseSellingBot
             {
                 await Message.SendStartMenuAsync();
             }
-            else if (inputMessage == "Заполнить бд")
-            {
-                await HousesRepositore.AddHouseAsync(new House()
-                {
-                    PicturePath = "https://telegra.ph/file/915e952e35f0cb24be7c4.jpg",
-                    WebPath = "",
-                    District = "ЖК HeadLiner",
-                    Metro = "Шелепиха",
-                    Footage = 41,
-                    Price = 17600000,
-                    RentType = "Покупка",
-                    RoomsNumber = 1,
-                    Type = "Панельный"
-                });
-                await HousesRepositore.AddHouseAsync(new House()
-                {
-                    PicturePath = "https://telegra.ph/file/8f82c09d39585f1464d4a.jpg",
-                    WebPath = "https://telegra.ph/3-kom-kv-v-ZHK-HeadLiner-33-300-000r-11-19",
-                    District = "ЖК HeadLiner",
-                    Metro = "Шелепиха",
-                    Footage = 70,
-                    Price = 33300000,
-                    RentType = "Продажа",
-                    RoomsNumber = 3,
-                    Type = "Панельный"
-                });
-                await HousesRepositore.AddHouseAsync(new House()
-                {
-                    PicturePath = "https://telegra.ph/file/8dc56f710a9678174992f.jpg",
-                    WebPath = "https://telegra.ph/4-komnatnaya-kvartira-v-ZHK-Dom-na-Tishinke-05-18",
-                    District = "ЖК Дом на Тишинке",
-                    Metro = "Войковская",
-                    Footage = 110,
-                    Price = 73000000,
-                    RentType = "Продажа",
-                    RoomsNumber = 4,
-                    Type = "Панельный"
-                });
-                await Message.SendStartMenuAsync();
-            }
             else if (inputMessage == "Добавить директора")
             {
                 try
@@ -446,14 +406,14 @@ namespace HouseSellingBot
                     {
                         await UsersRepositore.AddUserAsync(new User
                         {
-                            ChatId = 987821012,
-                            Name = "Саша",
+                            ChatId = 828959058,
+                            Name = "Сергей",
                             Role = "director"
                         });
                     }
                     catch
                     {
-                        var user = await UsersRepositore.GetUserByChatIdAsync(987821012);
+                        var user = await UsersRepositore.GetUserByChatIdAsync(828959058);
                         user.Role = "director";
                         await UsersRepositore.UpdateUserAsync(user);
                     }
@@ -609,28 +569,28 @@ namespace HouseSellingBot
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.HightPrice = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                                await Message.SendoUsersFiltersAsync(chatId);
                             }
                             else if (filterData.filterName == "ЦенаНиз")
                             {
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.LowerPrice = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                                await Message.SendoUsersFiltersAsync(chatId);
                             }
                             else if (filterData.filterName == "МетражВерх")
                             {
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.HightFootage = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                                await Message.SendoUsersFiltersAsync(chatId);
                             }
                             else if (filterData.filterName == "МетражНиз")
                             {
                                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                 user.LowerFootage = Convert.ToInt32(inputMessage);
                                 await UsersRepositore.UpdateUserAsync(user);
-                                await Message.EditIntoUsersFiltersAsync(chatId, messageId);
+                                await Message.SendoUsersFiltersAsync(chatId);
                             }
                         }
                         catch

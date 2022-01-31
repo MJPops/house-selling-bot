@@ -38,6 +38,41 @@ namespace HouseSellingBot.UI
                     replyMarkup: await Buttons.StartAsync(ChatId));
             }
         }
+        public async Task SendoUsersFiltersAsync(long chatId)
+        {
+            try
+            {
+                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                await Client.SendTextMessageAsync(chatId,
+                    $"Вот выши фильтры:\n" +
+                    $"Тип дома: {user.HouseType}\n" +
+                    $"Метро: {user.HouseMetro}\n" +
+                    $"Тип покупки: {user.HouseRentType}\n" +
+                    $"Район: {user.HouseDistrict}\n" +
+                    $"Число комнат: {user.HouseRoomsNumbe}\n" +
+                    $"Цена: {user.LowerPrice ?? 00} - {user.HightPrice ?? 00}\n" +
+                    $"Метраж: {user.LowerFootage ?? 00} - {user.HightFootage ?? 00}",
+                    replyMarkup: Buttons.BackToFilters());
+            }
+            catch (NotFoundException)
+            {
+                await Client.SendTextMessageAsync(chatId,
+                    "Вы не зарегистрированны",
+                    replyMarkup: Buttons.BackToFilters());
+            }
+        }
+        public async Task EditIntoAboutUsAsync(int messageId)
+        {
+            await Client.EditMessageTextAsync(ChatId, messageId, 
+                "Привет, я бот канала Элитная недвижимость Москвы" +
+                " @eliterealestatemoscow и я помогу тебе найти квартиру мечты!\n" +
+                                              "Будут вопросы, звони:");
+            await Client.SendContactAsync(ChatId,
+                phoneNumber: "+79856986633", //TODO - insert telephon
+                firstName:"Сергей",
+                lastName:"Малахов",
+                replyMarkup: Buttons.StartAndLink());
+        }
         public async Task EditIntoStartMenuAsync(int messageId)
         {
             if (await UsersRepositore.UserIsRegisteredAsync(ChatId))
@@ -173,26 +208,6 @@ namespace HouseSellingBot.UI
             {
                 await SendNotFoundMessageAsync();
             }
-        }
-        public async Task FavoriteNotificationAsync()
-        {
-            await Client.SendTextMessageAsync(ChatId, "Квартира добавлена в список избранного.");
-        }
-        public async Task NotificationOfRemovalFromFavoritesAsync()
-        {
-            await Client.SendTextMessageAsync(ChatId, "Квартира удалена из списка избранного.");
-        }
-        public async Task SendAboutUsAsync(int messageId)
-        {
-            await Client.EditMessageTextAsync(ChatId, messageId, 
-                "Привет, я бот канала Элитная недвижимость Москвы" +
-                " @eliterealestatemoscow и я помогу тебе найти квартиру мечты!\n" +
-                                              "Будут вопросы, звони:");
-            await Client.SendContactAsync(ChatId,
-                phoneNumber: "", //TODO - insert telephon
-                firstName:"Сергей",
-                lastName:"Малахов",
-                replyMarkup: Buttons.StartAndLink());
         }
         public async Task SendHousesWhithLowerPriceAsync(float price)
         {
@@ -419,6 +434,14 @@ namespace HouseSellingBot.UI
         {
             await Client.SendTextMessageAsync(ChatId,
                 "Код не подходит");
+        }
+        public async Task SendNotificationFavoriteIsAddAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Квартира добавлена в список избранного.");
+        }
+        public async Task SendNotificationFavoriteIsRemoveAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Квартира удалена из списка избранного.");
         }
         public async Task EditIntoNotFoundMessageAsync(int messageId)
         {
