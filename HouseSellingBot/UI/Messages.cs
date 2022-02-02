@@ -63,14 +63,14 @@ namespace HouseSellingBot.UI
         }
         public async Task EditIntoAboutUsAsync(int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId, messageId, 
+            await Client.EditMessageTextAsync(ChatId, messageId,
                 "Привет, я бот канала Элитная недвижимость Москвы" +
                 " @eliterealestatemoscow и я помогу тебе найти квартиру мечты!\n" +
                                               "Будут вопросы, звони:");
             await Client.SendContactAsync(ChatId,
                 phoneNumber: "", //TODO - insert telephon
-                firstName:"Сергей",
-                lastName:"Малахов",
+                firstName: "Сергей",
+                lastName: "Малахов",
                 replyMarkup: Buttons.StartAndLink());
         }
         public async Task EditIntoStartMenuAsync(int messageId)

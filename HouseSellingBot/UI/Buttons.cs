@@ -9,7 +9,6 @@ namespace HouseSellingBot.UI
 {
     public class Buttons
     {
-
         public static async Task<IReplyMarkup> StartAsync(long chatId)
         {
             List<List<InlineKeyboardButton>> returnsButtons = new()

@@ -168,7 +168,6 @@ namespace HouseSellingBot
                     catch { }
                 }
 
-                
                 else
                 {
                     try
