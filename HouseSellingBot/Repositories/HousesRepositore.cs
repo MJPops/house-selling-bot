@@ -9,8 +9,6 @@ namespace HouseSellingBot.Repositories
 {
     public class HousesRepositore
     {
-        private static readonly AppDBContext dBContext = new();
-
         /// <summary>
         /// Returns a house from the database with the corresponding ID.
         /// </summary>
@@ -18,6 +16,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="No tFoundException"></exception>
         public static async Task<House> GetHouseByIdAsync(int houseId)
         {
+            using var dBContext = new AppDBContext();
             var house = await dBContext.Houses.FindAsync(houseId);
             if (house == null)
             {
@@ -33,6 +32,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetAllHousesAsync()
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.ToListAsync();
             if (!houses.Any())
             {
@@ -48,6 +48,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHousesByTypeAsync(string type)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.Where(h => h.Type == type).ToListAsync();
             if (!houses.Any())
             {
@@ -63,6 +64,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHousesByMetroAsync(string metro)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.Where(h => h.Metro == metro).ToListAsync();
             if (!houses.Any())
             {
@@ -78,6 +80,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHousesByRentTypeAsync(string rentType)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.Where(h => h.RentType == rentType).ToListAsync();
             if (!houses.Any())
             {
@@ -93,6 +96,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseByDistrictAsync(string district)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.Where(h => h.District == district).ToListAsync();
             if (!houses.Any())
             {
@@ -108,6 +112,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHousesByRoomsNumberAsync(int roomsNumber)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.Where(h => h.RoomsNumber == roomsNumber).ToListAsync();
             if (!houses.Any())
             {
@@ -123,6 +128,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithHigherPrice(float price)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.Where(h => h.Price >= price).ToListAsync();
             if (!houses.Any())
             {
@@ -138,6 +144,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithLowerPrice(float price)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.Where(h => h.Price <= price).ToListAsync();
             if (!houses.Any())
             {
@@ -155,6 +162,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetHouseWithPriceInBetween(float lowerPrice,
             float higherPrice)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.
                 Where(h => h.Price >= lowerPrice && h.Price <= higherPrice).ToListAsync();
             if (!houses.Any())
@@ -171,6 +179,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithHigherFootage(float footage)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.Where(h => h.Footage >= footage).ToListAsync();
             if (!houses.Any())
             {
@@ -186,6 +195,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetHouseWithLowerFootage(float footage)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.Where(h => h.Footage <= footage).ToListAsync();
             if (!houses.Any())
             {
@@ -203,6 +213,7 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetHouseWithFootageInBetween(float lowerFootage,
             float higherFootage)
         {
+            using var dBContext = new AppDBContext();
             var houses = await dBContext.Houses.
                 Where(h => h.Footage >= lowerFootage && h.Footage <= higherFootage).ToListAsync();
             if (!houses.Any())
@@ -218,6 +229,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="house">The house being add.</param>
         public static async Task AddHouseAsync(House house)
         {
+            using var dBContext = new AppDBContext();
             dBContext.Houses.Add(house);
             await dBContext.SaveChangesAsync();
         }
@@ -227,6 +239,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="house">The house being updated.</param>
         public static async Task UpdateHouseAsync(House house)
         {
+            using var dBContext = new AppDBContext();
             dBContext.Houses.Update(house);
             await dBContext.SaveChangesAsync();
         }
@@ -236,6 +249,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="house">The house being remove.</param>
         public static async Task RemoveHouseAsync(int houseId)
         {
+            using var dBContext = new AppDBContext();
             var house = await GetHouseByIdAsync(houseId);
             dBContext.Houses.Remove(house);
             await dBContext.SaveChangesAsync();

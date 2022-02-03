@@ -13,8 +13,6 @@ namespace HouseSellingBot.Repositories
     /// </summary>
     public class UsersRepositore
     {
-        private static readonly AppDBContext dBContext = new();
-
         /// <summary>
         /// Returns true if a user with the given chatId is found in the database. Otherwise, it's false.
         /// </summary>
@@ -78,6 +76,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static long GetDirectorChatId()
         {
+            using var dBContext = new AppDBContext();
             var director = dBContext.Users.FirstOrDefault(u => u.Role == "director");
             if (director == null)
             {
@@ -91,6 +90,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<long> GetDirectorChatIdAsync()
         {
+            using var dBContext = new AppDBContext();
             var director = await dBContext.Users.FirstOrDefaultAsync(u => u.Role == "director");
             if (director == null)
             {
@@ -107,6 +107,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<User> GetUserByChatIdAsync(long chatId)
         {
+            using var dBContext = new AppDBContext();
             var user = await dBContext.Users.FirstOrDefaultAsync(u => u.ChatId == chatId);
             if (user == null)
             {
@@ -121,6 +122,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<User>> GetAllAdminAsync()
         {
+            using var dBContext = new AppDBContext();
             var admins = await dBContext.Users.Where(u => u.Role == "admin").ToListAsync();
             if (admins.Any())
             {
@@ -173,6 +175,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="AlreadyContainException"></exception>
         public static async Task AddUserAsync(User user)
         {
+            using var dBContext = new AppDBContext();
             if (dBContext.Users.Where(u => u.ChatId == user.ChatId).Any())
             {
                 throw new AlreadyContainException();
@@ -186,6 +189,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="user">The user being update.</param>
         public static async Task UpdateUserAsync(User user)
         {
+            using var dBContext = new AppDBContext();
             dBContext.Users.Update(user);
             await dBContext.SaveChangesAsync();
         }
@@ -195,6 +199,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="chatId">ChatID of the user to be deleted.</param>
         public static async Task RemoveUserByChatIdAsync(long chatId)
         {
+            using var dBContext = new AppDBContext();
             var user = await GetUserByChatIdAsync(chatId);
             dBContext.Users.Remove(user);
             await dBContext.SaveChangesAsync();
@@ -207,6 +212,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="AlreadyContainException"></exception>
         public static async Task AddFavoriteHouseToUserAsync(long chatId, int houseId)
         {
+            using var dBContext = new AppDBContext();
             var user = await GetUserByChatIdAsync(chatId);
             await dBContext.Houses.Include(h => h.Users).ToListAsync();
 
@@ -223,6 +229,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="AlreadyContainException"></exception>
         public static async Task RemoveFromFavoritHousesAsync(long chatId, int houseId)
         {
+            using var dBContext = new AppDBContext();
             var user = await GetUserByChatIdAsync(chatId);
             await dBContext.Houses.Include(h => h.Users).ToListAsync();
 
@@ -239,6 +246,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="chatId">The id of the user whose filters will be cleared.</param>
         public static async Task ClearUserFiltersAsync(long chatId)
         {
+            using var dBContext = new AppDBContext();
             var user = await GetUserByChatIdAsync(chatId);
 
             user.HouseType = null;
