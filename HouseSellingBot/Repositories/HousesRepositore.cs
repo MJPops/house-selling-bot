@@ -1,14 +1,19 @@
 ﻿using HouseSellingBot.Models;
 using HouseSellingBot.PersonalExceptions;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace HouseSellingBot.Repositories
 {
     public class HousesRepositore
     {
+        private static HttpClient httpClient = new();
+        private static string ServerRoot = "https:///";
+
         /// <summary>
         /// Returns a house from the database with the corresponding ID.
         /// </summary>
@@ -16,13 +21,15 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="No tFoundException"></exception>
         public static async Task<House> GetHouseByIdAsync(int houseId)
         {
-            using var dBContext = new AppDBContext();
-            var house = await dBContext.Houses.FindAsync(houseId);
+            HttpResponseMessage httpResponse = await httpClient.
+                GetAsync(ServerRoot + "Houses/Get/" + houseId.ToString());
+            var jsonRequest = await httpResponse.Content.ReadAsStringAsync();
+            var house = JsonConvert.DeserializeObject<House>(jsonRequest);
+
             if (house == null)
             {
                 throw new NotFoundException();
             }
-            await dBContext.Users.Include(u => u.FavoriteHouses).ToListAsync();
             return house;
         }
         /// <summary>
@@ -32,8 +39,10 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<House>> GetAllHousesAsync()
         {
-            using var dBContext = new AppDBContext();
-            var houses = await dBContext.Houses.ToListAsync();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(ServerRoot + "Houses/Get");
+            var jsonRequest = await httpResponse.Content.ReadAsStringAsync();
+            var houses = JsonConvert.DeserializeObject<IEnumerable<House>>(jsonRequest);
+
             if (!houses.Any())
             {
                 throw new NotFoundException();
