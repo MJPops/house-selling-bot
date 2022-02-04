@@ -499,7 +499,7 @@ namespace HouseSellingBot
             {
                 try
                 {
-                    UsersRepositore.GetDirectorChatId();
+                    await UsersRepositore.GetDirectorChatIdAsync();
                 }
                 catch
                 {
