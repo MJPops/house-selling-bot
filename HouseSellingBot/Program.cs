@@ -81,7 +81,7 @@ namespace HouseSellingBot
                 {
                     try
                     {
-                        await Message.EditIntoHousesForUserAsync(chatId, messageId);
+                        await Message.EditIntoHousesForUserAsync(messageId);
                     }
                     catch (NotFoundException)
                     {

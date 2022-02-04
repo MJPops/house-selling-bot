@@ -170,7 +170,7 @@ namespace HouseSellingBot.UI
                 await SendHousesListAsync(user.FavoriteHouses);
             }
         }
-        public async Task EditIntoHousesForUserAsync(long ChatId, int messageId)
+        public async Task EditIntoHousesForUserAsync(int messageId)
         {
             try
             {
