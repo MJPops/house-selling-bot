@@ -1,10 +1,10 @@
 ﻿using HouseSellingBot.Models;
 using HouseSellingBot.PersonalExceptions;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace HouseSellingBot.Repositories
@@ -23,14 +23,13 @@ namespace HouseSellingBot.Repositories
         {
             HttpResponseMessage httpResponse = await httpClient.
                 GetAsync(ServerRoot + "Houses/Get/" + houseId.ToString());
-            var jsonRequest = await httpResponse.Content.ReadAsStringAsync();
-            var house = JsonConvert.DeserializeObject<House>(jsonRequest);
 
-            if (house == null)
+            if (httpResponse.IsSuccessStatusCode)
             {
-                throw new NotFoundException();
+                var jsonRequest = await httpResponse.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<House>(jsonRequest);
             }
-            return house;
+            throw new NotFoundException();
         }
         /// <summary>
         /// Returns all houses from the database.
@@ -40,14 +39,14 @@ namespace HouseSellingBot.Repositories
         public static async Task<IEnumerable<House>> GetAllHousesAsync()
         {
             HttpResponseMessage httpResponse = await httpClient.GetAsync(ServerRoot + "Houses/Get");
-            var jsonRequest = await httpResponse.Content.ReadAsStringAsync();
-            var houses = JsonConvert.DeserializeObject<IEnumerable<House>>(jsonRequest);
 
-            if (!houses.Any())
+            if (httpResponse.IsSuccessStatusCode)
             {
-                throw new NotFoundException();
+                var jsonRequest = await httpResponse.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IEnumerable<House>>(jsonRequest);
             }
-            return houses;
+
+            throw new NotFoundException();
         }
         /// <summary>
         /// Returns houses from the database with the appropriate type.
@@ -226,9 +225,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="house">The house being add.</param>
         public static async Task AddHouseAsync(House house)
         {
-            using var dBContext = new AppDBContext();
-            dBContext.Houses.Add(house);
-            await dBContext.SaveChangesAsync();
+            await httpClient.PostAsJsonAsync(ServerRoot + "Houses/Add", house);
         }
         /// <summary>
         /// Update house in the database.
@@ -236,9 +233,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="house">The house being updated.</param>
         public static async Task UpdateHouseAsync(House house)
         {
-            using var dBContext = new AppDBContext();
-            dBContext.Houses.Update(house);
-            await dBContext.SaveChangesAsync();
+            await httpClient.PutAsJsonAsync(ServerRoot + "Houses/Put", house);
         }
         /// <summary>
         /// Remove house from the database.
@@ -246,10 +241,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="house">The house being remove.</param>
         public static async Task RemoveHouseAsync(int houseId)
         {
-            using var dBContext = new AppDBContext();
-            var house = await GetHouseByIdAsync(houseId);
-            dBContext.Houses.Remove(house);
-            await dBContext.SaveChangesAsync();
+            await httpClient.DeleteAsync(ServerRoot + "Houses/Delete/" + houseId.ToString());
         }
     }
 }
