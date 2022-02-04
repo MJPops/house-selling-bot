@@ -471,7 +471,7 @@ namespace HouseSellingBot.UI
                     "Администраторы не добавлены");
             }
         }
-        public async Task SendAdminRegistrationCodeAsync(int code, string userName)
+        public async Task SendToAdminRegistrationCodeAsync(int code, string userName)
         {
             await Client.SendTextMessageAsync(await UsersRepositore.GetDirectorChatIdAsync(),
                 $"Пользователь {userName}, просит предоставить доступ администратора.\n" +
