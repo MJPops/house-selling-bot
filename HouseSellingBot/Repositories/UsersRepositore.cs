@@ -1,9 +1,12 @@
 ﻿using HouseSellingBot.Models;
 using HouseSellingBot.PersonalExceptions;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace HouseSellingBot.Repositories
@@ -13,6 +16,9 @@ namespace HouseSellingBot.Repositories
     /// </summary>
     public class UsersRepositore
     {
+        private static HttpClient httpClient = new();
+        private static string ServerRoot = "https:///";
+
         /// <summary>
         /// Returns true if a user with the given chatId is found in the database. Otherwise, it's false.
         /// </summary>
@@ -74,24 +80,9 @@ namespace HouseSellingBot.Repositories
         /// Returns the director's chatID.
         /// </summary>
         /// <exception cref="NotFoundException"></exception>
-        public static long GetDirectorChatId()
-        {
-            using var dBContext = new AppDBContext();
-            var director = dBContext.Users.FirstOrDefault(u => u.Role == "director");
-            if (director == null)
-            {
-                throw new NotFoundException();
-            }
-            return director.ChatId;
-        }
-        /// <summary>
-        /// Returns the director's chatID.
-        /// </summary>
-        /// <exception cref="NotFoundException"></exception>
         public static async Task<long> GetDirectorChatIdAsync()
         {
-            using var dBContext = new AppDBContext();
-            var director = await dBContext.Users.FirstOrDefaultAsync(u => u.Role == "director");
+            var director = (await GetAllUsersAsync()).FirstOrDefault(u => u.Role == "director");
             if (director == null)
             {
                 throw new NotFoundException();
@@ -107,13 +98,11 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<User> GetUserByChatIdAsync(long chatId)
         {
-            using var dBContext = new AppDBContext();
-            var user = await dBContext.Users.FirstOrDefaultAsync(u => u.ChatId == chatId);
+            var user = (await GetAllUsersAsync()).FirstOrDefault(u => u.ChatId == chatId);
             if (user == null)
             {
                 throw new NotFoundException();
             }
-            await dBContext.Houses.Include(h => h.Users).ToListAsync();
             return user;
         }
         /// <summary>
@@ -122,8 +111,7 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="NotFoundException"></exception>
         public static async Task<IEnumerable<User>> GetAllAdminAsync()
         {
-            using var dBContext = new AppDBContext();
-            var admins = await dBContext.Users.Where(u => u.Role == "admin").ToListAsync();
+            var admins = (await GetAllUsersAsync()).Where(u => u.Role == "admin");
             if (admins.Any())
             {
                 return admins;
@@ -169,42 +157,6 @@ namespace HouseSellingBot.Repositories
         }
 
         /// <summary>
-        /// Writes the user to the database.
-        /// </summary>
-        /// <param name="user">The user being recorded.</param>
-        /// <exception cref="AlreadyContainException"></exception>
-        public static async Task AddUserAsync(User user)
-        {
-            using var dBContext = new AppDBContext();
-            if (dBContext.Users.Where(u => u.ChatId == user.ChatId).Any())
-            {
-                throw new AlreadyContainException();
-            }
-            dBContext.Users.Add(user);
-            await dBContext.SaveChangesAsync();
-        }
-        /// <summary>
-        /// Update user in the database.
-        /// </summary>
-        /// <param name="user">The user being update.</param>
-        public static async Task UpdateUserAsync(User user)
-        {
-            using var dBContext = new AppDBContext();
-            dBContext.Users.Update(user);
-            await dBContext.SaveChangesAsync();
-        }
-        /// <summary>
-        /// Remove user from the database.
-        /// </summary>
-        /// <param name="chatId">ChatID of the user to be deleted.</param>
-        public static async Task RemoveUserByChatIdAsync(long chatId)
-        {
-            using var dBContext = new AppDBContext();
-            var user = await GetUserByChatIdAsync(chatId);
-            dBContext.Users.Remove(user);
-            await dBContext.SaveChangesAsync();
-        }
-        /// <summary>
         /// Creates a relationship between home and user in the database.
         /// </summary>
         /// <param name="chatId">The user ID to which the favorite home will be added.</param>
@@ -212,16 +164,18 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="AlreadyContainException"></exception>
         public static async Task AddFavoriteHouseToUserAsync(long chatId, int houseId)
         {
-            using var dBContext = new AppDBContext();
             var user = await GetUserByChatIdAsync(chatId);
-            await dBContext.Houses.Include(h => h.Users).ToListAsync();
 
             if (user.FavoriteHouses.Where(h => h.Id == houseId).Any())
             {
                 throw new AlreadyContainException("This house has already been added to this user");
             }
-            user.FavoriteHouses.Add(await dBContext.Houses.FindAsync(houseId));
-            await dBContext.SaveChangesAsync();
+            HttpResponseMessage httpResponse = await httpClient.
+                GetAsync(ServerRoot + "Houses/Get/" + houseId.ToString());
+            var jsonRequest = await httpResponse.Content.ReadAsStringAsync();
+
+            user.FavoriteHouses.Add(JsonConvert.DeserializeObject<House>(jsonRequest));
+            await UpdateUserAsync(user);
         }
         /// <summary>
         /// Removes the association of a home and a user in the database.
@@ -229,16 +183,48 @@ namespace HouseSellingBot.Repositories
         /// <exception cref="AlreadyContainException"></exception>
         public static async Task RemoveFromFavoritHousesAsync(long chatId, int houseId)
         {
-            using var dBContext = new AppDBContext();
             var user = await GetUserByChatIdAsync(chatId);
-            await dBContext.Houses.Include(h => h.Users).ToListAsync();
 
             if (!user.FavoriteHouses.Where(h => h.Id == houseId).Any())
             {
                 throw new AlreadyContainException("This house has already been added to this user");
             }
-            user.FavoriteHouses.Remove(await dBContext.Houses.FindAsync(houseId));
-            await dBContext.SaveChangesAsync();
+            HttpResponseMessage httpResponse = await httpClient.
+                GetAsync(ServerRoot + "Houses/Get/" + houseId.ToString());
+            var jsonRequest = await httpResponse.Content.ReadAsStringAsync();
+
+            user.FavoriteHouses.Remove(JsonConvert.DeserializeObject<House>(jsonRequest));
+            await UpdateUserAsync(user);
+        }
+        /// <summary>
+        /// Writes the user to the database.
+        /// </summary>
+        /// <param name="user">The user being recorded.</param>
+        /// <exception cref="AlreadyContainException"></exception>
+        public static async Task AddUserAsync(User user)
+        {
+            HttpResponseMessage httpResponse = await httpClient.PostAsJsonAsync(ServerRoot + "Users/Add", user);
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                throw new AlreadyContainException();
+            }
+        }
+        /// <summary>
+        /// Update user in the database.
+        /// </summary>
+        /// <param name="user">The user being update.</param>
+        public static async Task UpdateUserAsync(User user)
+        {
+            await httpClient.PutAsJsonAsync(ServerRoot + "Users/Put", user);
+        }
+        /// <summary>
+        /// Remove user from the database.
+        /// </summary>
+        /// <param name="chatId">ChatID of the user to be deleted.</param>
+        public static async Task RemoveUserByChatIdAsync(long chatId)
+        {
+            var user = await GetUserByChatIdAsync(chatId);
+            await httpClient.DeleteAsync(ServerRoot + "Users/Put/" + user.Id.ToString());
         }
         /// <summary>
         /// Clears the filters for the given user.
@@ -246,7 +232,6 @@ namespace HouseSellingBot.Repositories
         /// <param name="chatId">The id of the user whose filters will be cleared.</param>
         public static async Task ClearUserFiltersAsync(long chatId)
         {
-            using var dBContext = new AppDBContext();
             var user = await GetUserByChatIdAsync(chatId);
 
             user.HouseType = null;
@@ -259,10 +244,16 @@ namespace HouseSellingBot.Repositories
             user.LowerFootage = null;
             user.HightFootage = null;
 
-            await dBContext.SaveChangesAsync();
+            await UpdateUserAsync(user);
         }
 
 
+        private static async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(ServerRoot + "Users/Get");
+            var jsonRequest = await httpResponse.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<IEnumerable<User>>(jsonRequest);
+        }
         private static async Task<IEnumerable<House>> SamplingHousesBasedOnPrice
             (float? lowerPrice, float? hightPrice)
         {
