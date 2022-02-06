@@ -13,7 +13,7 @@ namespace HouseSellingBot.Repositories
     /// </summary>
     public class UsersRepositore
     {
-        private static readonly AppDBContext dBContext = new();
+        public static AppDBContext dBContext;
 
         /// <summary>
         /// Returns true if a user with the given chatId is found in the database. Otherwise, it's false.

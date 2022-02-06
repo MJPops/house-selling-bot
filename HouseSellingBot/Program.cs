@@ -47,6 +47,9 @@ namespace HouseSellingBot
             Messages Message = new(client, chatId);
             Console.WriteLine(callbackMessage);
 
+            HousesRepositore.dBContext = new AppDBContext();
+            UsersRepositore.dBContext = new AppDBContext();
+
             try
             {
                 if (callbackMessage == "/start")
@@ -490,6 +493,10 @@ namespace HouseSellingBot
             int messageId = e.Message.MessageId;
             Messages Message = new(client, chatId);
             Console.WriteLine(inputMessage);
+
+            HousesRepositore.dBContext = new AppDBContext();
+            UsersRepositore.dBContext = new AppDBContext();
+
             try
             {
                 if (inputMessage == "/start")

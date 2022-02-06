@@ -9,7 +9,7 @@ namespace HouseSellingBot.Repositories
 {
     public class HousesRepositore
     {
-        private static readonly AppDBContext dBContext = new();
+        public static AppDBContext dBContext;
 
         /// <summary>
         /// Returns a house from the database with the corresponding ID.
