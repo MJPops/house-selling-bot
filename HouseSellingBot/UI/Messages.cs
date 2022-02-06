@@ -124,7 +124,7 @@ namespace HouseSellingBot.UI
                 var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                 await Client.EditMessageTextAsync(chatId,
                     messageId,
-                    $"Вот выши фильтры:\n" +
+                    $"Вот ваши фильтры:\n" +
                     $"Тип дома: {user.HouseType}\n" +
                     $"Метро: {user.HouseMetro}\n" +
                     $"Тип покупки: {user.HouseRentType}\n" +
