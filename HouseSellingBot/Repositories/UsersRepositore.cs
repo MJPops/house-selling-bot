@@ -134,7 +134,7 @@ namespace HouseSellingBot.Repositories
         /// <param name="chatId">The user ID for which the selection will be made.</param>
         /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
         /// <exception cref="NoHomesWithTheseFeaturesException"></exception>
-        public static async Task<IEnumerable<House>> GetHousesWhithCustomFiltersAsync(long chatId)
+        public static async Task<IEnumerable<House>> GetHousesWhthCustomFiltersAsync(long chatId)
         {
             var retrievedHouses = await HousesRepositore.GetAllHousesAsync();
             var user = await GetUserByChatIdAsync(chatId);

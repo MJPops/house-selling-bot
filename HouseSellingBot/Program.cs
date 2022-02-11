@@ -715,19 +715,19 @@ namespace HouseSellingBot
                             {
                                 if (filterData.filterName == "ЦенаВерх")
                                 {
-                                    await Message.SendHousesWhithLowerPriceAsync(Convert.ToInt32(inputMessage));
+                                    await Message.SendHousesWhthLowerPriceAsync(Convert.ToInt32(inputMessage));
                                 }
                                 else if (filterData.filterName == "ЦенаНиз")
                                 {
-                                    await Message.SendHousesWhithHigerPriceAsync(Convert.ToInt32(inputMessage));
+                                    await Message.SendHousesWhthHigerPriceAsync(Convert.ToInt32(inputMessage));
                                 }
                                 else if (filterData.filterName == "МетражВерх")
                                 {
-                                    await Message.SendHousesWhithLowerFootageAsync(Convert.ToInt32(inputMessage));
+                                    await Message.SendHousesWhthLowerFootageAsync(Convert.ToInt32(inputMessage));
                                 }
                                 else if (filterData.filterName == "МетражНиз")
                                 {
-                                    await Message.SendHousesWhithHigerFootageAsync(Convert.ToInt32(inputMessage));
+                                    await Message.SendHousesWhthHigerFootageAsync(Convert.ToInt32(inputMessage));
                                 }
                             }
                             catch (FormatException)

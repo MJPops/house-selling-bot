@@ -21,6 +21,7 @@ namespace HouseSellingBot.UI
             ChatId = chatId;
         }
 
+        #region Menus
         public async Task SendStartMenuAsync()
         {
             if (await UsersRepositore.UserIsRegisteredAsync(ChatId))
@@ -68,7 +69,7 @@ namespace HouseSellingBot.UI
                 " @eliterealestatemoscow и я помогу тебе найти квартиру мечты!\n" +
                                               "Будут вопросы, звони:");
             await Client.SendContactAsync(ChatId,
-                phoneNumber: "", //TODO - insert telephon
+                phoneNumber: "+79856986633", //TODO - insert telephon
                 firstName: "Сергей",
                 lastName: "Малахов",
                 replyMarkup: Buttons.StartAndLink());
@@ -142,7 +143,22 @@ namespace HouseSellingBot.UI
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
+        #endregion
 
+        #region Departures of houses without additional parameters
+        public async Task SendFavoriteHousesAsync()
+        {
+            var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
+            if (user.FavoriteHouses.Count == 0)
+            {
+                await Client.SendTextMessageAsync(ChatId, "Ваш список избранного пуст", replyMarkup: Buttons.BackToStart());
+            }
+            else
+            {
+                await Client.SendTextMessageAsync(ChatId, "Ваши дома, которые были добавлены в избранное:");
+                await SendHousesListAsync(user.FavoriteHouses);
+            }
+        }
         public async Task EditIntoAllHousesAsync(int messageId)
         {
             try
@@ -157,33 +173,22 @@ namespace HouseSellingBot.UI
                 await SendNotFoundMessageAsync();
             }
         }
-        public async Task SendFavoriteHousesAsync()
-        {
-            var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
-            if (user.FavoriteHouses.Count == 0)
-            {
-                await Client.SendTextMessageAsync(ChatId, "Ваш список избранного пуст", replyMarkup: Buttons.BackToStart());
-            }
-            else
-            {
-                await Client.SendTextMessageAsync(ChatId, "Ваши дома, которые были добавлены в избранное:");
-                await SendHousesListAsync(user.FavoriteHouses);
-            }
-        }
         public async Task EditIntoHousesForUserAsync(int messageId)
         {
             try
             {
                 await Client.EditMessageTextAsync(ChatId, messageId, "Дома, соответствующие вашим фильтрам:");
-                await SendHousesListAsync(await UsersRepositore.GetHousesWhithCustomFiltersAsync(ChatId));
+                await SendHousesListAsync(await UsersRepositore.GetHousesWhthCustomFiltersAsync(ChatId));
             }
             catch (NoHomesWithTheseFeaturesException)
             {
                 await EditIntoNotFoundMessageAsync(messageId);
             }
         }
+        #endregion
 
-        public async Task SendHousesWhithHigerPriceAsync(float price)
+        #region Departure of houses by filters
+        public async Task SendHousesWhthHigerPriceAsync(float price)
         {
             await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с ценой выше " +
                 $"{price}");
@@ -196,7 +201,7 @@ namespace HouseSellingBot.UI
                 await SendNotFoundMessageAsync();
             }
         }
-        public async Task SendHousesWhithHigerFootageAsync(float footage)
+        public async Task SendHousesWhthHigerFootageAsync(float footage)
         {
             await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с метражом больше " +
                 $"{footage}");
@@ -209,7 +214,7 @@ namespace HouseSellingBot.UI
                 await SendNotFoundMessageAsync();
             }
         }
-        public async Task SendHousesWhithLowerPriceAsync(float price)
+        public async Task SendHousesWhthLowerPriceAsync(float price)
         {
             await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с ценой ниже " +
                 $"{price}");
@@ -222,7 +227,7 @@ namespace HouseSellingBot.UI
                 await SendNotFoundMessageAsync();
             }
         }
-        public async Task SendHousesWhithLowerFootageAsync(float footage)
+        public async Task SendHousesWhthLowerFootageAsync(float footage)
         {
             await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с метражом ниже " +
                 $"{footage}");
@@ -298,7 +303,9 @@ namespace HouseSellingBot.UI
                 await EditIntoNotFoundMessageAsync(messageId);
             }
         }
+        #endregion
 
+        #region Filter selection sheets
         public async Task EditIntoTypeListAsync(int messageId)
         {
             try
@@ -404,7 +411,9 @@ namespace HouseSellingBot.UI
                 "Выберите вид ограничения метража",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.FootageFilters());
         }
+        #endregion
 
+        #region Warnings and Exceptions
         public async Task SendNotFoundMessageAsync()
         {
             await Client.SendTextMessageAsync(ChatId,
@@ -456,7 +465,9 @@ namespace HouseSellingBot.UI
                 messageId,
                 $"Введите {request}");
         }
+        #endregion
 
+        #region Administrative Information
         public async Task SendAdminsRedactionMenuAsync()
         {
             try
@@ -551,6 +562,7 @@ namespace HouseSellingBot.UI
                     "Администраторы не добавлены");
             }
         }
+        #endregion
 
 
         private async Task SendBackToStart()
