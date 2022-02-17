@@ -8,6 +8,7 @@ namespace HouseSellingBot.Models
         public long ChatId { get; set; }
         public string Name { get; set; }
         public string Role { get; set; } = "user";
+        public string Phone { get; set; }
         public string HouseType { get; set; }
         public string HouseMetro { get; set; }
         public string HouseRentType { get; set; }

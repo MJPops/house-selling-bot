@@ -5,6 +5,7 @@ namespace HouseSellingBot.Models
     public class House
     {
         public int Id { get; set; }
+        public string AdminPhone { get; set; }
         public string WebPath { get; set; }
         public string PicturePath { get; set; }
         public string Description { get; set; }

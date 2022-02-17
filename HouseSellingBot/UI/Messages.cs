@@ -467,6 +467,18 @@ namespace HouseSellingBot.UI
         }
         #endregion
 
+        #region Registration messages
+        public async Task SendPhoneAndNameRequestAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Введите ваш номер телефона и имя через пробел\n\n" +
+                "Пример: 89991119911 Иван");
+        }
+        public async Task SendRegistrationСompletedAsync()
+        {
+            await Client.SendTextMessageAsync(ChatId, "Регистрация испешно завершена!");
+        }
+        #endregion
+
         #region Administrative Information
         public async Task SendAdminsRedactionMenuAsync()
         {

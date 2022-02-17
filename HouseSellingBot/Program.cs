@@ -17,7 +17,8 @@ namespace HouseSellingBot
         private static TelegramBotClient client;
         private static List<(long chatId, int houseId, string attribute)> RedactionData = new();
         private static List<(long chatId, string filterName)> UsersFilters = new();
-        private static List<(long chatId, int code)> RegistrationData = new();
+        private static List<(long chatId, int code)> AdminRegistrationData = new();
+        private static List<long> RegistrationUsersChatId = new();
 
         [Obsolete]
         static void Main()
@@ -553,7 +554,7 @@ namespace HouseSellingBot
                             Random random = new();
                             int code = random.Next(1000, 9999);
                             await Message.SendToAdminRegistrationCodeAsync(code, user.Name);
-                            RegistrationData.Add((chatId, code));
+                            AdminRegistrationData.Add((chatId, code));
                         }
                         catch
                         {
@@ -664,6 +665,65 @@ namespace HouseSellingBot
                         RedactionData.Remove(data);
                     }
                 }
+                else if (AdminRegistrationData.Any() && inputMessage.Substring(0, 3) == "Код")
+                {
+                    List<(long, int)> RegistrationDataToRemove = new();
+                    foreach (var registrationData in AdminRegistrationData)
+                    {
+                        try
+                        {
+                            if (registrationData.chatId == chatId
+                                && registrationData.code == Convert.ToInt32(inputMessage.Substring(3)))
+                            {
+                                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
+                                user.Role = "admin";
+                                await UsersRepositore.UpdateUserAsync(user);
+                                await Message.SendYouAdminAsync(await UsersRepositore.GetDirectorChatIdAsync());
+
+                                RegistrationDataToRemove.Add(registrationData);
+                            }
+                            else
+                            {
+                                await Message.SendCodeNotWorkAsync();
+                            }
+                        }
+                        catch (FormatException)
+                        {
+                            await Message.SendCodeNotWorkAsync();
+                        }
+                    }
+                    foreach (var filter in RegistrationDataToRemove)
+                    {
+                        AdminRegistrationData.Remove(filter);
+                    }
+                }
+                else if (RegistrationUsersChatId.Any() && inputMessage.Substring(0, 1) == "8")
+                {
+                    if (RegistrationUsersChatId.Contains(chatId))
+                    {
+                        RegistrationUsersChatId.Remove(chatId);
+                        await UsersRepositore.AddUserAsync(new User
+                        {
+                            ChatId = chatId,
+                            Phone = inputMessage.Substring(0, 11),
+                            Name = inputMessage.Substring(12)
+                        });
+                        await Message.SendRegistrationСompletedAsync();
+                    }
+                }
+                else if (inputMessage.Substring(0, 11) == "Регистрация")
+                {
+                    try
+                    {
+                        RegistrationUsersChatId.Remove(chatId);
+                        await Message.SendPhoneAndNameRequestAsync();
+                        RegistrationUsersChatId.Add(chatId);
+                    }
+                    catch (AlreadyContainException)
+                    {
+                        await Message.SendAlreadyRegisterAsync();
+                    }
+                }
                 else if (UsersFilters.Any())
                 {
                     List<(long, string)> FiltersToRemove = new();
@@ -743,68 +803,13 @@ namespace HouseSellingBot
                         UsersFilters.Remove(filter);
                     }
                 }
-                else
-                {
-                    try
-                    {
-                        if (RegistrationData.Any() && inputMessage.Substring(0, 3) == "Код")
-                        {
-                            List<(long, int)> RegistrationDataToRemove = new();
-                            foreach (var registrationData in RegistrationData)
-                            {
-                                try
-                                {
-                                    if (registrationData.chatId == chatId
-                                        && registrationData.code == Convert.ToInt32(inputMessage.Substring(3)))
-                                    {
-                                        var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                                        user.Role = "admin";
-                                        await UsersRepositore.UpdateUserAsync(user);
-                                        await Message.SendYouAdminAsync(await UsersRepositore.GetDirectorChatIdAsync());
-
-                                        RegistrationDataToRemove.Add(registrationData);
-                                    }
-                                    else
-                                    {
-                                        await Message.SendCodeNotWorkAsync();
-                                    }
-                                }
-                                catch (FormatException)
-                                {
-                                    await Message.SendCodeNotWorkAsync();
-                                }
-                            }
-                            foreach (var filter in RegistrationDataToRemove)
-                            {
-                                RegistrationData.Remove(filter);
-                            }
-                        }
-                        else if (inputMessage.Substring(0, 12) == "Регистрация ")
-                        {
-                            try
-                            {
-                                await UsersRepositore.AddUserAsync(new User
-                                {
-                                    ChatId = chatId,
-                                    Name = inputMessage.Substring(12)
-                                });
-                                await Message.SendStartMenuAsync();
-                            }
-                            catch (AlreadyContainException)
-                            {
-                                await Message.SendAlreadyRegisterAsync();
-                            }
-                        }
-                    }
-                    catch (ArgumentOutOfRangeException) { }//It's OK
-                }
             }
             catch { }
         }
         private static void CleanRegistrationDataFilter(long chatId)
         {
             List<(long chatId, int code)> registrationDataToRemove = new();
-            foreach (var registrationData in RegistrationData)
+            foreach (var registrationData in AdminRegistrationData)
             {
                 if (registrationData.chatId == chatId)
                 {
@@ -813,7 +818,7 @@ namespace HouseSellingBot
             }
             foreach (var registrationData in registrationDataToRemove)
             {
-                RegistrationData.Remove(registrationData);
+                AdminRegistrationData.Remove(registrationData);
             }
         }
         private static void CleanRedactionDataFilter(long chatId)
