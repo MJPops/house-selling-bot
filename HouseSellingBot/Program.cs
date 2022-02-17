@@ -709,6 +709,7 @@ namespace HouseSellingBot
                             Name = inputMessage.Substring(12)
                         });
                         await Message.SendRegistrationСompletedAsync();
+                        await Message.SendStartMenuAsync();
                     }
                 }
                 else if (inputMessage.Substring(0, 11) == "Регистрация")
