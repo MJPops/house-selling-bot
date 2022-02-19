@@ -442,7 +442,7 @@ namespace HouseSellingBot.UI
         }
         public async Task SendRegistrationСompletedAsync()
         {
-            await Client.SendTextMessageAsync(ChatId, "Регистрация испешно завершена!");
+            await Client.SendTextMessageAsync(ChatId, "Регистрация успешно завершена!");
         }
         #endregion
 
