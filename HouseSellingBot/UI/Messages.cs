@@ -32,7 +32,7 @@ namespace HouseSellingBot.UI
             }
             else
             {
-                await Client.SendTextMessageAsync(ChatId, "Привет, я бот канала Элитная недвижимость Москвы, и я помогу Вам найти квартиру мечты!\n" +
+                await Client.SendTextMessageAsync(ChatId, "Привет, я бот канала Элитной недвижимости Chase real estate services, и я помогу Вам найти квартиру мечты!\n" +
                                               "Для начала нужно зарегистрироваться, иначе не получится пользоваться полным функционалом!\n" +
                                               "Чтобы зарегистрироваться отправьте сообщение\n" +
                                               "\"Регистрация <Ваше имя>\".",
@@ -65,8 +65,8 @@ namespace HouseSellingBot.UI
         public async Task EditIntoAboutUsAsync(int messageId)
         {
             await Client.EditMessageTextAsync(ChatId, messageId,
-                "Привет, я бот канала Элитная недвижимость Москвы" +
-                " @eliterealestatemoscow и я помогу тебе найти квартиру мечты!\n" +
+                "Привет, я бот канала Элитной недвижимости Chase real estate services," +
+                "и я помогу тебе найти квартиру мечты!\n" +
                                               "Будут вопросы, звони:");
             await Client.SendContactAsync(ChatId,
                 phoneNumber: "+79856986633", //TODO - insert telephon
@@ -89,7 +89,7 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                "Привет, я бот канала Элитная недвижимость Москвы, и я помогу Вам найти квартиру мечты!\n" +
+                "Привет, я бот канала Элитной недвижимости Chase real estate services, и я помогу Вам найти квартиру мечты!\n" +
                                               "Для начала нужно зарегистрироваться, иначе не получится пользоваться полным функционалом!\n" +
                                               "Чтобы зарегистрироваться отправьте сообщение\n" +
                                               "\"Регистрация <Ваше имя>\".",

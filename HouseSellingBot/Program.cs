@@ -188,6 +188,12 @@ namespace HouseSellingBot
                             await Message.EditIntoSubmitInputRequest("Метро", messageId);
                             RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(5)), "Метро"));
                         }
+                        else if (callbackMessage.Substring(0, 5) == "Номер")
+                        {
+                            await Task.Run(() => CleanRedactionDataFilter(chatId));
+                            await Message.EditIntoSubmitInputRequest("Номер", messageId);
+                            RedactionData.Add((chatId, Convert.ToInt32(callbackMessage.Substring(5)), "Номер"));
+                        }
                         else if (callbackMessage.Substring(0, 6) == "Ссылка")
                         {
                             await Task.Run(() => CleanRedactionDataFilter(chatId));
