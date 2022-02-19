@@ -39,12 +39,12 @@ namespace HouseSellingBot.UI
                     replyMarkup: await Buttons.StartAsync(ChatId));
             }
         }
-        public async Task SendUsersFiltersAsync(long chatId)
+        public async Task SendUsersFiltersAsync()
         {
             try
             {
-                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                await Client.SendTextMessageAsync(chatId,
+                var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
+                await Client.SendTextMessageAsync(ChatId,
                     $"Вот выши фильтры:\n" +
                     $"Тип дома: {user.HouseType}\n" +
                     $"Метро: {user.HouseMetro}\n" +
@@ -56,7 +56,7 @@ namespace HouseSellingBot.UI
             }
             catch (NotFoundException)
             {
-                await Client.SendTextMessageAsync(chatId,
+                await Client.SendTextMessageAsync(ChatId,
                     "Вы не зарегистрированны",
                     replyMarkup: Buttons.BackToFilters());
             }
@@ -115,12 +115,12 @@ namespace HouseSellingBot.UI
                     await Buttons.FiltersMenuForUserAsync(ChatId));
             }
         }
-        public async Task EditIntoUsersFiltersAsync(long chatId, int messageId)
+        public async Task EditIntoUsersFiltersAsync(int messageId)
         {
             try
             {
-                var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
-                await Client.EditMessageTextAsync(chatId,
+                var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
+                await Client.EditMessageTextAsync(ChatId,
                     messageId,
                     $"Вот ваши фильтры:\n" +
                     $"Тип дома: {user.HouseType}\n" +
@@ -133,7 +133,7 @@ namespace HouseSellingBot.UI
             }
             catch (NotFoundException)
             {
-                await Client.EditMessageTextAsync(chatId,
+                await Client.EditMessageTextAsync(ChatId,
                     messageId,
                     "Вы не зарегистрированны",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
