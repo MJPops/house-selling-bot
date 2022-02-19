@@ -68,8 +68,6 @@ namespace HouseSellingBot.UI
                 },
                 new List<InlineKeyboardButton>
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "По Типу Покупки",
-                    callbackData: "ПоТипуПокупки"),
                     InlineKeyboardButton.WithCallbackData(text: "По Типу Дома",
                     callbackData: "ПоТипуДома")
                 }
@@ -152,8 +150,6 @@ namespace HouseSellingBot.UI
                     new List<InlineKeyboardButton>
                     {
                         InlineKeyboardButton.WithCallbackData(text: "Тип дома", callbackData: $"ТипДома{houseId}"),
-                        InlineKeyboardButton.WithCallbackData(text: "Тип покупки",
-                        callbackData: $"ТипПокупки{houseId}")
                     },
                     new List<InlineKeyboardButton>
                     {

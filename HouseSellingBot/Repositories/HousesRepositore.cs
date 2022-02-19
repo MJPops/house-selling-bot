@@ -71,21 +71,6 @@ namespace HouseSellingBot.Repositories
             return houses;
         }
         /// <summary>
-        /// Returns houses from the database with the appropriate rent type.
-        /// </summary>
-        /// <param name="rentType">The rent type of house you are looking for.</param>
-        /// <returns><see cref="IEnumerable{T}"/> from <see cref="House"/></returns>
-        /// <exception cref="NotFoundException"></exception>
-        public static async Task<IEnumerable<House>> GetHousesByRentTypeAsync(string rentType)
-        {
-            var houses = await dBContext.Houses.Where(h => h.RentType == rentType).ToListAsync();
-            if (!houses.Any())
-            {
-                throw new NotFoundException();
-            }
-            return houses;
-        }
-        /// <summary>
         /// Returns houses from the database with the appropriate district.
         /// </summary>
         /// <param name="district">The district of house you are looking for.</param>

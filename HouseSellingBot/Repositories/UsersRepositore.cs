@@ -141,7 +141,6 @@ namespace HouseSellingBot.Repositories
 
             retrievedHouses = from house in retrievedHouses
                               where (user.HouseType == null || house.Type == user.HouseType)
-                              && (user.HouseRentType == null || house.RentType == user.HouseRentType)
                               && (user.HouseDistrict == null || house.District == user.HouseDistrict)
                               && (user.HouseRoomsNumbe == null || house.RoomsNumber == user.HouseRoomsNumbe)
                               && (user.HouseMetro == null || house.Metro == user.HouseMetro)
@@ -243,7 +242,6 @@ namespace HouseSellingBot.Repositories
 
             user.HouseType = null;
             user.HouseMetro = null;
-            user.HouseRentType = null;
             user.HouseDistrict = null;
             user.HouseRoomsNumbe = null;
             user.LowerPrice = null;

@@ -32,7 +32,7 @@ namespace HouseSellingBot.UI
             }
             else
             {
-                await Client.SendTextMessageAsync(ChatId, "Привет, я бот канала Элитная недвижимость Москвы, и я помогу тебе найти квартиру мечты!\n" +
+                await Client.SendTextMessageAsync(ChatId, "Привет, я бот канала Элитная недвижимость Москвы, и я помогу Вам найти квартиру мечты!\n" +
                                               "Для начала нужно зарегистрироваться, иначе не получится пользоваться полным функционалом!\n" +
                                               "Чтобы зарегистрироваться отправьте сообщение\n" +
                                               "\"Регистрация <Ваше имя>\".",
@@ -48,7 +48,6 @@ namespace HouseSellingBot.UI
                     $"Вот выши фильтры:\n" +
                     $"Тип дома: {user.HouseType}\n" +
                     $"Метро: {user.HouseMetro}\n" +
-                    $"Тип покупки: {user.HouseRentType}\n" +
                     $"Район: {user.HouseDistrict}\n" +
                     $"Число комнат: {user.HouseRoomsNumbe}\n" +
                     $"Цена: {user.LowerPrice ?? 00} - {user.HightPrice ?? 00}\n" +
@@ -89,7 +88,7 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                "Привет, я бот канала Элитная недвижимость Москвы, и я помогу тебе найти квартиру мечты!\n" +
+                "Привет, я бот канала Элитная недвижимость Москвы, и я помогу Вам найти квартиру мечты!\n" +
                                               "Для начала нужно зарегистрироваться, иначе не получится пользоваться полным функционалом!\n" +
                                               "Чтобы зарегистрироваться отправьте сообщение\n" +
                                               "\"Регистрация <Ваше имя>\".",
@@ -103,7 +102,7 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                "Все доступные фильтры",
+                "Ниже указаны все доступные фильтры.",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 await Buttons.FiltersMenuForUserAsync(ChatId));
             }
@@ -111,9 +110,7 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Все доступные фильтры\n" +
-                    "Напоминаю, что незарегистрированный клиент может использовать единовременно только 1 фильтр.\n" +
-                    "Чтобы зарегистрироваться отправьте сообщение \"Регистрация <Ваше имя>\".",
+                    "Ниже указаны все доступные фильтры.",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                     await Buttons.FiltersMenuForUserAsync(ChatId));
             }
@@ -128,7 +125,6 @@ namespace HouseSellingBot.UI
                     $"Вот ваши фильтры:\n" +
                     $"Тип дома: {user.HouseType}\n" +
                     $"Метро: {user.HouseMetro}\n" +
-                    $"Тип покупки: {user.HouseRentType}\n" +
                     $"Район: {user.HouseDistrict}\n" +
                     $"Число комнат: {user.HouseRoomsNumbe}\n" +
                     $"Цена: {user.LowerPrice ?? 00} - {user.HightPrice ?? 00}\n" +
@@ -264,18 +260,6 @@ namespace HouseSellingBot.UI
                 await EditIntoNotFoundMessageAsync(messageId);
             }
         }
-        public async Task EditIntoHousesByRentTypeAsync(string type, int messageId)
-        {
-            await Client.EditMessageTextAsync(ChatId, messageId, $"Доступные помещения на данный момент:");
-            try
-            {
-                await SendHousesListAsync(await HousesRepositore.GetHousesByRentTypeAsync(type));
-            }
-            catch (NotFoundException)
-            {
-                await EditIntoNotFoundMessageAsync(messageId);
-            }
-        }
         public async Task EditIntoHousesByDistrictAsync(string type, int messageId)
         {
             await Client.EditMessageTextAsync(ChatId,
@@ -322,25 +306,6 @@ namespace HouseSellingBot.UI
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
                     "Типы жил/площади пока не добавлены",
-                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
-            }
-        }
-        public async Task EditIntoRentTypeListAsync(int messageId)
-        {
-            try
-            {
-                var rentTypes = await GetAllRentTypesAsync();
-                await Client.EditMessageTextAsync(ChatId,
-                    messageId,
-                    "Все доступные варианты:",
-                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
-                Buttons.FiltersList(rentTypes));
-            }
-            catch (NotFoundException)
-            {
-                await Client.EditMessageTextAsync(ChatId,
-                    messageId,
-                    "Типы продажи пока не добавлены",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
@@ -509,7 +474,6 @@ namespace HouseSellingBot.UI
                 $"Район: {house.District}\n" +
                 $"Метраж: {house.Footage}\n" +
                 $"Число комнат: {house.RoomsNumber}\n" +
-                $"Тип покупки: {house.RentType}\n" +
                 $"Цена: {house.Price}₽\n" +
                 $"Тип дома: {house.Type}";
             try
@@ -578,7 +542,6 @@ namespace HouseSellingBot.UI
                 $"Район: {house.District}\n" +
                 $"Метраж: {house.Footage}\n" +
                 $"Число комнат: {house.RoomsNumber}\n" +
-                $"Тип покупки: {house.RentType}\n" +
                 $"Цена: {house.Price}₽\n" +
                 $"Тип дома: {house.Type}";
             try
@@ -620,7 +583,6 @@ namespace HouseSellingBot.UI
                 $"Район: {house.District}\n" +
                 $"Метраж: {house.Footage}\n" +
                 $"Число комнат: {house.RoomsNumber}\n" +
-                $"Тип покупки: {house.RentType}\n" +
                 $"Цена: {house.Price}₽\n" +
                 $"Тип дома: {house.Type}";
             try
@@ -696,18 +658,6 @@ namespace HouseSellingBot.UI
                 throw new NotFoundException();
             }
             return allTypes;
-        }
-        private async Task<IEnumerable<string>> GetAllRentTypesAsync()
-        {
-            var allRentTypes = from house in await HousesRepositore.GetAllHousesAsync()
-                               where house.RentType != null
-                               select house.RentType;
-            allRentTypes = allRentTypes.Distinct();
-            if (allRentTypes == null)
-            {
-                throw new NotFoundException();
-            }
-            return allRentTypes;
         }
         private async Task<IEnumerable<string>> GetAllDistrictsAsync()
         {

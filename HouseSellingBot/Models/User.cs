@@ -10,7 +10,6 @@ namespace HouseSellingBot.Models
         public string Role { get; set; } = "user";
         public string HouseType { get; set; }
         public string HouseMetro { get; set; }
-        public string HouseRentType { get; set; }
         public string HouseDistrict { get; set; }
         public int? HouseRoomsNumbe { get; set; }
         public float? LowerPrice { get; set; }
