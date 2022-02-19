@@ -606,7 +606,14 @@ namespace HouseSellingBot
                                 {
                                     var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
                                     house.Footage
-                                        = Convert.ToInt32(inputMessage); ;
+                                        = Convert.ToInt32(inputMessage); 
+                                    await Message.SendNewHouseDesignAsync(house);
+                                    await HousesRepositore.UpdateHouseAsync(house);
+                                }
+                                else if (data.attribute == "Номер")
+                                {
+                                    var house = await HousesRepositore.GetHouseByIdAsync(data.houseId);
+                                    house.AdminPhone = inputMessage;
                                     await Message.SendNewHouseDesignAsync(house);
                                     await HousesRepositore.UpdateHouseAsync(house);
                                 }

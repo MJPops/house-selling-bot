@@ -27,7 +27,7 @@ namespace HouseSellingBot.UI
             if (await UsersRepositore.UserIsRegisteredAsync(ChatId))
             {
                 var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
-                await Client.SendTextMessageAsync(ChatId, $"Здравствуйте {user.Name}, рад Вас видеть.",
+                await Client.SendTextMessageAsync(ChatId, $"Здравствуйте, {user.Name}, рад Вас видеть.",
                 replyMarkup: await Buttons.StartAsync(ChatId));
             }
             else
@@ -51,7 +51,8 @@ namespace HouseSellingBot.UI
                     $"Район: {user.HouseDistrict}\n" +
                     $"Число комнат: {user.HouseRoomsNumbe}\n" +
                     $"Цена: {user.LowerPrice ?? 00} - {user.HightPrice ?? 00}\n" +
-                    $"Метраж: {user.LowerFootage ?? 00} - {user.HightFootage ?? 00}",
+                    $"Метраж: {user.LowerFootage ?? 00} - {user.HightFootage ?? 00}\n" +
+                    $"Номер телефона: {user.Phone}",
                     replyMarkup: Buttons.BackToFilters());
             }
             catch (NotFoundException)
@@ -128,7 +129,8 @@ namespace HouseSellingBot.UI
                     $"Район: {user.HouseDistrict}\n" +
                     $"Число комнат: {user.HouseRoomsNumbe}\n" +
                     $"Цена: {user.LowerPrice ?? 00} - {user.HightPrice ?? 00}\n" +
-                    $"Метраж: {user.LowerFootage ?? 00} - {user.HightFootage ?? 00}",
+                    $"Метраж: {user.LowerFootage ?? 00} - {user.HightFootage ?? 00}\n" +
+                    $"Номер телефона: {user.Phone}",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
             catch (NotFoundException)
@@ -487,7 +489,8 @@ namespace HouseSellingBot.UI
                 $"Метраж: {house.Footage}\n" +
                 $"Число комнат: {house.RoomsNumber}\n" +
                 $"Цена: {house.Price}₽\n" +
-                $"Тип дома: {house.Type}";
+                $"Тип дома: {house.Type}\n" +
+                $"Номер телефона: {house.AdminPhone}";
             try
             {
                 await Client.SendPhotoAsync(ChatId,
@@ -555,7 +558,8 @@ namespace HouseSellingBot.UI
                 $"Метраж: {house.Footage}\n" +
                 $"Число комнат: {house.RoomsNumber}\n" +
                 $"Цена: {house.Price}₽\n" +
-                $"Тип дома: {house.Type}";
+                $"Тип дома: {house.Type}\n" +
+                $"Номер телефона: {house.AdminPhone}";
             try
             {
                 await Client.SendPhotoAsync(ChatId,
@@ -596,7 +600,8 @@ namespace HouseSellingBot.UI
                 $"Метраж: {house.Footage}\n" +
                 $"Число комнат: {house.RoomsNumber}\n" +
                 $"Цена: {house.Price}₽\n" +
-                $"Тип дома: {house.Type}";
+                $"Тип дома: {house.Type}\n" +
+                $"Номер телефона: {house.AdminPhone}";
             try
             {
                 await Client.SendPhotoAsync(ChatId,
