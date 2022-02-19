@@ -35,11 +35,11 @@ namespace HouseSellingBot.UI
                 await Client.SendTextMessageAsync(ChatId, "Привет, я бот канала Элитной недвижимости Chase real estate services, и я помогу Вам найти квартиру мечты!\n" +
                                               "Для начала нужно зарегистрироваться, иначе не получится пользоваться полным функционалом!\n" +
                                               "Чтобы зарегистрироваться отправьте сообщение\n" +
-                                              "\"Регистрация <Ваше имя>\".",
+                                              "\"Регистрация\".",
                     replyMarkup: await Buttons.StartAsync(ChatId));
             }
         }
-        public async Task SendoUsersFiltersAsync(long chatId)
+        public async Task SendUsersFiltersAsync(long chatId)
         {
             try
             {
@@ -51,8 +51,7 @@ namespace HouseSellingBot.UI
                     $"Район: {user.HouseDistrict}\n" +
                     $"Число комнат: {user.HouseRoomsNumbe}\n" +
                     $"Цена: {user.LowerPrice ?? 00} - {user.HightPrice ?? 00}\n" +
-                    $"Метраж: {user.LowerFootage ?? 00} - {user.HightFootage ?? 00}\n" +
-                    $"Номер телефона: {user.Phone}",
+                    $"Метраж: {user.LowerFootage ?? 00} - {user.HightFootage ?? 00}\n",
                     replyMarkup: Buttons.BackToFilters());
             }
             catch (NotFoundException)
@@ -81,7 +80,7 @@ namespace HouseSellingBot.UI
                 var user = await UsersRepositore.GetUserByChatIdAsync(ChatId);
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    $"Здравствуйте {user.Name}, рад Вас видеть.",
+                    $"Здравствуйте, {user.Name}, рад Вас видеть.",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 await Buttons.StartAsync(ChatId));
             }
@@ -92,7 +91,7 @@ namespace HouseSellingBot.UI
                 "Привет, я бот канала Элитной недвижимости Chase real estate services, и я помогу Вам найти квартиру мечты!\n" +
                                               "Для начала нужно зарегистрироваться, иначе не получится пользоваться полным функционалом!\n" +
                                               "Чтобы зарегистрироваться отправьте сообщение\n" +
-                                              "\"Регистрация <Ваше имя>\".",
+                                              "\"Регистрация\".",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)
                 await Buttons.StartAsync(ChatId));
             }
@@ -129,8 +128,7 @@ namespace HouseSellingBot.UI
                     $"Район: {user.HouseDistrict}\n" +
                     $"Число комнат: {user.HouseRoomsNumbe}\n" +
                     $"Цена: {user.LowerPrice ?? 00} - {user.HightPrice ?? 00}\n" +
-                    $"Метраж: {user.LowerFootage ?? 00} - {user.HightFootage ?? 00}\n" +
-                    $"Номер телефона: {user.Phone}",
+                    $"Метраж: {user.LowerFootage ?? 00} - {user.HightFootage ?? 00}\n",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
             catch (NotFoundException)

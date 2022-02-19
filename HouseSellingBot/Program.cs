@@ -711,28 +711,28 @@ namespace HouseSellingBot
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HightPrice = Convert.ToInt32(inputMessage);
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendoUsersFiltersAsync(chatId);
+                                    await Message.SendUsersFiltersAsync(chatId);
                                 }
                                 else if (filterData.filterName == "ЦенаНиз")
                                 {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.LowerPrice = Convert.ToInt32(inputMessage);
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendoUsersFiltersAsync(chatId);
+                                    await Message.SendUsersFiltersAsync(chatId);
                                 }
                                 else if (filterData.filterName == "МетражВерх")
                                 {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HightFootage = Convert.ToInt32(inputMessage);
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendoUsersFiltersAsync(chatId);
+                                    await Message.SendUsersFiltersAsync(chatId);
                                 }
                                 else if (filterData.filterName == "МетражНиз")
                                 {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.LowerFootage = Convert.ToInt32(inputMessage);
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendoUsersFiltersAsync(chatId);
+                                    await Message.SendUsersFiltersAsync(chatId);
                                 }
                             }
                             catch
@@ -793,28 +793,28 @@ namespace HouseSellingBot
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HightPrice = Convert.ToInt32(inputMessage);
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendoUsersFiltersAsync(chatId);
+                                    await Message.SendUsersFiltersAsync(chatId);
                                 }
                                 else if (filterData.filterName == "ЦенаНиз")
                                 {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.LowerPrice = Convert.ToInt32(inputMessage);
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendoUsersFiltersAsync(chatId);
+                                    await Message.SendUsersFiltersAsync(chatId);
                                 }
                                 else if (filterData.filterName == "МетражВерх")
                                 {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.HightFootage = Convert.ToInt32(inputMessage);
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendoUsersFiltersAsync(chatId);
+                                    await Message.SendUsersFiltersAsync(chatId);
                                 }
                                 else if (filterData.filterName == "МетражНиз")
                                 {
                                     var user = await UsersRepositore.GetUserByChatIdAsync(chatId);
                                     user.LowerFootage = Convert.ToInt32(inputMessage);
                                     await UsersRepositore.UpdateUserAsync(user);
-                                    await Message.SendoUsersFiltersAsync(chatId);
+                                    await Message.SendUsersFiltersAsync(chatId);
                                 }
                             }
                             catch
