@@ -367,8 +367,8 @@ namespace HouseSellingBot.UI
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
                 "Выберите вид ограничения цены.\n" +
-                "Зарегистрированный пользователь может использовать одновременно сразу 2 вида ограничений\n" +
-                "Для этого необходимо будет повторить процедуру 2 раза!",
+                "Зарегистрированный пользователь может выставить диапазон цены.\n" +
+                "Для этого достаточно сначала ввести значение цены \"От\", а потом \"До\".",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.PriceFilters());
         }
         public async Task EditIntoFootageFilterMenuAsync(int messageId)
@@ -376,8 +376,8 @@ namespace HouseSellingBot.UI
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
                 "Выберите вид ограничения метража.\n" +
-                "Зарегистрированный пользователь может использовать одновременно сразу 2 вида ограничений\n" +
-                "Для этого необходимо будет повторить процедуру 2 раза!",
+                "Зарегистрированный пользователь может выставить диапазон метража.\n" +
+                "Для этого достаточно сначала ввести значение метража \"От\", а потом \"До\".",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.FootageFilters());
         }
         #endregion
@@ -432,7 +432,8 @@ namespace HouseSellingBot.UI
         {
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                $"Введите {request} в поле сообщений.");
+                $"Введите {request} в поле сообщений.\n\n" +
+                "Например: 10000000(для цены) или 100(для метража)");
         }
         #endregion
 
