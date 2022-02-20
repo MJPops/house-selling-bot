@@ -151,7 +151,7 @@ namespace HouseSellingBot.UI
             }
             else
             {
-                await Client.SendTextMessageAsync(ChatId, "Ваши дома, которые были добавлены в избранное:");
+                await Client.SendTextMessageAsync(ChatId, "Ваши объекты, которые были добавлены в избранное:");
                 await SendHousesListAsync(user.FavoriteHouses);
             }
         }
@@ -173,7 +173,7 @@ namespace HouseSellingBot.UI
         {
             try
             {
-                await Client.EditMessageTextAsync(ChatId, messageId, "Дома, соответствующие вашим фильтрам:");
+                await Client.EditMessageTextAsync(ChatId, messageId, "Объекты, подходящие по параметрам запроса:");
                 await SendHousesListAsync(await UsersRepositore.GetHousesWhthCustomFiltersAsync(ChatId));
             }
             catch (NoHomesWithTheseFeaturesException)
@@ -186,7 +186,7 @@ namespace HouseSellingBot.UI
         #region Departure of houses by filters
         public async Task SendHousesWhthHigerPriceAsync(float price)
         {
-            await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с ценой выше " +
+            await Client.SendTextMessageAsync(ChatId, $"Все доступные объекты с ценой выше " +
                 $"{price}");
             try
             {
@@ -199,7 +199,7 @@ namespace HouseSellingBot.UI
         }
         public async Task SendHousesWhthHigerFootageAsync(float footage)
         {
-            await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с метражом больше " +
+            await Client.SendTextMessageAsync(ChatId, $"Все доступные объекты с метражом больше " +
                 $"{footage}");
             try
             {
@@ -212,7 +212,7 @@ namespace HouseSellingBot.UI
         }
         public async Task SendHousesWhthLowerPriceAsync(float price)
         {
-            await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с ценой ниже " +
+            await Client.SendTextMessageAsync(ChatId, $"Все доступные объекты с ценой ниже " +
                 $"{price}");
             try
             {
@@ -225,7 +225,7 @@ namespace HouseSellingBot.UI
         }
         public async Task SendHousesWhthLowerFootageAsync(float footage)
         {
-            await Client.SendTextMessageAsync(ChatId, $"Все доступные помещения с метражом ниже " +
+            await Client.SendTextMessageAsync(ChatId, $"Все доступные объекты с метражом ниже " +
                 $"{footage}");
             try
             {
@@ -250,7 +250,7 @@ namespace HouseSellingBot.UI
         }
         public async Task EditIntoHousesMetroAsync(string metro, int messageId)
         {
-            await Client.EditMessageTextAsync(ChatId, messageId, $"Станции метро, рядом с которыми сейчас доступны квартиры:");
+            await Client.EditMessageTextAsync(ChatId, messageId, $"Станции метро, рядом с которыми сейчас доступны объекты:");
             try
             {
                 await SendHousesListAsync(await HousesRepositore.GetHousesByMetroAsync(metro));
@@ -264,7 +264,7 @@ namespace HouseSellingBot.UI
         {
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                $"Доступные помещение на данный момент в {type}");
+                $"Доступные объекты на данный момент в {type}");
             try
             {
                 await SendHousesListAsync(await HousesRepositore.GetHouseByDistrictAsync(type));
@@ -277,7 +277,7 @@ namespace HouseSellingBot.UI
         public async Task EditIntoHousesByRoomsNumberAsync(int roomsNumber, int messageId)
         {
             await Client.EditMessageTextAsync(ChatId, messageId, $"Доступные {roomsNumber}-х комнатные" +
-                $" помещения на данный момент:");
+                $" объекты на данный момент:");
             try
             {
                 await SendHousesListAsync(await HousesRepositore.GetHousesByRoomsNumberAsync(roomsNumber));
@@ -305,7 +305,7 @@ namespace HouseSellingBot.UI
             {
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Типы жил/площади пока не добавлены",
+                    "Типы объектов пока не добавлены",
                     replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToFilters());
             }
         }
@@ -351,7 +351,7 @@ namespace HouseSellingBot.UI
                 var rooms = await GetAllRoomsNumberAsync();
                 await Client.EditMessageTextAsync(ChatId,
                     messageId,
-                    "Все доступные варианты квартир по количеству комнат:",
+                    "Все доступные варианты объектов по количеству комнат:",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.FiltersList(rooms));
             }
             catch (NotFoundException)
@@ -366,14 +366,18 @@ namespace HouseSellingBot.UI
         {
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                "Выберите вид ограничения цены",
+                "Выберите вид ограничения цены.\n" +
+                "Зарегистрированный пользователь может использовать одновременно сразу 2 вида ограничений\n" +
+                "Для этого необходимо будет повторить процедуру 2 раза!",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.PriceFilters());
         }
         public async Task EditIntoFootageFilterMenuAsync(int messageId)
         {
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                "Выберите вид ограничения метража",
+                "Выберите вид ограничения метража.\n" +
+                "Зарегистрированный пользователь может использовать одновременно сразу 2 вида ограничений\n" +
+                "Для этого необходимо будет повторить процедуру 2 раза!",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.FootageFilters());
         }
         #endregion
@@ -382,7 +386,7 @@ namespace HouseSellingBot.UI
         public async Task SendNotFoundMessageAsync()
         {
             await Client.SendTextMessageAsync(ChatId,
-                "Дома с такими параметрами не обнаружены.",
+                "Объекты с такими параметрами не обнаружены.",
                 replyMarkup: Buttons.BackToStart());
         }
         public async Task SendHouseIsDeleted()
@@ -411,24 +415,24 @@ namespace HouseSellingBot.UI
         }
         public async Task SendNotificationFavoriteIsAddAsync()
         {
-            await Client.SendTextMessageAsync(ChatId, "Квартира добавлена в список избранного.");
+            await Client.SendTextMessageAsync(ChatId, "Объект добавлен в список избранного.");
         }
         public async Task SendNotificationFavoriteIsRemoveAsync()
         {
-            await Client.SendTextMessageAsync(ChatId, "Квартира удалена из списка избранного.");
+            await Client.SendTextMessageAsync(ChatId, "Объект удален из списка избранного.");
         }
         public async Task EditIntoNotFoundMessageAsync(int messageId)
         {
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                "Дома с такими параметрами не обнаружены.",
+                "Объекты с такими параметрами не обнаружены.",
                 replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Buttons.BackToStart());
         }
         public async Task EditIntoSubmitInputRequest(string request, int messageId)
         {
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
-                $"Введите {request}");
+                $"Введите {request} в поле сообщений.");
         }
         #endregion
 
@@ -551,7 +555,7 @@ namespace HouseSellingBot.UI
         private async Task SendOneHouseAsync(House house)
         {
             string text = $"{house.Description ?? "Скоро тут будет описание😄"}\n\n" +
-                $"По пунктам о квартире:\n" +
+                $"Информация о квартире:\n" +
                 $"◽ Данная квартира распологается в {house.District ?? "районе который мы укажем чуть позже"}" +
                 $", недалеко от метро {house.Metro ?? "которое мы постараемся указать как можно скорее"}\n" +
                 $"◽ Площадь квартиры составляет {house.Footage}м², а число комнат - {house.RoomsNumber}\n" +

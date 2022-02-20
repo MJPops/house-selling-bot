@@ -26,7 +26,7 @@ namespace HouseSellingBot.UI
                 {
                     returnsButtons.Add(new List<InlineKeyboardButton>
                     {
-                        InlineKeyboardButton.WithCallbackData(text: "Добавить дом",
+                        InlineKeyboardButton.WithCallbackData(text: "Добавить объект",
                             callbackData: "ДобавитьДом")
                     });
                 }
@@ -68,7 +68,7 @@ namespace HouseSellingBot.UI
                 },
                 new List<InlineKeyboardButton>
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "По Типу Дома",
+                    InlineKeyboardButton.WithCallbackData(text: "Новостройки/Вторички",
                     callbackData: "ПоТипуДома")
                 }
             };
@@ -83,7 +83,7 @@ namespace HouseSellingBot.UI
                 {
                     InlineKeyboardButton.WithCallbackData(text: "Мои Фильтры",
                     callbackData: "МоиФильтры"),
-                    InlineKeyboardButton.WithCallbackData(text: "Дома по Фильтрам",
+                    InlineKeyboardButton.WithCallbackData(text: "Объекты по Фильтрам",
                     callbackData: "ДомаПоФильтрам")
                 });
                 startButtons.Add(new List<InlineKeyboardButton>
@@ -149,7 +149,7 @@ namespace HouseSellingBot.UI
                     },
                     new List<InlineKeyboardButton>
                     {
-                        InlineKeyboardButton.WithCallbackData(text: "Тип дома", callbackData: $"ТипДома{houseId}"),
+                        InlineKeyboardButton.WithCallbackData(text: "Новостройки/Вторички", callbackData: $"ТипДома{houseId}"),
                         InlineKeyboardButton.WithCallbackData(text: "Номер телефона", callbackData: $"Номер{houseId}")
                     },
                     new List<InlineKeyboardButton>
