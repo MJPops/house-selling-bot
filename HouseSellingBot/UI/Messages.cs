@@ -433,7 +433,7 @@ namespace HouseSellingBot.UI
             await Client.EditMessageTextAsync(ChatId,
                 messageId,
                 $"Введите {request} в поле сообщений.\n\n" +
-                "Например: 10000000(для цены) или 100(для метража)");
+                "Отправьте сообщение, содержащее цифру, соответствующую выбранному фильтру (цена в рублях, метраж в м²).");
         }
         #endregion
 
